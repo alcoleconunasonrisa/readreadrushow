@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadReadRushOw - ¡Aventura de Lectura!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-reading: #A29BFE; /* Púrpura suave */
+            --secondary-reading: #6C5CE7; /* Púrpura intenso */
+            --accent-soft: #FFE66D;
+            --andalucia-green: #00843D; /* Verde Andalucía */
+            --glass-card: rgba(255, 255, 255, 0.1);
+            --text-white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+
+        body {
+            background:
+                linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)),
+                url('iconkid.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-white);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+
+        header { text-align: center; padding: 20px 0 50px; }
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.5);
+            line-height: 0.9;
+        }
+        .logo span { color: var(--primary-reading); }
+
+        .section-pill {
+            padding: 15px;
+            border-radius: 50px;
+            text-align: center;
+            font-weight: 900;
+            margin: 40px 0 20px;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            background: var(--secondary-reading);
+            color: white;
+        }
+
+        .pill-especial { background: var(--andalucia-green); }
+
+        .card-group {
+            background: var(--glass-card);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .links-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+        }
+
+        .btn-game {
+            background: white;
+            color: #1e293b;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-weight: 900;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 6px 0px #cbd5e1;
+        }
+
+        .btn-game:hover {
+            transform: translateY(-5px);
+            background: var(--accent-soft);
+            box-shadow: 0 6px 0px #d4af37;
+        }
+
+        .btn-andalucia:hover {
+            background: #e8f5e9;
+            box-shadow: 0 6px 0px #005a2a;
+        }
+
+        .dot {
+            width: 35px; height: 35px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1rem; flex-shrink: 0;
+            font-weight: 900;
+        }
+
+        @media (max-width: 600px) {
+            .links-grid { grid-template-columns: 1fr; }
+            .logo { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo">READ READ<br><span>RUSH OW</span></div>
+        <p style="opacity: 0.9; margin-top: 10px; font-weight: 700;">¡Tu gran aventura con las letras!</p>
+    </header>
+
+    <div class="zone">
+        <div class="section-pill">📚 MÓDULOS DE APRENDIZAJE</div>
+
+        <div class="card-group">
+            <div class="links-grid">
+                <a href="Letrasmslt.html" class="btn-game">
+                    <div class="dot" style="background:#FF6B6B">MS</div> 
+                    <span>SÍLABAS (M-L-S-T)</span>
+                </a>
+
+                <a href="Palabras.html" class="btn-game">
+                    <div class="dot" style="background:#4ECDC4">ABC</div> 
+                    <span>PALABRAS E ICONOS</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="section-pill pill-especial">🗓️ EFEMÉRIDES</div>
+
+        <div class="card-group">
+            <div class="links-grid">
+                <a href="Andalucia.html" class="btn-game btn-andalucia" style="grid-column: 1 / -1;">
+                    <div class="dot" style="background:var(--andalucia-green)"><i class="fas fa-flag"></i></div> 
+                    <span>EFEMÉRIDES DÍA DE ANDALUCÍA</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align:center; padding: 60px 20px 20px; opacity: 0.6; font-size: 0.8rem;">
+        © 2026 ReadReadRushOw - Abriendo las puertas del conocimiento
+    </footer>
+</div>
+
+</body>
+</html>

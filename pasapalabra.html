@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasapalabra Andalucía - Primaria</title>
+    <style>
+        :root { 
+            --verde: #00843D; 
+            --blanco: #ffffff; 
+            --dorado: #C1A14E; 
+            --rojo: #d32f2f; 
+            --azul: #004521; 
+            --fondo: #f0f7f2;
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', sans-serif; 
+            background: radial-gradient(circle, #005e2c, #002b14); 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+
+        .btn-inicio {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: var(--verde);
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 4px solid #005a2a;
+        }
+
+        h1 { margin-top: 40px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+
+        .main-wrapper { 
+            display: flex; 
+            flex-direction: row; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 40px; 
+            margin-top: 20px; 
+            width: 95%; 
+            max-width: 1200px; 
+        }
+
+        .rosco-container { position: relative; width: 520px; height: 520px; flex-shrink: 0; }
+        
+        .letra { 
+            position: absolute; 
+            width: 40px; 
+            height: 40px; 
+            background: var(--azul); 
+            border: 2px solid white; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            font-size: 1.1rem; 
+            transition: all 0.3s; 
+        }
+
+        .letra.activa { transform: scale(1.3); border-color: var(--dorado); box-shadow: 0 0 20px var(--dorado); z-index: 5; }
+        .acierto { background-color: var(--verde) !important; }
+        .error { background-color: var(--rojo) !important; }
+        .timer { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3.5rem; color: var(--dorado); font-weight: bold; }
+
+        .panel { 
+            background: white; 
+            color: #333; 
+            padding: 25px; 
+            border-radius: 20px; 
+            width: 380px; 
+            border-left: 8px solid var(--dorado); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            font-size: 1.3rem; 
+            border: 2px solid var(--verde); 
+            border-radius: 10px; 
+            text-align: center; 
+            text-transform: uppercase; 
+            outline: none; 
+            box-sizing: border-box; 
+        }
+
+        .botones-juego { display: flex; gap: 10px; margin-top: 15px; }
+        
+        .btn-game-control { 
+            flex: 1; 
+            padding: 12px; 
+            font-weight: bold; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            border: none; 
+            color: white; 
+            font-size: 1rem;
+        }
+
+        .btn-ok { background: var(--verde); border-bottom: 4px solid #005a2a; } 
+        .btn-pass { background: var(--dorado); border-bottom: 4px solid #967d3b; }
+
+        /* ESTILOS DEL PANEL DE ACTIVIDADES (Copiado de Andalucia.html) */
+        .panel-actividades {
+            background: white;
+            width: 95%;
+            max-width: 850px;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            margin: 60px 0;
+            border: 3px solid var(--verde);
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        .panel-actividades h2 { color: var(--verde); margin-bottom: 25px; font-size: 1.6rem; }
+
+        .grid-botones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .btn-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 10px;
+            background-color: var(--verde);
+            color: white !important;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border-bottom: 5px solid #005a2a;
+            font-size: 0.9rem;
+        }
+
+        .btn-nav:hover {
+            background-color: var(--dorado);
+            border-bottom-color: #967d3b;
+            transform: translateY(-4px);
+        }
+
+        .btn-index { background-color: #444; border-bottom-color: #222; }
+
+        @media (max-width: 900px) {
+            .main-wrapper { flex-direction: column; }
+            .rosco-container { width: 400px; height: 400px; }
+            .timer { font-size: 2.5rem; }
+            .letra { width: 30px; height: 30px; font-size: 0.8rem; }
+            .panel { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<a href="Andalucia.html" class="btn-inicio">🏠 Volver a la Lectura</a>
+
+<h1>PASAPALABRA ANDALUCÍA</h1>
+
+<div class="main-wrapper">
+    <div class="rosco-container" id="rosco">
+        <div class="timer" id="reloj">720</div>
+    </div>
+    
+    <div class="panel">
+        <h2 id="letra-h" style="color:var(--verde); margin:0">Letra A</h2>
+        <p id="def" style="font-size: 1.1rem; min-height: 80px;">Cargando...</p>
+        <input type="text" id="ans" placeholder="Escribe con tildes..." autocomplete="off">
+        <div class="botones-juego">
+            <button class="btn-game-control btn-ok" onclick="check()">ENVIAR</button>
+            <button class="btn-game-control btn-pass" onclick="pass()">PASAPALABRA</button>
+        </div>
+    </div>
+</div>
+
+<div class="panel-actividades">
+    <h2>¿Estáis listos para demostrar que sois expertos?</h2>
+    <div class="grid-botones">
+        <a href="main-index.html" class="btn-nav btn-index">🏠 Volver al Index</a>                      
+        <a href="sopa.html" class="btn-nav">🔍 Sopa de Letras 1</a>
+        <a href="sopa1.html" class="btn-nav">🔍 Sopa de Letras 2</a>
+        <a href="test0.html" class="btn-nav">❓ Preguntas 1</a>
+        <a href="test1.html" class="btn-nav">❓ Preguntas 2</a>
+        <a href="test2.html" class="btn-nav">❓ Preguntas 3</a>
+        <a href="tildes.html" class="btn-nav">✍️ Tildes</a>
+        <a href="gramaticapalabras.html" class="btn-nav">🅰️ Tipos de palabras</a>
+        <a href="ordenar.html" class="btn-nav">🅰️ Ordena la oración</a>
+        <a href="pasapalabra.html" class="btn-nav" style="background-color: var(--dorado);">🅰️ Pasapalabra</a>
+        <a href="escribe.html" class="btn-nav">🅰️ Describe tu aventura</a>
+    </div>
+</div>
+
+<audio id="s-ok" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+<audio id="s-no" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3"></audio>
+
+<script>
+    const datos = [
+        {l:"A", p:"ALMERÍA", d:"Provincia andaluza donde se encuentra el Cabo de Gata."},
+        {l:"B", p:"BOQUERÓN", d:"Pescado pequeño que se come frito, muy típico en Málaga."},
+        {l:"C", p:"CÁDIZ", d:"Ciudad andaluza rodeada de mar, famosa por sus Carnavales."},
+        {l:"D", p:"DOÑANA", d:"Parque Nacional muy importante donde vive el lince ibérico."},
+        {l:"E", p:"ESTRECHO", d:"Franja de mar que separa Andalucía de África."},
+        {l:"F", p:"FLAMENCO", d:"Baile y música tradicional de nuestra tierra."},
+        {l:"G", p:"GRANADA", d:"Ciudad donde puedes visitar los palacios de la Alhambra."},
+        {l:"H", p:"HUELVA", d:"Provincia famosa por sus fresas y el descubrimiento de América."},
+        {l:"I", p:"INVERNADERO", d:"Construcción de plástico para cultivar tomates en Almería."},
+        {l:"J", p:"JAÉN", d:"Capital del aceite de oliva y tierra de muchos olivos."},
+        {l:"K", p:"KILÓMETRO", d:"Unidad de medida de distancia entre dos ciudades."},
+        {l:"L", p:"LINCE", d:"Animal salvaje protegido que vive en Doñana."},
+        {l:"M", p:"MEZQUITA", d:"Famoso monumento de Córdoba de construcción árabe con arcos rojos y blancos."},
+        {l:"N", p:"NEVADA", d:"Lugar de Granada donde se puede esquiar: Sierra..."},
+        {l:"Ñ", p:"CAÑA", d:"Contiene la Ñ: Se usa para pinchar las sardinas en el espeto."},
+        {l:"O", p:"OLIVO", d:"Árbol que nos da las aceitunas."},
+        {l:"P", p:"PUENTE", d:"Construcción como la del Carranza o la Pepa por donde pasan coches sobre el agua."},
+        {l:"Q", p:"QUESO", d:"Alimento que se hace mucho en la Sierra de Grazalema."},
+        {l:"R", p:"ROMERÍA", d:"Fiesta popular donde se va en carreta o caballo a una ermita."},
+        {l:"S", p:"SEVILLA", d:"Capital de Andalucía, donde está la Giralda."},
+        {l:"T", p:"TARIFA", d:"Pueblo de Cádiz con mucho viento y muy cerca de África."},
+        {l:"U", p:"ÚBEDA", d:"Ciudad de Jaén famosa por su historia y sus edificios antiguos."},
+        {l:"V", p:"VERDE", d:"Uno de los colores de nuestra bandera."},
+        {l:"W", p:"WESTERN", d:"Contiene la W: Películas de vaqueros grabadas en Almería."},
+        {l:"X", p:"XEREZ", d:"Contiene la X: Nombre antiguo de Jerez de la Frontera."},
+        {l:"Y", p:"AYAMONTE", d:"Contiene la Y: Pueblo de Huelva que limita con Portugal."},
+        {l:"Z", p:"ZAMBRA", d:"Primer nombre de estos pueblos: ... de los atunes y ... de la sierra."}
+    ];
+
+    let i = 0, t = 720;
+    const roscoSize = window.innerWidth < 900 ? 160 : 220;
+    const centerOffset = window.innerWidth < 900 ? 180 : 240;
+
+    function init() {
+        const r = document.getElementById('rosco');
+        datos.forEach((d, idx) => {
+            const div = document.createElement('div');
+            div.className = 'letra'; div.id = 'l'+idx; div.innerText = d.l;
+            const a = (idx * (360/datos.length) - 90) * (Math.PI/180);
+            div.style.left = (centerOffset + roscoSize * Math.cos(a)) + 'px';
+            div.style.top = (centerOffset + roscoSize * Math.sin(a)) + 'px';
+            r.appendChild(div);
+        });
+        update();
+    }
+
+    function update() {
+        if(i >= datos.length) { 
+            document.getElementById('def').innerText = "¡TERMINADO!"; 
+            document.getElementById('ans').style.display = "none";
+            return; 
+        }
+        document.querySelectorAll('.letra').forEach(x => x.classList.remove('activa'));
+        document.getElementById('l'+i).classList.add('activa');
+        document.getElementById('letra-h').innerText = "Con la " + datos[i].l;
+        document.getElementById('def').innerText = datos[i].d;
+    }
+
+    function check() {
+        const val = document.getElementById('ans').value.trim().toUpperCase();
+        const res = datos[i].p.toUpperCase();
+        if(val === res) { 
+            document.getElementById('l'+i).classList.add('acierto'); 
+            document.getElementById('s-ok').play(); 
+        } else { 
+            document.getElementById('l'+i).classList.add('error'); 
+            document.getElementById('s-no').play(); 
+        }
+        i++; 
+        document.getElementById('ans').value = ""; 
+        update();
+    }
+
+    function pass() { i++; update(); }
+
+    setInterval(() => { 
+        if(t > 0 && i < datos.length){ 
+            t--; 
+            document.getElementById('reloj').innerText = t; 
+        } 
+    }, 1000);
+
+    document.getElementById('ans').addEventListener("keyup", (e) => { 
+        if(e.key === "Enter") check(); 
+    });
+
+    init();
+</script>
+</body>
+</html>

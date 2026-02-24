@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sopa de Letras: Tesoros de Andalucía</title>
+    <style>
+        :root { 
+            --verde: #00843D; 
+            --verde-oscuro: #005a2a;
+            --blanco: #ffffff; 
+            --dorado: #C1A14E; 
+            --suave: #f4f9f4; 
+        }
+        
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #eef2ee; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+            margin: 0;
+        }
+        
+        .btn-inicio {
+            align-self: flex-start;
+            background: var(--verde);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-bottom: 4px solid var(--verde-oscuro);
+        }
+
+        .contenedor { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            text-align: center; 
+            max-width: 500px; 
+            width: 100%; 
+            border-top: 12px solid var(--verde); 
+        }
+        
+        h1 { color: var(--verde); margin-top: 0; }
+
+        #sopa { 
+            display: grid; 
+            grid-template-columns: repeat(10, 1fr); 
+            gap: 4px; 
+            margin: 20px auto; 
+            max-width: 380px;
+            user-select: none;
+        }
+
+        .celda { 
+            aspect-ratio: 1; 
+            border: 2px solid #eee; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            cursor: pointer; 
+            background: white;
+            border-radius: 5px;
+            transition: 0.2s;
+        }
+        .celda.marcada { background: var(--dorado); color: white; border-color: #967d3b; }
+        .celda.encontrada { background: var(--verde); color: white; border-color: var(--verde-oscuro); }
+
+        .lista-palabras { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 20px; }
+        .item { padding: 6px 12px; background: var(--suave); border-radius: 20px; font-size: 0.85rem; color: #444; border: 1px solid #ddd; }
+        .tachado { text-decoration: line-through; background: #d4edda; color: #155724; border-color: #c3e6cb; }
+
+        /* PANEL DE ACTIVIDADES UNIFICADO */
+        .panel-actividades {
+            background: white;
+            width: 100%;
+            max-width: 850px;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            margin: 60px 0;
+            border: 3px solid var(--verde);
+            box-sizing: border-box;
+        }
+
+        .panel-actividades h2 { color: var(--verde); margin-bottom: 25px; font-size: 1.6rem; }
+
+        .grid-botones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .btn-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 10px;
+            background-color: var(--verde);
+            color: white !important;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border-bottom: 5px solid #005a2a;
+            font-size: 0.9rem;
+        }
+
+        .btn-nav:hover {
+            background-color: var(--dorado);
+            border-bottom-color: #967d3b;
+            transform: translateY(-4px);
+        }
+
+        .btn-index { background-color: #444; border-bottom-color: #222; }
+
+        @media (max-width: 500px) {
+            .grid-botones { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="Andalucia.html" class="btn-inicio">🏠 Volver a la Lectura</a>
+
+    <div class="contenedor">
+        <h1>🔍 Tesoros de Andalucía</h1>
+        <p>Encuentra 6 lugares mágicos:</p>
+        
+        <div id="sopa"></div>
+        
+        <div class="lista-palabras" id="lista-palabras"></div>
+    </div>
+
+    <div class="panel-actividades">
+        <h2>¿Estáis listos para demostrar que sois expertos?</h2>
+        <div class="grid-botones">
+            <a href="main-index.html" class="btn-nav btn-index">🏠 Volver al Index</a>                      
+            <a href="sopa.html" class="btn-nav" style="background-color: var(--dorado);">🔍 Sopa de Letras 1</a>
+            <a href="sopa1.html" class="btn-nav">🔍 Sopa de Letras 2</a>
+            <a href="test0.html" class="btn-nav">❓ Preguntas 1</a>
+            <a href="test1.html" class="btn-nav">❓ Preguntas 2</a>
+            <a href="test2.html" class="btn-nav">❓ Preguntas 3</a>
+            <a href="tildes.html" class="btn-nav">✍️ Tildes</a>
+            <a href="gramaticapalabras.html" class="btn-nav">🅰️ Tipos de palabras</a>
+            <a href="ordenar.html" class="btn-nav">🅰️ Ordena la oración</a>
+            <a href="pasapalabra.html" class="btn-nav">🅰️ Pasapalabra</a>
+            <a href="escribe.html" class="btn-nav">🅰️ Describe tu aventura</a>
+        </div>
+    </div>
+
+    <script>
+        const listaBusqueda = ["ALHAMBRA", "GIRALDA", "MEZQUITA", "DOÑANA", "CABO", "SIERRA"];
+        const filas = 10, columnas = 10;
+        let tablero = Array(filas).fill().map(() => Array(columnas).fill(''));
+
+        function ponerPalabras() {
+            listaBusqueda.forEach(pal => {
+                let puesta = false;
+                while (!puesta) {
+                    let vertical = Math.random() > 0.5;
+                    let r = Math.floor(Math.random() * (filas - (vertical ? pal.length : 0)));
+                    let c = Math.floor(Math.random() * (columnas - (vertical ? 0 : pal.length)));
+                    
+                    let hueco = true;
+                    for (let i = 0; i < pal.length; i++) {
+                        if (tablero[r + (vertical ? i : 0)][c + (vertical ? 0 : i)] !== '') hueco = false;
+                    }
+
+                    if (hueco) {
+                        for (let i = 0; i < pal.length; i++) {
+                            tablero[r + (vertical ? i : 0)][c + (vertical ? 0 : i)] = pal[i];
+                        }
+                        puesta = true;
+                    }
+                }
+            });
+        }
+
+        ponerPalabras();
+        const sopaDiv = document.getElementById('sopa');
+        const letras = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+
+        for (let r = 0; r < filas; r++) {
+            for (let c = 0; c < columnas; c++) {
+                if (tablero[r][c] === '') tablero[r][c] = letras[Math.floor(Math.random()*letras.length)];
+                const span = document.createElement('div');
+                span.className = 'celda';
+                span.innerText = tablero[r][c];
+                span.onclick = function() {
+                    this.classList.toggle('marcada');
+                    chequear();
+                };
+                sopaDiv.appendChild(span);
+            }
+        }
+
+        const listaDiv = document.getElementById('lista-palabras');
+        listaBusqueda.forEach(p => {
+            const d = document.createElement('div');
+            d.className = 'item';
+            d.innerText = p;
+            d.id = "p-" + p;
+            listaDiv.appendChild(d);
+        });
+
+        function chequear() {
+            const marcadas = document.querySelectorAll('.marcada');
+            let combinacion = "";
+            marcadas.forEach(m => combinacion += m.innerText);
+
+            listaBusqueda.forEach(p => {
+                if(combinacion.includes(p) || combinacion.split('').reverse().join('').includes(p)) {
+                    marcadas.forEach(m => {
+                        if(p.includes(m.innerText)) {
+                            m.classList.remove('marcada');
+                            m.classList.add('encontrada');
+                        }
+                    });
+                    document.getElementById("p-" + p).classList.add('tachado');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordena la Aventura - Andalucía</title>
+    <style>
+        :root {
+            --verde: #00843D;
+            --verde-oscuro: #005a2a;
+            --dorado: #C1A14E;
+            --blanco: #ffffff;
+            --fondo: #f0f7f2;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background: var(--fondo);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .btn-inicio {
+            align-self: flex-start;
+            background: var(--verde);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-size: 1.1rem;
+        }
+
+        .container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 850px;
+            border-top: 12px solid var(--verde);
+        }
+
+        h1 { color: var(--verde); text-align: center; margin-bottom: 15px; font-size: 2.2rem; }
+        
+        .score-panel {
+            display: flex;
+            justify-content: space-around;
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            color: var(--verde-oscuro);
+            font-size: 1.3rem;
+        }
+
+        .sentence-container {
+            background: #fff;
+            border: 4px dashed var(--dorado);
+            border-radius: 20px;
+            min-height: 110px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .words-container {
+            background: #f1f1f1;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .word {
+            padding: 15px 22px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+            border: none;
+            background: white;
+            box-shadow: 0 5px 0px #ccc;
+            border: 2px solid #ddd;
+            font-size: 1.3rem;
+        }
+
+        .word:hover { transform: translateY(-3px); box-shadow: 0 7px 0px #bbb; }
+        
+        .word.selected {
+            background: var(--verde);
+            color: white;
+            border-color: var(--verde-oscuro);
+            box-shadow: 0 5px 0px var(--verde-oscuro);
+        }
+
+        .word.used {
+            opacity: 0.2;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .controls { display: flex; gap: 15px; }
+        button.action-btn {
+            flex: 1;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        #checkBtn { background: var(--verde); border-bottom: 5px solid var(--verde-oscuro); }
+        #clearBtn { background: #e74c3c; border-bottom: 5px solid #c0392b; }
+        #nextBtn { background: var(--dorado); border-bottom: 5px solid #967d3b; }
+
+        #message {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            font-size: 1.4rem;
+            min-height: 35px;
+        }
+        
+        .progress { text-align: center; margin-bottom: 10px; color: #666; font-size: 1.1rem; }
+
+        /* ESTILOS DEL PANEL DE ACTIVIDADES (Copiados de Andalucia.html) */
+        .panel-actividades {
+            background: white;
+            width: 100%;
+            max-width: 850px;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.05);
+            text-align: center;
+            margin: 40px 0 60px 0;
+            border: 3px solid var(--verde);
+            box-sizing: border-box;
+        }
+
+        .panel-actividades h2 {
+            color: var(--verde);
+            margin-bottom: 25px;
+            font-size: 1.6rem;
+        }
+
+        .grid-botones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .btn-actividad {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 10px;
+            background-color: var(--verde);
+            color: white !important;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border-bottom: 5px solid #005a2a;
+            font-size: 1rem;
+        }
+
+        .btn-actividad:hover {
+            background-color: var(--dorado);
+            border-bottom-color: #967d3b;
+            transform: translateY(-4px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-index {
+            background-color: #444 !important;
+            border-bottom-color: #222 !important;
+        }
+
+        @media (max-width: 600px) {
+            .grid-botones { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="Andalucia.html" class="btn-inicio">🏠 Volver a la Lectura</a>
+
+    <div class="container">
+        <h1>🔤 Ordena la Oración</h1>
+        <div class="progress">Pregunta <span id="currentIdx">1</span> de 8</div>
+        
+        <div class="score-panel">
+            <span>Puntos: <span id="puntos">0</span></span>
+            <span>Aciertos: <span id="aciertos">0</span></span>
+        </div>
+
+        <div class="sentence-container" id="dropZone"></div>
+        <div class="words-container" id="wordsZone"></div>
+
+        <div id="message"></div>
+
+        <div class="controls">
+            <button id="clearBtn" class="action-btn">🗑️ Limpiar</button>
+            <button id="checkBtn" class="action-btn">✅ Comprobar</button>
+            <button id="nextBtn" class="action-btn" disabled>Siguiente ⏭️</button>
+        </div>
+    </div>
+
+    <div class="panel-actividades">
+        <h2>¿Estáis listos para demostrar que sois expertos?</h2>
+        <div class="grid-botones">
+            <a href="main-index.html" class="btn-actividad btn-index">🏠 Volver al Index</a>                      
+            <a href="sopa.html" class="btn-actividad">🔍 Sopa de Letras 1</a>
+            <a href="sopa1.html" class="btn-actividad">🔍 Sopa de Letras 2</a>
+            <a href="test0.html" class="btn-actividad">❓ Preguntas 1</a>
+            <a href="test1.html" class="btn-actividad">❓ Preguntas 2</a>
+            <a href="test2.html" class="btn-actividad">❓ Preguntas 3</a>
+            <a href="tildes.html" class="btn-actividad">✍️ Tildes</a>
+            <a href="gramaticapalabras.html" class="btn-actividad">🅰️ Tipos de palabras</a>
+            <a href="ordenar.html" class="btn-actividad" style="background-color: var(--dorado);">🅰️ Ordena la oración</a>
+            <a href="pasapalabra.html" class="btn-actividad">🅰️ Pasapalabra</a>
+            <a href="escribe.html" class="btn-actividad">🅰️ Describe tu aventura</a>
+        </div>
+    </div>
+
+<script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSound(type) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'click') {
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        } else if (type === 'correct') {
+            osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        } else if (type === 'wrong') {
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        }
+    }
+
+    const datosJuego = [
+        { s: "Almería es la tierra del sol.", words: ["Almería", "es", "la", "tierra", "del", "sol."] },
+        { s: "Jaén tiene un mar de olivos.", words: ["Jaén", "tiene", "un", "mar", "de", "olivos."] },
+        { s: "En Málaga asan los espetos de sardinas.", words: ["En", "Málaga", "asan", "los", "espetos", "de", "sardinas."] },
+        { s: "El lince ibérico vive en Doñana.", words: ["El", "lince", "ibérico", "vive", "en", "Doñana."] },
+        { s: "Cádiz es conocida como la Tacita de Plata.", words: ["Cádiz", "es", "conocida", "como", "la", "Tacita", "de", "Plata."] },
+        { s: "La Giralda de Sevilla toca las campanas.", words: ["La", "Giralda", "de", "Sevilla", "toca", "las", "campanas."] },
+        { s: "La Mezquita de Córdoba tiene arcos de colores.", words: ["La", "Mezquita", "de", "Córdoba", "tiene", "arcos", "de", "colores."] },
+        { s: "Los reyes nazaríes construyeron la Alhambra.", words: ["Los", "reyes", "nazaríes", "construyeron", "la", "Alhambra."] }
+    ];
+
+    let indiceActual = 0;
+    let fraseUsuario = [];
+    let puntos = 0;
+    let aciertos = 0;
+
+    const dropZone = document.getElementById('dropZone');
+    const wordsZone = document.getElementById('wordsZone');
+    const message = document.getElementById('message');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    function iniciarNivel() {
+        dropZone.innerHTML = "";
+        wordsZone.innerHTML = "";
+        fraseUsuario = [];
+        message.innerText = "";
+        nextBtn.disabled = true;
+        checkBtn.disabled = false;
+        document.getElementById('currentIdx').innerText = indiceActual + 1;
+
+        let palabras = [...datosJuego[indiceActual].words];
+        palabras.sort(() => Math.random() - 0.5);
+
+        palabras.forEach(p => {
+            const btn = document.createElement('button');
+            btn.className = 'word';
+            btn.innerText = p;
+            btn.onclick = () => { playSound('click'); seleccionarPalabra(p, btn); };
+            wordsZone.appendChild(btn);
+        });
+    }
+
+    function seleccionarPalabra(palabra, btn) {
+        if (btn.classList.contains('used')) return;
+        fraseUsuario.push(palabra);
+        btn.classList.add('used');
+        
+        const span = document.createElement('button');
+        span.className = 'word selected';
+        span.innerText = palabra;
+        span.onclick = () => { playSound('click'); deseleccionarPalabra(palabra, btn, span); };
+        dropZone.appendChild(span);
+    }
+
+    function deseleccionarPalabra(palabra, btnOriginal, spanActual) {
+        fraseUsuario = fraseUsuario.filter(p => p !== palabra);
+        btnOriginal.classList.remove('used');
+        spanActual.remove();
+    }
+
+    clearBtn.onclick = () => { playSound('click'); iniciarNivel(); };
+
+    checkBtn.onclick = () => {
+        const resultado = fraseUsuario.join(" ");
+        const correcta = datosJuego[indiceActual].s;
+
+        if (resultado === correcta) {
+            playSound('correct');
+            message.innerText = "¡Excelente! ✨";
+            message.style.color = "var(--verde)";
+            puntos += 100;
+            aciertos++;
+            document.getElementById('puntos').innerText = puntos;
+            document.getElementById('aciertos').innerText = aciertos + "/8";
+            checkBtn.disabled = true;
+            nextBtn.disabled = false;
+        } else {
+            playSound('wrong');
+            message.innerText = "Revisa el orden... ❌";
+            message.style.color = "#e74c3c";
+        }
+    };
+
+    nextBtn.onclick = () => { playSound('click'); indiceActual++; 
+        if (indiceActual < datosJuego.length) iniciarNivel(); 
+        else mostrarFinal();
+    };
+
+    function mostrarFinal() {
+        document.querySelector('.container').innerHTML = `
+            <h2 style="color:var(--verde); text-align:center; font-size:2.5rem">¡CAMPEÓN/A! 🏆</h2>
+            <div style="font-size:4rem; text-align:center; margin:30px">${puntos} pts</div>
+            <button onclick="location.reload()" class="action-btn" style="background:var(--verde); width:100%">REPETIR AVENTURA</button>
+        `;
+    }
+
+    iniciarNivel();
+</script>
+</body>
+</html>

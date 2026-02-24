@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sopa de Letras: Sabores de Andalucía</title>
+    <style>
+        :root { 
+            --verde: #00843D; 
+            --verde-oscuro: #005a2a;
+            --dorado: #C1A14E; 
+            --fondo: #f9fdf9; 
+        }
+        
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: var(--fondo); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+            margin: 0;
+        }
+
+        .btn-inicio {
+            align-self: flex-start;
+            background: var(--verde);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-bottom: 4px solid var(--verde-oscuro);
+        }
+        
+        .card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            text-align: center; 
+            max-width: 600px; 
+            width: 100%; 
+            border-top: 12px solid var(--verde); 
+        }
+        
+        #sopa-grid { 
+            display: grid; 
+            grid-template-columns: repeat(10, 35px); 
+            grid-template-rows: repeat(10, 35px); 
+            gap: 5px; 
+            justify-content: center; 
+            margin: 20px 0; 
+            user-select: none;
+        }
+
+        .letra { 
+            width: 35px; height: 35px; border: 1px solid #ddd; border-radius: 5px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; cursor: pointer; background: #fff; transition: 0.2s;
+        }
+        .letra.seleccionada { background: var(--dorado); color: white; border-color: #967d3b; }
+        .letra.encontrada { background: var(--verde); color: white; border-color: var(--verde-oscuro); }
+
+        .lista-palabras { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px; }
+        .palabra-item { padding: 5px 12px; background: #eee; border-radius: 15px; font-size: 0.9rem; color: #555; }
+        .palabra-item.tachada { text-decoration: line-through; background: #d4edda; color: #155724; }
+
+        /* PANEL DE ACTIVIDADES UNIFICADO */
+        .panel-actividades {
+            background: white;
+            width: 100%;
+            max-width: 850px;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            margin: 60px 0;
+            border: 3px solid var(--verde);
+            box-sizing: border-box;
+        }
+
+        .panel-actividades h2 { color: var(--verde); margin-bottom: 25px; font-size: 1.6rem; }
+
+        .grid-botones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .btn-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 10px;
+            background-color: var(--verde);
+            color: white !important;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border-bottom: 5px solid #005a2a;
+            font-size: 0.9rem;
+        }
+
+        .btn-nav:hover {
+            background-color: var(--dorado);
+            border-bottom-color: #967d3b;
+            transform: translateY(-4px);
+        }
+
+        .btn-index { background-color: #444; border-bottom-color: #222; }
+
+        @media (max-width: 500px) {
+            #sopa-grid { grid-template-columns: repeat(10, 28px); grid-template-rows: repeat(10, 28px); }
+            .letra { width: 28px; height: 28px; font-size: 0.8rem; }
+            .grid-botones { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="Andalucia.html" class="btn-inicio">🏠 Volver a la Lectura</a>
+
+    <div class="card">
+        <h2 style="color: var(--verde);">🍴 Sabores de Andalucía</h2>
+        <p>Busca productos típicos de nuestra tierra:</p>
+        
+        <div id="sopa-grid"></div>
+        
+        <div class="lista-palabras" id="lista-palabras"></div>
+    </div>
+
+    <div class="panel-actividades">
+        <h2>¿Estáis listos para demostrar que sois expertos?</h2>
+        <div class="grid-botones">
+            <a href="main-index.html" class="btn-nav btn-index">🏠 Volver al Index</a>                      
+            <a href="sopa.html" class="btn-nav">🔍 Sopa de Letras 1</a>
+            <a href="sopa1.html" class="btn-nav" style="background-color: var(--dorado);">🔍 Sopa de Letras 2</a>
+            <a href="test0.html" class="btn-nav">❓ Preguntas 1</a>
+            <a href="test1.html" class="btn-nav">❓ Preguntas 2</a>
+            <a href="test2.html" class="btn-nav">❓ Preguntas 3</a>
+            <a href="tildes.html" class="btn-nav">✍️ Tildes</a>
+            <a href="gramaticapalabras.html" class="btn-nav">🅰️ Tipos de palabras</a>
+            <a href="ordenar.html" class="btn-nav">🅰️ Ordena la oración</a>
+            <a href="pasapalabra.html" class="btn-nav">🅰️ Pasapalabra</a>
+            <a href="escribe.html" class="btn-nav">🅰️ Describe tu aventura</a>
+        </div>
+    </div>
+
+    <script>
+        const palabras = ["ACEITE", "ESPETO", "SARDINA", "QUESO", "FRESA", "TOMATE"];
+        const size = 10;
+        let grid = Array(size).fill().map(() => Array(size).fill(''));
+
+        function colocarPalabras() {
+            palabras.forEach(p => {
+                let colocada = false;
+                while(!colocada) {
+                    let dir = Math.random() > 0.5 ? 'H' : 'V';
+                    let r = Math.floor(Math.random() * size);
+                    let c = Math.floor(Math.random() * size);
+                    
+                    if(dir === 'H' && c + p.length <= size) {
+                        let libre = true;
+                        for(let i=0; i<p.length; i++) if(grid[r][c+i] !== '') libre = false;
+                        if(libre) {
+                            for(let i=0; i<p.length; i++) grid[r][c+i] = p[i];
+                            colocada = true;
+                        }
+                    } else if(dir === 'V' && r + p.length <= size) {
+                        let libre = true;
+                        for(let i=0; i<p.length; i++) if(grid[r+i][c] !== '') libre = false;
+                        if(libre) {
+                            for(let i=0; i<p.length; i++) grid[r+i][c] = p[i];
+                            colocada = true;
+                        }
+                    }
+                }
+            });
+        }
+
+        colocarPalabras();
+        const gridDiv = document.getElementById('sopa-grid');
+        const listaDiv = document.getElementById('lista-palabras');
+        const letrasPosibles = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+
+        for(let r=0; r<size; r++) {
+            for(let c=0; c<size; c++) {
+                if(grid[r][c] === '') grid[r][c] = letrasPosibles[Math.floor(Math.random()*letrasPosibles.length)];
+                const div = document.createElement('div');
+                div.className = 'letra';
+                div.innerText = grid[r][c];
+                div.dataset.r = r;
+                div.dataset.c = c;
+                div.onclick = () => marcar(div);
+                gridDiv.appendChild(div);
+            }
+        }
+
+        palabras.forEach(p => {
+            const span = document.createElement('span');
+            span.className = 'palabra-item';
+            span.innerText = p;
+            span.id = "word-" + p;
+            listaDiv.appendChild(span);
+        });
+
+        function marcar(el) {
+            el.classList.toggle('seleccionada');
+            actualizarBusqueda();
+        }
+
+        function actualizarBusqueda() {
+            const sels = document.querySelectorAll('.seleccionada');
+            let texto = "";
+            sels.forEach(s => texto += s.innerText);
+
+            palabras.forEach(p => {
+                if(texto.includes(p) || texto.split('').reverse().join('').includes(p)) {
+                    sels.forEach(s => {
+                        s.classList.remove('seleccionada');
+                        s.classList.add('encontrada');
+                    });
+                    document.getElementById("word-" + p).classList.add('tachada');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

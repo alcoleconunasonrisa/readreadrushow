@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andalucía: Una Aventura Alucinante</title>
+    <style>
+        :root {
+            --verde: #00843D;
+            --blanco: #ffffff;
+            --dorado: #C1A14E;
+            --texto: #2c3e50;
+            --fondo: #f0f7f2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: var(--texto);
+            background-color: var(--fondo);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lectura-container {
+            max-width: 900px;
+            margin: 40px 20px;
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 12px solid var(--verde);
+        }
+
+        h1 { color: var(--verde); text-align: center; font-size: 2.5rem; margin-bottom: 30px; line-height: 1.2; }
+        
+        .intro-texto {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--verde);
+            margin-bottom: 35px;
+        }
+
+        /* Estilo para las fotos de las primeras provincias */
+        .img-flotante-der {
+            float: right;
+            width: 280px;
+            height: 190px;
+            margin-left: 20px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            border: 3px solid var(--verde);
+            object-fit: cover;
+        }
+
+        .img-flotante-izq {
+            float: left;
+            width: 280px;
+            height: 190px;
+            margin-right: 20px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            border: 3px solid var(--verde);
+            object-fit: cover;
+        }
+
+        /* Contenedor especial para las 3 fotos finales */
+        .galeria-final {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .galeria-final img {
+            width: 260px;
+            height: 180px;
+            border-radius: 15px;
+            border: 3px solid var(--verde);
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        p { margin-bottom: 22px; text-align: justify; font-size: 1.15rem; }
+        strong { color: var(--verde); }
+
+        .destaque-huelva {
+            background-color: #f9fdf9;
+            padding: 25px;
+            border-left: 6px solid var(--dorado);
+            border-radius: 15px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .panel-actividades {
+            background: white;
+            width: 100%;
+            max-width: 900px;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 60px;
+            border: 3px solid var(--verde);
+        }
+
+        .grid-botones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 10px;
+            background-color: var(--verde);
+            color: white !important;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 15px;
+            border-bottom: 5px solid #005a2a;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 650px) {
+            .img-flotante-der, .img-flotante-izq {
+                float: none;
+                width: 100%;
+                height: auto;
+                margin: 10px 0;
+            }
+            .galeria-final img { width: 100%; height: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lectura-container clearfix">
+        <h1>🌟 ¡Andalucía: una aventura alucinante! 🌟</h1>
+        
+        <div class="intro-texto">
+            ¡Preparad las mochilas porque hoy vamos a recorrer la tierra más bonita del mundo!
+        </div>
+
+        <p>Nuestra bandera brilla con un blanco y verde esperanza que nos guiará por un viaje lleno de tesoros. ¡Vamos allá!</p>
+
+        <p>
+            <img src="almeria.jpg" alt="Almería" class="img-flotante-der">
+            Nuestra primera parada es <strong>Almería</strong>, la tierra del sol. Aquí fliparéis con el Cabo de Gata, pero también con los miles de invernaderos que parecen un mar de cristal. ¿Sabíais que aquí se sentían como auténticos vaqueros? ¡Sí! Porque en la provincia se grabaron las mejores películas de western de la historia. 🎬🤠
+        </p>
+
+        <p>
+            <img src="jaen.jpg" alt="Jaén" class="img-flotante-izq">
+            Pisamos el acelerador y, tras recorrer cada kilómetro de nuestra red de carreteras, llegamos al "mar de olivos" de <strong>Jaén</strong>. ¡Es increíble! Millones de olivos nos regalan el mejor aceite del mundo. No podéis perderos Úbeda, una ciudad tan antigua y majestuosa que os hará sentir como si viajaramos en el tiempo. 🏰
+        </p>
+
+        <p>
+            <img src="malaga.jpg" alt="Málaga" class="img-flotante-der">
+            ¡Pero qué calorcito! El olor a mar nos lleva a <strong>Málaga</strong>. ¿Habéis visto cómo asan las sardinas? Usan una caña perfecta para preparar el espeto. ¡Y no os vayáis sin comer un buen boquerón frito, que es el rey de la mesa! 🐟🔥
+        </p>
+
+        <p>
+            <img src="cadiz.jpg" alt="Cádiz" class="img-flotante-izq">
+            Seguimos la costa hasta Tarifa, donde el viento nos despeina mientras miramos hacia África a través del estrecho. ¡Casi se puede tocar! Y justo al lado... ¡La alegría de <strong>Cádiz</strong>! La ciudad que sonríe al mar con sus carnavales y sus puentes, como el puente Carranza y el nuevo puente de la Pepa. ¡Ah! Y si os entra hambre, en Grazalema hacen un queso que está riquísimo. Nuestra cultura es una fiesta: desde ir de romería con los caballos hasta bailar flamenco con toda el alma. Ya sea en Jerez (que antes se escribía Xerez) o en pueblos con nombres con tanta solera como Zahara que puede ser … de la Sierra o … de los atunes, ¡Andalucía es una explosión de vida! 💃
+        </p>
+
+        <div class="destaque-huelva">
+            <img src="huelva.jpg" alt="Huelva" class="img-flotante-der">
+            ¡Silencio ahora! Entramos en <strong>Doñana</strong>, el hogar del lince ibérico, nuestro felino más especial. Estamos en <strong>Huelva</strong>, tierra de marineros valientes que descubrieron América y de pueblos preciosos como Ayamonte, donde el río Guadiana nos saluda desde la frontera con Portugal. 🍓🐾
+        </div>
+
+        <p>
+            ¡Y todavía hay más arte! En <strong>Sevilla</strong>, la capital, la Giralda nos espera para tocarnos las campanas, mientras que en <strong>Córdoba</strong> la mezquita nos deja con la boca abierta con sus arcos de colores. ¿Y <strong>Granada</strong>? ¡Pura magia! Allí los reyes de la época nazarí construyeron la Alhambra y, si miráis arriba, veréis Sierra Nevada, siempre imponente! ❄️🕌
+        </p>
+
+        <div class="galeria-final">
+            <img src="sevilla.jpg" alt="Sevilla">
+            <img src="cordoba.jpg" alt="Córdoba">
+            <img src="granada.jpg" alt="Granada">
+        </div>
+
+        <p>
+            Pero lo más increíble de Andalucía no son sólo sus monumentos o sus paisajes, es su luz y su alegría. Tenemos un cielo tan azul y brillante que parece pintado a mano, y una gente tan acogedora que siempre te recibe con una sonrisa y una palabra amable. Aquí, cada plaza es un lugar para compartir y cada rincón tiene una historia que contarte. Vivimos en una tierra que celebra la vida con alegría, donde el sol nos regala energía cada mañana y donde aprender es siempre una aventura compartida bajo el cielo más luminoso de Europa. 
+        </p>
+
+        <p style="text-align: center; font-weight: bold; font-size: 1.3rem;">Es un auténtico privilegio vivir en este maravilloso lugar: ANDALUCÍA. 🚀</p>
+    </div>
+
+    <div class="panel-actividades">
+        <h2>🎯 ¿Estáis listos para demostrar que sois expertos?</h2>
+        <div class="grid-botones">
+            <a href="main-index.html" class="btn" style="background:#444;">📖 Volver a menú</a>
+            <a href="sopa.html" class="btn">🔍 Sopa 1</a>
+            <a href="sopa1.html" class="btn">🔍 Sopa 2</a>
+            <a href="test0.html" class="btn">❓ Test 1</a>
+            <a href="test1.html" class="btn">❓ Test 2</a>
+            <a href="test2.html" class="btn">❓ Test 3</a>
+            <a href="tildes.html" class="btn">✍️ Tildes</a>
+            <a href="gramaticapalabras.html" class="btn">🅰️ Gramática</a>
+            <a href="ordenar.html" class="btn">🧩 Oraciones</a>
+            <a href="pasapalabra.html" class="btn">🅰️ Pasapalabra</a>
+            <a href="escribe.html" class="btn">📝 Escritura</a>
+        </div>
+    </div>
+</body>
+</html>

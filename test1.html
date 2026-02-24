@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Súper Test de Comprensión: Andalucía</title>
+    <style>
+        :root { 
+            --verde: #00843D; 
+            --verde-oscuro: #005a2a;
+            --dorado: #C1A14E; 
+            --gris: #f8f9fa; 
+            --fondo: #e9f5ec;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--fondo); 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px;
+        }
+
+        .btn-inicio {
+            align-self: flex-start;
+            background: var(--verde);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-bottom: 4px solid var(--verde-oscuro);
+        }
+
+        .quiz-card { 
+            background: white; 
+            width: 100%; 
+            max-width: 650px; 
+            padding: 35px; 
+            border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
+            border-top: 12px solid var(--verde); 
+            text-align: center;
+        }
+
+        .header { text-align: center; margin-bottom: 25px; }
+        .progreso { font-weight: bold; color: var(--verde); margin-bottom: 10px; font-size: 0.9rem; text-transform: uppercase; }
+        .pregunta { font-size: 1.4rem; color: #2c3e50; line-height: 1.4; margin-bottom: 25px; min-height: 80px; font-weight: bold; }
+        
+        .opciones { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        
+        .btn-opcion { 
+            background: white; 
+            border: 2px solid #e0e0e0; 
+            padding: 18px; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            font-size: 1.1rem; 
+            font-weight: 500;
+            border-bottom: 5px solid #ccc;
+        }
+
+        .btn-opcion:hover { background: #f0f7f2; border-color: var(--verde); transform: translateY(-2px); }
+        .btn-opcion.correcta { background: #d4edda !important; border-color: #28a745 !important; border-bottom-color: #1e7e34; color: #155724; }
+        .btn-opcion.incorrecta { background: #f8d7da !important; border-color: #dc3545 !important; border-bottom-color: #bd2130; color: #721c24; }
+
+        #feedback { margin-top: 20px; font-weight: bold; font-size: 1.2rem; min-height: 30px; }
+
+        /* PANEL DE ACTIVIDADES UNIFICADO */
+        .panel-actividades {
+            background: white;
+            width: 100%;
+            max-width: 850px;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            margin: 60px 0;
+            border: 3px solid var(--verde);
+            box-sizing: border-box;
+        }
+
+        .panel-actividades h2 { color: var(--verde); margin-bottom: 25px; font-size: 1.6rem; }
+
+        .grid-botones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .btn-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 10px;
+            background-color: var(--verde);
+            color: white !important;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border-bottom: 5px solid #005a2a;
+            font-size: 0.9rem;
+        }
+
+        .btn-nav:hover {
+            background-color: var(--dorado);
+            border-bottom-color: #967d3b;
+            transform: translateY(-4px);
+        }
+
+        .btn-index { background-color: #444; border-bottom-color: #222; }
+
+        @media (max-width: 600px) {
+            .grid-botones { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="Andalucia.html" class="btn-inicio">🏠 Volver a la Lectura</a>
+
+    <div class="quiz-card" id="quiz">
+        <div class="header">
+            <div class="progreso" id="progreso">Pregunta 1 de 10</div>
+            <div class="pregunta" id="pregunta">Cargando pregunta...</div>
+        </div>
+        <div class="opciones" id="opciones"></div>
+        <div id="feedback"></div>
+    </div>
+
+    <div class="panel-actividades">
+        <h2>¿Estáis listos para demostrar que sois expertos?</h2>
+        <div class="grid-botones">
+            <a href="main-index.html" class="btn-nav btn-index">🏠 Volver al Index</a>                      
+            <a href="sopa.html" class="btn-nav">🔍 Sopa de Letras 1</a>
+            <a href="sopa1.html" class="btn-nav">🔍 Sopa de Letras 2</a>
+            <a href="test0.html" class="btn-nav">❓ Preguntas 1</a>
+            <a href="test1.html" class="btn-nav" style="background-color: var(--dorado);">❓ Preguntas 2</a>
+            <a href="test2.html" class="btn-nav">❓ Preguntas 3</a>
+            <a href="tildes.html" class="btn-nav">✍️ Tildes</a>
+            <a href="gramaticapalabras.html" class="btn-nav">🅰️ Tipos de palabras</a>
+            <a href="ordenar.html" class="btn-nav">🅰️ Ordena la oración</a>
+            <a href="pasapalabra.html" class="btn-nav">🅰️ Pasapalabra</a>
+            <a href="escribe.html" class="btn-nav">🅰️ Describe tu aventura</a>
+        </div>
+    </div>
+
+<script>
+    const bancoPreguntas = [
+        {p: "¿Qué fruta famosa se cultiva en Huelva?", a: ["Manzanas", "Fresas", "Plátanos"], c: 1},
+        {p: "¿Cuál es el color de la bandera de Andalucía?", a: ["Blanca y Roja", "Verde y Blanca", "Azul y Blanca"], c: 1},
+        {p: "¿Cómo se llama el río más importante de Andalucía?", a: ["Tajo", "Ebro", "Guadalquivir"], c: 2},
+        {p: "¿En qué ciudad está la Mezquita con arcos rojos?", a: ["Córdoba", "Jaén", "Cádiz"], c: 0},
+        {p: "¿Qué animal protegido vive en Doñana?", a: ["Oso", "Lince Ibérico", "Tigre"], c: 1},
+        {p: "¿Cómo se llama la torre más famosa de Sevilla?", a: ["Torre de Oro", "Giralda", "Torre Eiffel"], c: 1},
+        {p: "¿Qué ciudad es conocida como la capital del aceite?", a: ["Huelva", "Málaga", "Jaén"], c: 2},
+        {p: "¿Dónde se grabaron películas de vaqueros?", a: ["Almería", "Granada", "Sevilla"], c: 0},
+        {p: "¿Qué ciudad tiene un carnaval muy famoso?", a: ["Córdoba", "Cádiz", "Almería"], c: 1},
+        {p: "¿Qué cordillera tiene nieve en Granada?", a: ["Sierra Morena", "Sierra Nevada", "Pirineos"], c: 1}
+    ];
+
+    let actual = 0;
+    let score = 0;
+    let contestada = false;
+
+    function mostrarPregunta() {
+        contestada = false;
+        const p = bancoPreguntas[actual];
+        document.getElementById('progreso').innerText = `Pregunta ${actual + 1} de 10`;
+        document.getElementById('pregunta').innerText = p.p;
+        document.getElementById('feedback').innerText = "";
+        
+        const contenedorOpciones = document.getElementById('opciones');
+        contenedorOpciones.innerHTML = "";
+        
+        p.a.forEach((opt, idx) => {
+            const boton = document.createElement('button');
+            boton.className = 'btn-opcion';
+            boton.innerText = opt;
+            boton.onclick = () => validar(idx, boton);
+            contenedorOpciones.appendChild(boton);
+        });
+    }
+
+    function validar(eleccion, el) {
+        if(contestada) return;
+        contestada = true;
+        
+        const correcta = bancoPreguntas[actual].c;
+        if(eleccion === correcta) {
+            el.classList.add('correcta');
+            document.getElementById('feedback').innerText = "¡Correcto! 🌟";
+            document.getElementById('feedback').style.color = "var(--verde)";
+            score++;
+        } else {
+            el.classList.add('incorrecta');
+            document.getElementById('feedback').innerText = "¡Oh! La respuesta era: " + bancoPreguntas[actual].a[correcta];
+            document.getElementById('feedback').style.color = "#e74c3c";
+        }
+
+        setTimeout(() => {
+            actual++;
+            if(actual < bancoPreguntas.length) {
+                mostrarPregunta();
+            } else {
+                finalizar();
+            }
+        }, 2000);
+    }
+
+    function finalizar() {
+        const quiz = document.getElementById('quiz');
+        let mensaje = score >= 8 ? "¡Eres un experto/a en Andalucía! 🏆" : "¡Buen intento! Repasa el texto para mejorar. 📚";
+        quiz.innerHTML = `
+            <div style="text-align:center">
+                <h2 style="color:var(--verde)">¡Resultado Final!</h2>
+                <div style="font-size:4rem; margin:20px 0; font-weight:bold">${score}/10</div>
+                <p style="font-size:1.3rem; margin-bottom:25px;">${mensaje}</p>
+                <button onclick="location.reload()" style="background:var(--verde); color:white; border:none; padding:18px 35px; border-radius:15px; cursor:pointer; font-weight:bold; border-bottom: 5px solid var(--verde-oscuro);">REPETIR DESAFÍO</button>
+            </div>
+        `;
+    }
+
+    mostrarPregunta();
+</script>
+</body>
+</html>

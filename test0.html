@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reto de las 8 Provincias</title>
+    <style>
+        :root {
+            --verde: #00843D;
+            --verde-oscuro: #005a2a;
+            --blanco: #ffffff;
+            --dorado: #C1A14E;
+            --rojo: #e74c3c;
+            --fondo: #f0f7f2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--fondo);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .btn-inicio {
+            align-self: flex-start;
+            background: var(--verde);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-bottom: 4px solid var(--verde-oscuro);
+        }
+
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 12px solid var(--verde);
+            box-sizing: border-box;
+        }
+
+        h1 { color: var(--verde); margin-bottom: 15px; }
+
+        #panel-mision {
+            background: var(--verde);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            border-bottom: 5px solid var(--verde-oscuro);
+            font-weight: bold;
+        }
+
+        .grid-provincias {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .caja-provincia {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+            border-bottom: 5px solid #ccc;
+        }
+
+        .caja-provincia:hover { transform: translateY(-3px); background: #fff; border-color: var(--verde); }
+        .acierto { background-color: #d4edda !important; border-color: #28a745 !important; border-bottom-color: #1e7e34 !important; color: #155724; }
+        .error { background-color: #f8d7da !important; border-color: #dc3545 !important; border-bottom-color: #bd2130 !important; color: #721c24; }
+
+        .score-box { margin-top: 25px; font-size: 1.2rem; font-weight: bold; color: #555; }
+
+        /* PANEL DE ACTIVIDADES UNIFICADO */
+        .panel-actividades {
+            background: white;
+            width: 100%;
+            max-width: 850px;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            margin: 60px 0;
+            border: 3px solid var(--verde);
+            box-sizing: border-box;
+        }
+
+        .panel-actividades h2 { color: var(--verde); margin-bottom: 25px; font-size: 1.6rem; }
+
+        .grid-botones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .btn-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 10px;
+            background-color: var(--verde);
+            color: white !important;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border-bottom: 5px solid #005a2a;
+            font-size: 0.9rem;
+        }
+
+        .btn-nav:hover {
+            background-color: var(--dorado);
+            border-bottom-color: #967d3b;
+            transform: translateY(-4px);
+        }
+
+        .btn-index { background-color: #444; border-bottom-color: #222; }
+
+        @media (max-width: 600px) {
+            .grid-botones { grid-template-columns: 1fr; }
+            .grid-provincias { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="Andalucia.html" class="btn-inicio">🏠 Volver a la Lectura</a>
+
+    <div class="container" id="game-box">
+        <h1>🚩 Reto de las Provincias</h1>
+        <p>¿Sabrías identificar de qué provincia estamos hablando?</p>
+
+        <div id="panel-mision">Cargando misión...</div>
+
+        <div class="grid-provincias" id="opciones">
+            <div class="caja-provincia" onclick="verificar('AL')">ALMERÍA</div>
+            <div class="caja-provincia" onclick="verificar('CA')">CÁDIZ</div>
+            <div class="caja-provincia" onclick="verificar('CO')">CÓRDOBA</div>
+            <div class="caja-provincia" onclick="verificar('GR')">GRANADA</div>
+            <div class="caja-provincia" onclick="verificar('HU')">HUELVA</div>
+            <div class="caja-provincia" onclick="verificar('JA')">JAÉN</div>
+            <div class="caja-provincia" onclick="verificar('MA')">MÁLAGA</div>
+            <div class="caja-provincia" onclick="verificar('SE')">SEVILLA</div>
+        </div>
+
+        <div class="score-box">Provincias encontradas: <span id="puntos">0</span> de 8</div>
+    </div>
+
+    <div class="panel-actividades">
+        <h2>¿Estáis listos para demostrar que sois expertos?</h2>
+        <div class="grid-botones">
+            <a href="main-index.html" class="btn-nav btn-index">🏠 Volver al Index</a>                      
+            <a href="sopa.html" class="btn-nav">🔍 Sopa de Letras 1</a>
+            <a href="sopa1.html" class="btn-nav">🔍 Sopa de Letras 2</a>
+            <a href="test0.html" class="btn-nav" style="background-color: var(--dorado);">❓ Preguntas 1</a>
+            <a href="test1.html" class="btn-nav">❓ Preguntas 2</a>
+            <a href="test2.html" class="btn-nav">❓ Preguntas 3</a>
+            <a href="tildes.html" class="btn-nav">✍️ Tildes</a>
+            <a href="gramaticapalabras.html" class="btn-nav">🅰️ Tipos de palabras</a>
+            <a href="ordenar.html" class="btn-nav">🅰️ Ordena la oración</a>
+            <a href="pasapalabra.html" class="btn-nav">🅰️ Pasapalabra</a>
+            <a href="escribe.html" class="btn-nav">🅰️ Describe tu aventura</a>
+        </div>
+    </div>
+
+    <audio id="audio-ok" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+    <audio id="audio-no" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3"></audio>
+
+    <script>
+        const retos = [
+            {m: "Busca la provincia de la Giralda y la capital de Andalucía", r: "SE"},
+            {m: "Busca la ciudad de la Mezquita y los arcos rojos y blancos", r: "CO"},
+            {m: "Busca la tierra de la Alhambra y Sierra Nevada", r: "GR"},
+            {m: "Busca la provincia de los Carnavales y el mar", r: "CA"},
+            {m: "Busca la provincia del aceite de oliva y los castillos", r: "JA"},
+            {m: "Busca donde se grabaron las películas de vaqueros e invernaderos", r: "AL"},
+            {m: "Busca la tierra de los espetos y los boquerones", r: "MA"},
+            {m: "Busca la provincia de las fresas y el Parque de Doñana", r: "HU"}
+        ];
+
+        let actual = 0;
+        let puntos = 0;
+        let bloqueado = false;
+
+        function cargarReto() {
+            if (actual >= retos.length) {
+                mostrarFinal();
+                return;
+            }
+            bloqueado = false;
+            document.getElementById('panel-mision').innerText = retos[actual].m;
+            const cajas = document.querySelectorAll('.caja-provincia');
+            cajas.forEach(c => c.classList.remove('acierto', 'error'));
+        }
+
+        function verificar(id) {
+            if (bloqueado) return;
+            
+            const cajas = document.querySelectorAll('.caja-provincia');
+            let cajaElegida;
+            cajas.forEach(c => {
+                if (c.innerText.includes(id === 'AL' ? 'ALMERÍA' : id === 'CA' ? 'CÁDIZ' : id === 'CO' ? 'CÓRDOBA' : id === 'GR' ? 'GRANADA' : id === 'HU' ? 'HUELVA' : id === 'JA' ? 'JAÉN' : id === 'MA' ? 'MÁLAGA' : 'SEVILLA')) {
+                    cajaElegida = c;
+                }
+            });
+
+            if (id === retos[actual].r) {
+                cajaElegida.classList.add('acierto');
+                document.getElementById('audio-ok').play();
+                puntos++;
+                document.getElementById('puntos').innerText = puntos;
+                bloqueado = true;
+                setTimeout(() => {
+                    actual++;
+                    cargarReto();
+                }, 1200);
+            } else {
+                cajaElegida.classList.add('error');
+                document.getElementById('audio-no').play();
+                bloqueado = true;
+                setTimeout(() => {
+                    cajaElegida.classList.remove('error');
+                    bloqueado = false;
+                }, 600);
+            }
+        }
+
+        function mostrarFinal() {
+            document.getElementById('game-box').innerHTML = `
+                <h2 style="color:var(--verde)">¡ENHORABUENA! 🏆</h2>
+                <p style="font-size:1.3rem">Has demostrado ser un experto en las 8 provincias de Andalucía.</p>
+                <div id="panel-mision" style="background:var(--dorado); border-bottom-color:#967d3b">Puntuación final: ${puntos} de 8</div>
+                <button onclick="location.reload()" style="padding:18px 35px; font-size:1.2rem; cursor:pointer; background:var(--verde); color:white; border:none; border-radius:15px; font-weight:bold; border-bottom: 5px solid var(--verde-oscuro);">JUGAR OTRA VEZ</button>
+            `;
+        }
+
+        cargarReto();
+    </script>
+</body>
+</html>

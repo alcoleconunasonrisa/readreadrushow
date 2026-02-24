@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafío: Los Secretos de Andalucía</title>
+    <style>
+        :root { 
+            --verde: #00843D; 
+            --verde-oscuro: #005a2a;
+            --dorado: #C1A14E; 
+            --fondo: #f4f7f4; 
+        }
+        
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: var(--fondo); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+        
+        .btn-inicio { 
+            align-self: flex-start; 
+            background: var(--verde); 
+            color: white; 
+            padding: 12px 24px; 
+            text-decoration: none; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            margin-bottom: 20px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            border-bottom: 4px solid var(--verde-oscuro);
+        }
+
+        .quiz-container { 
+            background: white; 
+            width: 100%; 
+            max-width: 650px; 
+            padding: 40px; 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            border-top: 12px solid var(--verde); 
+            text-align: center; 
+        }
+        
+        .progreso { color: #888; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        h2 { color: var(--verde); margin-top: 0; font-size: 1.8rem; }
+        
+        .opciones { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
+        
+        .opcion {
+            background: #f9f9f9;
+            border: 2px solid #eee;
+            padding: 18px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            font-size: 1.1rem;
+            border-bottom: 4px solid #ddd;
+        }
+
+        .opcion:hover { background: #f0f0f0; transform: translateY(-2px); }
+        .opcion.correcta { background: #d4edda !important; border-color: #28a745 !important; color: #155724; border-bottom: 4px solid #1e7e34; }
+        .opcion.incorrecta { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24; border-bottom: 4px solid #bd2130; }
+
+        #mensaje { margin-top: 20px; font-weight: bold; min-height: 24px; font-size: 1.2rem; }
+
+        /* PANEL DE ACTIVIDADES UNIFICADO */
+        .panel-actividades {
+            background: white;
+            width: 100%;
+            max-width: 850px;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            margin: 60px 0;
+            border: 3px solid var(--verde);
+            box-sizing: border-box;
+        }
+
+        .panel-actividades h2 { color: var(--verde); margin-bottom: 25px; font-size: 1.6rem; }
+
+        .grid-botones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .btn-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 10px;
+            background-color: var(--verde);
+            color: white !important;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border-bottom: 5px solid #005a2a;
+            font-size: 0.9rem;
+        }
+
+        .btn-nav:hover {
+            background-color: var(--dorado);
+            border-bottom-color: #967d3b;
+            transform: translateY(-4px);
+        }
+
+        .btn-index { background-color: #444; border-bottom-color: #222; }
+
+        @media (max-width: 600px) {
+            .grid-botones { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="Andalucia.html" class="btn-inicio">🏠 Volver a la Lectura</a>
+
+    <div class="quiz-container" id="quiz-box">
+        <div class="progreso" id="num-pregunta">Pregunta 1 de 10</div>
+        <h2 id="pregunta-texto">¿Cargando pregunta?</h2>
+        <div class="opciones" id="caja-opciones"></div>
+        <div id="mensaje"></div>
+    </div>
+
+    <div class="panel-actividades">
+        <h2>¿Estáis listos para demostrar que sois expertos?</h2>
+        <div class="grid-botones">
+            <a href="main-index.html" class="btn-nav btn-index">🏠 Volver al Index</a>                      
+            <a href="sopa.html" class="btn-nav">🔍 Sopa de Letras 1</a>
+            <a href="sopa1.html" class="btn-nav">🔍 Sopa de Letras 2</a>
+            <a href="test0.html" class="btn-nav">❓ Preguntas 1</a>
+            <a href="test1.html" class="btn-nav">❓ Preguntas 2</a>
+            <a href="test2.html" class="btn-nav" style="background-color: var(--dorado);">❓ Preguntas 3</a>
+            <a href="tildes.html" class="btn-nav">✍️ Tildes</a>
+            <a href="gramaticapalabras.html" class="btn-nav">🅰️ Tipos de palabras</a>
+            <a href="ordenar.html" class="btn-nav">🅰️ Ordena la oración</a>
+            <a href="pasapalabra.html" class="btn-nav">🅰️ Pasapalabra</a>
+            <a href="escribe.html" class="btn-nav">🅰️ Describe tu aventura</a>
+        </div>
+    </div>
+
+<script>
+    const misPreguntas = [
+        {q: "¿Qué nombre recibían las películas grabadas en Almería?", a: ["Musicales", "Ciencia Ficción", "Western"], c: 2},
+        {q: "¿Qué ciudad de Jaén es descrita como majestuosa y antigua?", a: ["Baeza", "Úbeda", "Linares"], c: 1},
+        {q: "¿Cómo se llama la caña que se usa para asar sardinas?", a: ["Pintxo", "Espeto", "Brocheta"], c: 1},
+        {q: "¿Qué viento nos despeina al llegar a Tarifa?", a: ["Levante", "Poniente", "Alisio"], c: 0},
+        {q: "¿Qué río hace de frontera con Portugal en Huelva?", a: ["Guadalquivir", "Tinto", "Guadiana"], c: 2},
+        {q: "¿En qué provincia se encuentra el Parque de Doñana?", a: ["Sevilla", "Huelva", "Cádiz"], c: 1},
+        {q: "¿Qué nombre antiguo tenía la ciudad de Jerez?", a: ["Xerez", "Gades", "Hispalis"], c: 0},
+        {q: "¿De qué colores son los arcos de la Mezquita de Córdoba?", a: ["Verdes y Blancos", "Rojos y Blancos", "Azules y Amarillos"], c: 1},
+        {q: "¿Qué reyes construyeron la Alhambra de Granada?", a: ["Cristianos", "Nazaríes", "Romanos"], c: 1},
+        {q: "¿Qué podemos ver arriba si miramos desde Granada?", a: ["Sierra Nevada", "Sierra Morena", "Sierra de Grazalema"], c: 0}
+    ];
+
+    let indiceActual = 0;
+    let aciertos = 0;
+    let contestada = false;
+
+    function iniciar() {
+        contestada = false;
+        const p = misPreguntas[indiceActual];
+        document.getElementById('num-pregunta').innerText = `Pregunta ${indiceActual + 1} de 10`;
+        document.getElementById('pregunta-texto').innerText = p.q;
+        document.getElementById('mensaje').innerText = "";
+        
+        const caja = document.getElementById('caja-opciones');
+        caja.innerHTML = "";
+        
+        p.a.forEach((opt, idx) => {
+            const div = document.createElement('div');
+            div.className = 'opcion';
+            div.innerText = opt;
+            div.onclick = () => validar(idx, div);
+            caja.appendChild(div);
+        });
+    }
+
+    function validar(eleccion, elemento) {
+        if(contestada) return;
+        contestada = true;
+        
+        const correcta = misPreguntas[indiceActual].c;
+        if(eleccion === correcta) {
+            elemento.classList.add('correcta');
+            document.getElementById('mensaje').innerText = "¡Excelente! ✨";
+            document.getElementById('mensaje').style.color = "var(--verde)";
+            aciertos++;
+        } else {
+            elemento.classList.add('incorrecta');
+            document.getElementById('mensaje').innerText = "¡Casi! Era: " + misPreguntas[indiceActual].a[correcta];
+            document.getElementById('mensaje').style.color = "#e74c3c";
+        }
+
+        setTimeout(() => {
+            indiceActual++;
+            if(indiceActual < misPreguntas.length) {
+                iniciar();
+            } else {
+                mostrarResultado();
+            }
+        }, 1800);
+    }
+
+    function mostrarResultado() {
+        const caja = document.getElementById('quiz-box');
+        let nota = aciertos >= 8 ? "¡Eres un fenómeno de la geografía!" : "¡Has aprendido mucho sobre nuestra tierra!";
+        caja.innerHTML = `
+            <h2 style="color:var(--verde)">¡Reto Finalizado!</h2>
+            <div style="font-size: 3.5rem; font-weight: bold; margin: 15px 0;">${aciertos}/10</div>
+            <p style="font-size: 1.1rem; color: #555;">${nota}</p>
+            <button onclick="location.reload()" style="background:var(--verde); color:white; border:none; padding:18px 30px; border-radius:15px; cursor:pointer; font-weight:bold; margin-top:15px; border-bottom: 5px solid var(--verde-oscuro);">REPETIR TEST</button>
+        `;
+    }
+
+    iniciar();
+</script>
+</body>
+</html>
