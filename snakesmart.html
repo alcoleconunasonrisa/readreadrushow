@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Snake Smart - Ortografía</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #2b6cb0;
+            --tablero: #fefae0;
+            --snake-body: #27ae60;
+            --snake-head: #2ecc71;
+            --accent: #f6ad55;
+        }
+
+        * { touch-action: none; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            margin: 0; padding: 10px;
+            font-family: 'Fredoka', sans-serif;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; color: white; overflow: hidden;
+        }
+
+        #word-card {
+            background: white; color: #2d3748;
+            padding: 10px 25px; border-radius: 50px;
+            margin-bottom: 10px; font-size: 1.5rem; font-weight: 600;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2); letter-spacing: 2px;
+            z-index: 5; height: 50px; display: flex; align-items: center;
+        }
+
+        .main-layout {
+            display: flex; gap: 10px; align-items: flex-start;
+            flex-wrap: wrap; justify-content: center;
+        }
+
+        .side-panel {
+            background: rgba(0,0,0,0.2); padding: 10px;
+            border-radius: 20px; width: 110px; text-align: center;
+        }
+
+        #game-container {
+            position: relative; background: #1a365d;
+            padding: 8px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        canvas {
+            display: block; background-color: var(--tablero);
+            width: 300px; height: 300px; border-radius: 12px;
+        }
+
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); border-radius: 12px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 10; text-align: center; padding: 15px; overflow-y: auto;
+        }
+
+        .menu-section { margin-bottom: 15px; width: 100%; }
+        .menu-label { font-size: 0.7rem; color: var(--accent); margin-bottom: 5px; text-transform: uppercase; font-weight: 600; }
+
+        .selector-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 5px;
+        }
+
+        .option-btn {
+            padding: 6px; border: 2px solid var(--accent);
+            background: transparent; color: white; border-radius: 8px;
+            cursor: pointer; font-family: 'Fredoka'; font-size: 0.65rem; transition: 0.2s;
+        }
+
+        .option-btn.active { background: var(--accent); font-weight: 600; }
+
+        .play-btn {
+            padding: 10px 25px; background: #48bb78; color: white; border: none; 
+            border-radius: 10px; font-weight: 600; cursor: pointer; font-family: 'Fredoka'; font-size: 1rem;
+            box-shadow: 0 4px 0 #2f855a; margin-top: 10px;
+        }
+
+        #history-list { font-size: 0.7rem; list-style: none; padding: 0; text-align: left; margin: 0; }
+        #history-list li.done { color: #f6ad55; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div id="word-card">¡ELIGE TU RETO!</div>
+
+    <div class="main-layout">
+        <div class="side-panel">
+            <div style="font-size: 0.6rem; color: var(--accent)">PUNTOS</div>
+            <div id="score-val" style="font-size: 1.5rem;">0</div>
+        </div>
+
+        <div id="game-container">
+            <canvas id="gameCanvas" width="300" height="300"></canvas>
+            <div id="menu-overlay" class="overlay">
+                <h2 id="status-title" style="color:var(--accent); margin:0 0 10px 0; font-size: 1.2rem;">AJUSTES</h2>
+                
+                <div class="menu-section">
+                    <div class="menu-label">Regla Ortográfica</div>
+                    <div class="selector-grid" id="rule-selector">
+                        <button class="option-btn active" onclick="setRule('mp_mb', this)">MP / MB</button>
+                        <button class="option-btn" onclick="setRule('c_z', this)">C / Z</button>
+                        <button class="option-btn" onclick="setRule('g_j', this)">G / J</button>
+                        <button class="option-btn" onclick="setRule('b_v', this)">B / V</button>
+                        <button class="option-btn" onclick="setRule('h', this)">CON H</button>
+                        <button class="option-btn" onclick="setRule('mix', this)">MIXTO</button>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <div class="menu-label">Velocidad</div>
+                    <div class="selector-grid">
+                        <button class="option-btn active" onclick="setSpeed(200, this)">INICIAL</button>
+                        <button class="option-btn" onclick="setSpeed(120, this)">MEDIO</button>
+                        <button class="option-btn" onclick="setSpeed(90, this)">PRO</button>
+                    </div>
+                </div>
+
+                <button class="play-btn" onclick="iniciarJuego()">¡EMPEZAR!</button>
+            </div>
+        </div>
+
+        <div class="side-panel">
+            <div style="font-size: 0.6rem; color: var(--accent)">LOGROS</div>
+            <ul id="history-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const box = 20;
+
+        // --- BANCO DE PALABRAS ---
+        const diccionario = {
+            mp_mb: ["TAMBOR", "CAMPO", "BOMBA", "LIMPIO", "SOMBRA", "CAMPANA", "ASOMBRO"],
+            c_z: ["ZAPATO", "CIEGO", "ZORRO", "CENA", "AZUL", "CIELO", "CEBRA", "CAZAR"],
+            g_j: ["GATO", "JIRAFA", "GENTE", "JABÓN", "GIGANTE", "JARRA", "GENIO", "RELOJ"],
+            b_v: ["BARCO", "AVIÓN", "BOTAS", "VACA", "BALÓN", "VENTANA", "BOTELLA", "VERDE"],
+            h: ["HUEVO", "HIELO", "HOJA", "HUESO", "HORMIGA", "HADA", "HUMO", "HIERBA"],
+            mix: ["TAMBOR", "CIELO", "JIRAFA", "AVIÓN", "HUEVO", "CAMPO", "ZAPATO"]
+        };
+
+        let audioCtx = null;
+        let currentVelocity = 200;
+        let currentRule = 'mp_mb';
+        let palabrasActuales = [];
+
+        function setSpeed(ms, btn) {
+            currentVelocity = ms;
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            playSound(400, 0.05);
+        }
+
+        function setRule(rule, btn) {
+            currentRule = rule;
+            btn.parentElement.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            playSound(500, 0.05);
+        }
+
+        function playSound(freq, duration, type = 'sine') {
+            if (!audioCtx) return;
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.type = type; o.frequency.value = freq;
+            g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            o.connect(g); g.connect(audioCtx.destination);
+            o.start(); o.stop(audioCtx.currentTime + duration);
+        }
+
+        let serpiente, direccion, siguienteDir, comida, letrasComidas, score, loop, juegoActivo = false, isPaused = false;
+        let indicePalabra = 0;
+
+        // GESTOS
+        let touchStartX = 0, touchStartY = 0;
+        document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; touchStartY = e.changedTouches[0].screenY; }, false);
+        document.addEventListener('touchend', e => {
+            if (!juegoActivo || isPaused) return;
+            let dx = e.changedTouches[0].screenX - touchStartX;
+            let dy = e.changedTouches[0].screenY - touchStartY;
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (dx > 30 && direccion !== "LEFT") siguienteDir = "RIGHT";
+                else if (dx < -30 && direccion !== "RIGHT") siguienteDir = "LEFT";
+            } else {
+                if (dy > 30 && direccion !== "UP") siguienteDir = "DOWN";
+                else if (dy < -30 && direccion !== "DOWN") siguienteDir = "UP";
+            }
+        }, false);
+
+        window.addEventListener("keydown", e => {
+            if(e.key === "Enter" && !juegoActivo) iniciarJuego();
+            if(e.code === "Space" && juegoActivo) {
+                isPaused = !isPaused;
+                document.getElementById("status-title").innerText = isPaused ? "PAUSA" : "SNAKE";
+                document.getElementById("menu-overlay").style.display = isPaused ? "flex" : "none";
+            }
+            const keyMap = {"ArrowLeft":"LEFT","ArrowUp":"UP","ArrowRight":"RIGHT","ArrowDown":"DOWN"};
+            if(keyMap[e.key]) {
+                const newDir = keyMap[e.key];
+                const opposites = {"LEFT":"RIGHT","RIGHT":"LEFT","UP":"DOWN","DOWN":"UP"};
+                if(newDir !== opposites[direccion]) siguienteDir = newDir;
+            }
+        });
+
+        function crearComida() {
+            comida = {
+                x: Math.floor(Math.random() * 14) * box,
+                y: Math.floor(Math.random() * 14) * box,
+                letra: palabrasActuales[indicePalabra][letrasComidas.length]
+            };
+        }
+
+        function actualizarUI() {
+            const meta = palabrasActuales[indicePalabra];
+            let html = "";
+            for(let i=0; i<meta.length; i++) {
+                if(i < letrasComidas.length) html += `<span style="color:#38a169">${meta[i]}</span>`;
+                else if(i === letrasComidas.length) html += `<span style="color:#e53e3e; border-bottom:3px solid;">${meta[i]}</span>`;
+                else html += `<span style="color:#cbd5e0">${meta[i]}</span>`;
+            }
+            document.getElementById("word-card").innerHTML = html;
+            document.getElementById("score-val").innerText = score;
+        }
+
+        function gameLoop() {
+            if (isPaused || !juegoActivo) return;
+            direccion = siguienteDir;
+            let hX = serpiente[0].x, hY = serpiente[0].y;
+
+            if(direccion === "LEFT") hX -= box; else if(direccion === "UP") hY -= box;
+            else if(direccion === "RIGHT") hX += box; else if(direccion === "DOWN") hY += box;
+
+            if(hX === comida.x && hY === comida.y) {
+                playSound(600, 0.1); score += 10;
+                letrasComidas += comida.letra;
+                if(letrasComidas.length === palabrasActuales[indicePalabra].length) {
+                    playSound(800, 0.2); score += 50;
+                    const li = document.createElement("li"); li.className = "done";
+                    li.innerText = "✓ " + palabrasActuales[indicePalabra];
+                    document.getElementById("history-list").prepend(li);
+                    indicePalabra = (indicePalabra + 1) % palabrasActuales.length;
+                    letrasComidas = "";
+                }
+                crearComida(); actualizarUI();
+            } else { serpiente.pop(); }
+
+            if(hX < 0 || hY < 0 || hX >= canvas.width || hY >= canvas.height || serpiente.some(s => s.x === hX && s.y === hY)) {
+                finalizarJuego(); return;
+            }
+            serpiente.unshift({x: hX, y: hY});
+            dibujar();
+        }
+
+        function dibujar() {
+            ctx.fillStyle = "#fefae0";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#e53e3e"; ctx.font = "bold 18px Fredoka";
+            ctx.textAlign = "center"; ctx.fillText(comida.letra, comida.x + box/2, comida.y + 16);
+
+            serpiente.forEach((s, i) => {
+                const isHead = i === 0;
+                ctx.fillStyle = isHead ? "#2ecc71" : "#27ae60";
+                ctx.beginPath();
+                ctx.arc(s.x + box/2, s.y + box/2, box/2 - 1, 0, Math.PI*2);
+                ctx.fill();
+                if(isHead) {
+                    ctx.fillStyle = "white";
+                    let e1, e2;
+                    if(direccion === "RIGHT") { e1={x:15,y:5}; e2={x:15,y:15}; }
+                    else if(direccion === "LEFT") { e1={x:5,y:5}; e2={x:5,y:15}; }
+                    else if(direccion === "UP") { e1={x:5,y:5}; e2={x:15,y:5}; }
+                    else { e1={x:5,y:15}; e2={x:15,y:15}; }
+                    ctx.beginPath(); ctx.arc(s.x + e1.x, s.y + e1.y, 3, 0, Math.PI*2); ctx.arc(s.x + e2.x, s.y + e2.y, 3, 0, Math.PI*2); ctx.fill();
+                    ctx.fillStyle = "black"; ctx.beginPath(); ctx.arc(s.x + e1.x, s.y + e1.y, 1.2, 0, Math.PI*2); ctx.arc(s.x + e2.x, s.y + e2.y, 1.2, 0, Math.PI*2); ctx.fill();
+                } else {
+                    ctx.strokeStyle = "#1e8449"; ctx.lineWidth = 1; ctx.stroke();
+                }
+            });
+        }
+
+        function iniciarJuego() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            else if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            // Cargar palabras de la regla elegida
+            palabrasActuales = [...diccionario[currentRule]].sort(() => Math.random() - 0.5);
+            
+            serpiente = [{x: 6*box, y: 7*box}, {x: 5*box, y: 7*box}];
+            direccion = "RIGHT"; siguienteDir = "RIGHT";
+            letrasComidas = ""; score = 0; indicePalabra = 0;
+            document.getElementById("history-list").innerHTML = "";
+            juegoActivo = true; isPaused = false;
+            document.getElementById("menu-overlay").style.display = "none";
+            crearComida(); actualizarUI();
+            if(loop) clearInterval(loop);
+            loop = setInterval(gameLoop, currentVelocity);
+        }
+
+        function finalizarJuego() {
+            juegoActivo = false; clearInterval(loop);
+            playSound(150, 0.5, 'sawtooth');
+            document.getElementById("menu-overlay").style.display = "flex";
+            document.getElementById("status-title").innerText = "¡CHOQUE!";
+        }
+
+        ctx.fillStyle = "#fefae0";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    </script>
+</body>
+</html>
