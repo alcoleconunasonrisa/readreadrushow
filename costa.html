@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorando los Paisajes de Costa - 5º de Primaria</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --secondary: #0ea5e9;
+            --accent: #f59e0b;
+            --bg: #f0f9ff;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .intro-box {
+            background-color: #e0f2fe;
+            border-left: 6px solid var(--primary);
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .section-title {
+            color: var(--primary-dark);
+            margin: 40px 0 20px 0;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 8px;
+            font-size: 1.8rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-body ul {
+            list-style-type: none;
+        }
+
+        .card-body li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .card-body li::before {
+            content: "🌊";
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Zona de Actividades Interactivas */
+        .interactive-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .quiz-question {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .quiz-question p {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .option-btn.correct {
+            background-color: #dcfce7;
+            border-color: var(--success);
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .option-btn.incorrect {
+            background-color: #fee2e2;
+            border-color: var(--error);
+            color: #991b1b;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.correct-text {
+            color: var(--success);
+            display: block;
+        }
+
+        .feedback.incorrect-text {
+            color: var(--error);
+            display: block;
+        }
+
+        /* Actividad de Relacionar */
+        .match-activity {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .match-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .match-concept {
+            font-weight: bold;
+            color: var(--primary-dark);
+            flex: 1;
+        }
+
+        .match-select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 2px solid #cbd5e1;
+            background-color: white;
+            font-size: 0.95rem;
+            flex: 2;
+            max-width: 400px;
+        }
+
+        .match-select.valid {
+            border-color: var(--success);
+            background-color: #f0fdf4;
+        }
+
+        .match-select.invalid {
+            border-color: var(--error);
+            background-color: #fef2f2;
+        }
+
+        .btn-check {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.2s;
+            display: block;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        .btn-check:hover {
+            background-color: #d97706;
+        }
+
+        .score-display {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--primary-dark);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #334155;
+            color: white;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 600px) {
+            .match-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .match-select {
+                width: 100%;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>¡Exploramos los Paisajes de Costa!</h1>
+        <p>Ciencias Sociales - 5º de Educación Primaria</p>
+    </header>
+
+    <main>
+        <div class="intro-box">
+            <strong>¿Sabías que...?</strong> El paisaje de costa es aquel que está cerca del mar o del océano. A lo largo de los años, el agua del mar y el viento van moldeando las rocas y la arena, creando formas espectaculares en el relieve. ¡Vamos a descubrirlas!
+        </div>
+
+        <!-- SECCIÓN 1: CONTENIDOS -->
+        <h2 class="section-title">1. Elementos del Relieve Costero</h2>
+        <p style="margin-bottom: 20px;">El relieve de la costa se divide principalmente en dos tipos según su altura y forma. Pasa el ratón o pulsa sobre las tarjetas para repasar la información:</p>
+        
+        <div class="grid">
+            <!-- Costa Alta -->
+            <div class="card">
+                <div class="card-header" style="background-color: #0369a1;">Costas Altas (Rocosas)</div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>Acantilado:</strong> Paredes de roca altas y muy verticales que dan directamente al mar.</li>
+                        <li><strong>Cabo:</strong> Una porción de tierra de la costa que se adentra de forma alargada en el mar.</li>
+                        <li><strong>Golfo:</strong> Una gran entrada del mar en la tierra (si es pequeña, la llamamos <strong>bahía</strong> o cala).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Costa Baja -->
+            <div class="card">
+                <div class="card-header" style="background-color: #0ea5e9;">Costas Bajas (Arenosas)</div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>Playa:</strong> Zonas llanas de la costa cubiertas de arena o piedras acumuladas por las olas.</li>
+                        <li><strong>Península:</strong> Terreno rodeado de agua por todas partes menos por una, llamada <strong>istmo</strong>.</li>
+                        <li><strong>Isla:</strong> Porción de tierra rodeada de agua por todas partes. Un grupo de islas forma un <strong>archipiélago</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SECCIÓN 2: TRIVIA INTERACTIVA -->
+        <h2 class="section-title">2. Mini-Trivia Costera</h2>
+        <p style="margin-bottom: 20px;">Pon a prueba lo que has aprendido seleccionando la opción correcta:</p>
+
+        <div class="interactive-container">
+            <!-- Pregunta 1 -->
+            <div class="quiz-question" id="q1">
+                <p>1. ¿Cómo llamamos a una gran pared de roca vertical que choca contra el mar?</p>
+                <div class="options-group">
+                    <button class="option-btn" onclick="checkQuiz('q1', this, false)">A) Una playa de piedras</button>
+                    <button class="option-btn" onclick="checkQuiz('q1', this, true)">B) Un acantilado</button>
+                    <button class="option-btn" onclick="checkQuiz('q1', this, false)">C) Un istmo</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Pregunta 2 -->
+            <div class="quiz-question" id="q2">
+                <p>2. Si un trozo de tierra está rodeado de agua por todas partes menos por una (istmo), es una...</p>
+                <div class="options-group">
+                    <button class="option-btn" onclick="checkQuiz('q2', this, true)">A) Península</button>
+                    <button class="option-btn" onclick="checkQuiz('q2', this, false)">B) Isla</button>
+                    <button class="option-btn" onclick="checkQuiz('q2', this, false)">C) Bahía</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Pregunta 3 -->
+            <div class="quiz-question" id="q3">
+                <p>3. ¿Qué nombre recibe un conjunto de islas agrupadas en el mar?</p>
+                <div class="options-group">
+                    <button class="option-btn" onclick="checkQuiz('q3', this, false)">A) Golfo</button>
+                    <button class="option-btn" onclick="checkQuiz('q3', this, false)">B) Cabo</button>
+                    <button class="option-btn" onclick="checkQuiz('q3', this, true)">C) Archipiélago</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+        </div>
+
+
+        <!-- SECCIÓN 3: RELACIONAR CONCEPTOS -->
+        <h2 class="section-title">3. El Reto de las Definiciones</h2>
+        <p style="margin-bottom: 20px;">Elige la definición correcta para cada uno de los siguientes elementos del relieve:</p>
+
+        <div class="interactive-container">
+            <div class="match-activity">
+                
+                <div class="match-row">
+                    <span class="match-concept">CABO</span>
+                    <select class="match-select" id="match1">
+                        <option value="">-- Elige una opción --</option>
+                        <option value="incorrect1">Gran entrada del mar en la tierra.</option>
+                        <option value="correct">Lengua de tierra de la costa que se adentra en el mar.</option>
+                        <option value="incorrect2">Terreno rodeado de agua por todas partes.</option>
+                    </select>
+                </div>
+
+                <div class="match-row">
+                    <span class="match-concept">GOLFO</span>
+                    <select class="match-select" id="match2">
+                        <option value="">-- Elige una opción --</option>
+                        <option value="correct">Gran entrada del mar en la costa o en la tierra.</option>
+                        <option value="incorrect1">Pared de roca muy alta y empinada.</option>
+                        <option value="incorrect2">Unión de una península con el continente.</option>
+                    </select>
+                </div>
+
+                <div class="match-row">
+                    <span class="match-concept">ISTMO</span>
+                    <select class="match-select" id="match3">
+                        <option value="">-- Elige una opción --</option>
+                        <option value="incorrect1">Acumulación de arena fina y conchas.</option>
+                        <option value="incorrect2">Conjunto de muchas montañas costeras.</option>
+                        <option value="correct">Franja estrecha de tierra que une una península al continente.</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button class="btn-check" onclick="checkMatching()">Comprobar Definiciones</button>
+            <div id="matching-score" class="score-display"></div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Aula Virtual de Ciencias Sociales - Creado para 5º de Primaria</p>
+    </footer>
+
+    <script>
+        // Función para controlar la Trivia
+        function checkQuiz(questionId, element, isCorrect) {
+            const questionDiv = document.getElementById(questionId);
+            const buttons = questionDiv.querySelectorAll('.option-btn');
+            const feedbackDiv = questionDiv.querySelector('.feedback');
+
+            // Deshabilitar todos los botones de esta pregunta para que no sigan pulsando
+            buttons.forEach(btn => {
+                btn.removeAttribute('style');
+                if(btn === element) {
+                    if(isCorrect) {
+                        btn.classList.add('correct');
+                        feedbackDiv.innerHTML = "¡Excelente! ¡Respuesta correcta! 🌟";
+                        feedbackDiv.className = "feedback correct-text";
+                    } else {
+                        btn.classList.add('incorrect');
+                        feedbackDiv.innerHTML = "¡Casi! Inténtalo de nuevo en la siguiente. 🌊";
+                        feedbackDiv.className = "feedback incorrect-text";
+                    }
+                } else {
+                    btn.style.opacity = "0.6";
+                    btn.style.pointerEvents = "none";
+                }
+            });
+        }
+
+        // Función para comprobar el juego de relacionar
+        function checkMatching() {
+            let correctCount = 0;
+            const total = 3;
+
+            for(let i = 1; i <= total; i++) {
+                const selectElement = document.getElementById('match' + i);
+                if(selectElement.value === 'correct') {
+                    correctCount++;
+                    selectElement.className = "match-select valid";
+                } else {
+                    selectElement.className = "match-select invalid";
+                }
+            }
+
+            const scoreDisplay = document.getElementById('matching-score');
+            if(correctCount === total) {
+                scoreDisplay.innerHTML = "¡Perfecto! ¡Has acertado las " + correctCount + " de " + total + "! ¡Eres un experto marinero! 🏴‍☠️⛵";
+                scoreDisplay.style.color = "var(--success)";
+            } else {
+                scoreDisplay.innerHTML = "Has acertado " + correctCount + " de " + total + ". ¡Revisa las de color rojo e inténtalo otra vez! 🔄";
+                scoreDisplay.style.color = "var(--accent)";
+            }
+        }
+    </script>
+</body>
+</html>
