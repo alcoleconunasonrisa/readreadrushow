@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reto 1: La Isla de las Palabras - Búsqueda del Tesoro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sky: #4facfe; --sea: #00f2fe; --sand: #f6d365;
+            --wood: #825e5c; --accent: #ff4757; --correct: #2ed573;
+        }
+
+        body {
+            background: linear-gradient(to bottom, var(--sky), var(--sea));
+            font-family: 'Fredoka', sans-serif; margin: 0; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; color: #2f3542;
+        }
+
+        /* Botón Volver al Inicio de la Búsqueda */
+        .btn-home {
+            position: absolute; top: 10px; left: 10px;
+            background: white; border: none; border-radius: 50%;
+            width: 45px; height: 45px; cursor: pointer;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; z-index: 120;
+        }
+
+        /* Marcador de Progreso del Alumnado */
+        .score-counter {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+            color: #b45309;
+            border: 2px solid #f59e0b;
+        }
+
+        /* ESCENARIO */
+        .stage {
+            width: 100%; max-width: 500px; height: 180px;
+            position: relative; margin-top: 15px; overflow: hidden;
+            background: rgba(255,255,255,0.1); border-radius: 30px;
+        }
+        .island { font-size: 4rem; position: absolute; bottom: 10px; }
+        #start-island { left: 10px; }
+        #end-island { right: 10px; }
+        #player { 
+            font-size: 3rem; position: absolute; bottom: 35px; left: 20px; 
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 5;
+        }
+
+        .bridge {
+            position: absolute; bottom: 30px; left: 80px; right: 80px;
+            display: flex; gap: 4px; justify-content: center;
+        }
+        .plank {
+            width: 100%; height: 12px; background: var(--wood);
+            border-radius: 4px; border-bottom: 3px solid #5d4037; transition: 0.5s;
+        }
+        .plank.broken { transform: translateY(150px) rotate(45deg); opacity: 0; }
+
+        /* INTERFAZ */
+        .word-box {
+            background: white; padding: 15px 25px; border-radius: 20px;
+            box-shadow: 0 8px 0 rgba(0,0,0,0.1); margin: 15px;
+            font-size: 2rem; letter-spacing: 5px; font-weight: 700;
+        }
+
+        .keyboard {
+            display: grid; grid-template-columns: repeat(7, 1fr);
+            gap: 8px; max-width: 500px; width: 95%; padding: 10px;
+        }
+        .key {
+            background: white; border: none; padding: 12px 0;
+            border-radius: 10px; font-size: 1.1rem; font-weight: 700;
+            cursor: pointer; box-shadow: 0 4px 0 #bdc3c7; transition: 0.1s;
+        }
+        .key.correct { background: var(--correct); color: white; box-shadow: 0 4px 0 #26af5a; }
+        .key.wrong { background: var(--accent); color: white; box-shadow: 0 4px 0 #cf3a46; }
+        .key:disabled { opacity: 0.6; }
+
+        /* MENÚS Y PANTALLAS FINALES */
+        .overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.9); display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
+            z-index: 100; color: white; text-align: center; padding: 20px;
+        }
+
+        .btn-opt {
+            padding: 15px 30px; border-radius: 15px; border: none; background: var(--sky);
+            color: white; font-weight: 700; cursor: pointer; font-family: 'Fredoka';
+            font-size: 1.3rem; box-shadow: 0 5px 0 #2575fc; transition: 0.1s;
+        }
+        .btn-opt:active { transform: translateY(4px); box-shadow: 0 1px 0 #2575fc; }
+    </style>
+</head>
+<body>
+
+    <a href="tesoro1.html" class="btn-home">🏠</a>
+
+    <h2 style="margin: 15px 0 0; color: white; text-shadow: 2px 2px 0px rgba(0,0,0,0.2);">RETO 1: EL PUENTE DE LAS PALABRAS</h2>
+    
+    <div class="score-counter" id="game-score">Palabras descubiertas: 0 / 5</div>
+    
+    <div class="stage">
+        <div id="start-island" class="island">🏝️</div>
+        <div id="player">🤠</div>
+        <div class="bridge" id="bridge-container"></div>
+        <div id="end-island" class="island">🎁</div>
+    </div>
+
+    <div id="word-display" class="word-box">_ _ _ _ _ _ _</div>
+    <div class="keyboard" id="keyboard"></div>
+
+    <div id="end-overlay" class="overlay" style="display:none;">
+        <h1 id="end-msg"></h1>
+        <h2 id="revealed-word" style="color: var(--sand); font-size: 2.5rem; margin-bottom: 20px;"></h2>
+        <div id="action-button-container"></div>
+    </div>
+
+    <script>
+        const palabrasAventura = [
+            "BARCO", "CAMPANA", "ZAPATO", "JIRAFA", "HUEVO", 
+            "TAMBOR", "CIEGO", "GATO", "AVIÓN", "HIELO", 
+            "BOMBA", "ZORRO", "JABÓN", "BOTAS", "HOJA", 
+            "LIMPIO", "CENA", "GIGANTE", "VACA", "HUESO",
+            "SOMBRA", "AZUL", "JARRA", "BALÓN", "HORMIGA",
+            "CAMPANA", "CIELO", "GENIO", "VENTANA", "HADA"
+        ];
+
+        let palabrasAcertadasTotales = 0;
+        const OBJETIVO_PALABRAS = 5;
+
+        let palabra, oculta, errores, audioCtx;
+        let palabrasJugadasEnEstaPartida = [];
+
+        function playSound(f, d, t='sine') {
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+            o.type = t; o.frequency.setValueAtTime(f, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
+            o.connect(g); g.connect(audioCtx.destination);
+            o.start(); o.stop(audioCtx.currentTime + d);
+        }
+
+        function initChallenge() {
+            palabrasAcertadasTotales = 0;
+            palabrasJugadasEnEstaPartida = [];
+            document.getElementById('game-score').innerText = `Palabras descubiertas: ${palabrasAcertadasTotales} / ${OBJETIVO_PALABRAS}`;
+            nextWord();
+        }
+
+        function nextWord() {
+            let disponibles = palabrasAventura.filter(p => !palabrasJugadasEnEstaPartida.includes(p));
+            if(disponibles.length === 0) disponibles = palabrasAventura;
+
+            palabra = disponibles[Math.floor(Math.random() * disponibles.length)];
+            palabrasJugadasEnEstaPartida.push(palabra);
+
+            oculta = Array(palabra.length).fill("_");
+            errores = 0;
+
+            document.getElementById('end-overlay').style.display = 'none';
+            document.getElementById('player').innerText = '🤠';
+            document.getElementById('player').style.left = '20px';
+            
+            // Generamos las 10 tablas del puente
+            document.getElementById('bridge-container').innerHTML = '';
+            for(let i=0; i<10; i++) {
+                let p = document.createElement('div');
+                p.className = 'plank'; p.id = 'p-' + i;
+                document.getElementById('bridge-container').appendChild(p);
+            }
+
+            renderWord();
+            renderKeyboard();
+        }
+
+        function renderWord() { document.getElementById('word-display').innerText = oculta.join(' '); }
+
+        function renderKeyboard() {
+            const kb = document.getElementById('keyboard'); kb.innerHTML = '';
+            "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split('').forEach(l => {
+                const b = document.createElement('button');
+                b.className = 'key'; b.innerText = l;
+                b.onclick = () => {
+                    b.disabled = true;
+                    let acierto = false;
+                    const normal = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    
+                    for(let i=0; i<palabra.length; i++) {
+                        if(normal(palabra[i]) === l) {
+                            oculta[i] = palabra[i];
+                            acierto = true;
+                        }
+                    }
+
+                    if(acierto) {
+                        b.classList.add('correct'); playSound(600, 0.2);
+                        let progreso = (oculta.filter(x => x !== '_').length / palabra.length) * 320;
+                        document.getElementById('player').style.left = (20 + progreso) + 'px';
+                    } else {
+                        b.classList.add('wrong'); playSound(200, 0.3, 'sawtooth');
+                        
+                        // Retroceder una sola tabla al fallar
+                        let plankIndex = 9 - errores;
+                        if(plankIndex >= 0) {
+                            document.getElementById('p-' + plankIndex).classList.add('broken');
+                        }
+                        errores++;
+                    }
+                    renderWord(); checkEnd();
+                };
+                kb.appendChild(b);
+            });
+        }
+
+        function checkEnd() {
+            if(!oculta.includes('_')) {
+                document.getElementById('player').style.left = '410px';
+                palabrasAcertadasTotales++;
+                document.getElementById('game-score').innerText = `Palabras descubiertas: ${palabrasAcertadasTotales} / ${OBJETIVO_PALABRAS}`;
+                
+                setTimeout(() => {
+                    playSound(800, 0.5);
+                    if (palabrasAcertadasTotales >= OBJETIVO_PALABRAS) {
+                        showFinal("¡RETO 1 SUPERADO COMPLETAMENTE! 🏆", "", true);
+                    } else {
+                        showFinal("¡PALABRA ACERTADA! 🎉", palabra, false);
+                    }
+                }, 500);
+            } else if(errores >= 10) {
+                document.getElementById('player').innerText = '😵';
+                setTimeout(() => {
+                    playSound(100, 0.8, 'square');
+                    showFinal("¡EL PUENTE CAYÓ! 🌊", `La palabra era: ${palabra}`, false, true);
+                }, 500);
+            }
+        }
+
+        function showFinal(msg, subtext, IsVictoryFinal, isDefeat = false) {
+            document.getElementById('end-overlay').style.display = 'flex';
+            document.getElementById('end-msg').innerText = msg;
+            document.getElementById('revealed-word').innerText = subtext;
+
+            const container = document.getElementById('action-button-container');
+            container.innerHTML = '';
+
+            if (IsVictoryFinal) {
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'btn-opt';
+                nextBtn.style.background = 'var(--correct)';
+                nextBtn.style.boxShadow = '0 5px 0 #1b9e52';
+                nextBtn.innerText = 'PASAR AL RETO 2 ➔';
+                nextBtn.onclick = () => {
+                    window.location.href = "reto5.html"; 
+                };
+                container.appendChild(nextBtn);
+            } else if (isDefeat) {
+                const retryBtn = document.createElement('button');
+                retryBtn.className = 'btn-opt';
+                retryBtn.style.background = 'var(--accent)';
+                retryBtn.style.boxShadow = '0 5px 0 #c0392b';
+                retryBtn.innerText = 'VOLVER A INTENTARLO 🔄';
+                retryBtn.onclick = () => { initChallenge(); };
+                container.appendChild(retryBtn);
+            } else {
+                const continueBtn = document.createElement('button');
+                continueBtn.className = 'btn-opt';
+                continueBtn.innerText = 'SIGUIENTE PALABRA ➔';
+                continueBtn.onclick = () => { nextWord(); };
+                container.appendChild(continueBtn);
+            }
+        }
+
+        window.onload = initChallenge;
+    </script>
+</body>
+</html>

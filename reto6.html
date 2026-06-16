@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reto 3: El Gran Pasapalabra Escrito - Búsqueda del Tesoro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Andika&family=Fredoka:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-pirata: #eef1f6;
+            --azul-principal: #2b6cb0; 
+            --azul-claro: #bee3f8;
+            --acierto: #319795; 
+            --error: #e53e3e;
+            --oro: #ecc94b;
+        }
+
+        body { 
+            font-family: 'Andika', sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            background: var(--bg-pirata); 
+            margin: 0; 
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .btn-home {
+            position: absolute; top: 15px; left: 15px;
+            background: white; border: none; border-radius: 50%;
+            width: 50px; height: 50px; cursor: pointer;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+            font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; color: #2d3748; z-index: 10;
+        }
+
+        .card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 30px; 
+            text-align: center; 
+            border: 5px solid var(--azul-principal); 
+            width: 100%;
+            max-width: 480px; 
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15); 
+            position: relative;
+        }
+        
+        .rosco-info {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.4rem;
+            color: var(--azul-principal);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .definition-container { 
+            width: 100%; 
+            min-height: 140px; 
+            margin-bottom: 20px; 
+            border-radius: 20px; 
+            background: #f7fafc; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border: 2px solid var(--azul-claro);
+            font-size: 1.15rem; 
+            padding: 15px;
+            box-sizing: border-box;
+            line-height: 1.5;
+            color: #2d3748;
+        }
+        
+        #letra-grande { 
+            font-family: 'Fredoka', sans-serif;
+            font-size: 80px; 
+            color: var(--azul-principal); 
+            margin: 5px 0; 
+            font-weight: bold; 
+            transition: 0.3s; 
+        }
+
+        #feedback { 
+            font-size: 1.1rem; 
+            margin-bottom: 15px; 
+            color: #4a5568; 
+            min-height: 1.5em; 
+        }
+
+        .input-palabra {
+            width: 85%;
+            padding: 12px 20px;
+            font-size: 1.3rem;
+            font-family: 'Andika', sans-serif;
+            border: 3px solid var(--azul-claro);
+            border-radius: 15px;
+            outline: none;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+        .input-palabra:focus {
+            border-color: var(--azul-principal);
+        }
+
+        .btn-start { 
+            background: var(--azul-principal); 
+            color: white; 
+            padding: 15px 40px; 
+            border: none; 
+            border-radius: 50px; 
+            font-size: 1.4rem; 
+            font-family: 'Fredoka', sans-serif;
+            cursor: pointer; 
+            box-shadow: 0 5px 0 #1a446c; 
+            transition: 0.1s;
+            width: 85%;
+            margin: 0 auto;
+        }
+        .btn-start:active { transform: translateY(4px); box-shadow: none; }
+        
+        .correcto { color: var(--acierto) !important; transform: scale(1.15); }
+        .error-anim { animation: shake 0.3s; color: var(--error) !important; }
+
+        /* --- CONTENEDOR INTEGRADO PARA PEDIR NOMBRE --- */
+        #formulario-nombre {
+            display: none;
+            margin-top: 15px;
+        }
+        #formulario-nombre label {
+            display: block;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.2rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        /* --- ESTILOS EXCLUSIVOS DEL DIPLOMA FINAL --- */
+        #seccion-diploma {
+            display: none;
+            background: #fffdf5;
+            border: 15px double #b7791f;
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            color: #2c3e50;
+        }
+        .titulo-diploma {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.5rem;
+            color: #b7791f;
+            margin-bottom: 10px;
+        }
+        .subtitulo-diploma {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        .nombre-alumno {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.8rem;
+            color: #2b6cb0;
+            border-bottom: 3px dashed #b7791f;
+            display: inline-block;
+            padding: 0 30px;
+            margin: 15px 0;
+            text-transform: uppercase;
+        }
+        .texto-diploma {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            margin: 20px 0;
+        }
+        .medalla-pirata {
+            font-size: 4.5rem;
+            margin-top: 20px;
+        }
+        .firma-capitana {
+            margin-top: 30px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+        .btn-imprimir {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 25px;
+            font-family: 'Fredoka', sans-serif;
+            box-shadow: 0 4px 0 #1e8449;
+        }
+        .btn-imprimir:active { transform: translateY(2px); box-shadow: none; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* --- CONFIGURACIÓN DE IMPRESIÓN --- */
+        @media print {
+            body { background: white; padding: 0; margin: 0; }
+            .card, .btn-home, .btn-imprimir { display: none !important; }
+            #seccion-diploma { 
+                display: block !important; 
+                border: 15px double #b7791f !important;
+                box-shadow: none !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="tesoro1.html" class="btn-home">🏠</a>
+
+    <div class="card" id="contenedor-juego">
+        <div class="rosco-info" id="progreso">PASAPALABRA</div>
+        <div id="letra-grande">A</div>
+        <div class="definition-container" id="definicion-box">
+            ¡Pulsa el botón inferior para comenzar a escribir y resolver el último gran reto de la aventura!
+        </div>
+        <div id="feedback">¡Mucha suerte, tripulación!</div>
+        
+        <input type="text" id="user-input" class="input-palabra" placeholder="Escribe tu respuesta aquí..." style="display: none;" autocomplete="off">
+        
+        <div id="formulario-nombre">
+            <label for="nombre-final">¡Por los siete mares! Escribe tu nombre o el de tu equipo para el galardón:</label>
+            <input type="text" id="nombre-final" class="input-palabra" placeholder="Ej. Equipo Pirata / Alejandro..." autocomplete="off">
+        </div>
+
+        <button id="btn" class="btn-start">¡Empezar Rosco!</button>
+    </div>
+
+    <div id="seccion-diploma">
+        <div class="titulo-diploma">📜 TÍTULO DE HONOR 📜</div>
+        <div class="subtitulo-diploma">La Gran Búsqueda del Tesoro Digital</div>
+        <div style="font-weight: bold; font-size: 1.4rem; color: #2c3e50; margin-bottom: 10px;">CEIP La Constitución</div>
+        <div class="texto-diploma">Este galardón se otorga con gran orgullo al intrépido/a grumete:</div>
+        
+        <div class="nombre-alumno" id="diploma-nombre">NOMBRE DEL ALUMNO</div>
+        
+        <div class="texto-diploma">
+            Por haber demostrado una valentía asombrosa, un magnífico trabajo en equipo y una ortografía impecable, logrando abrir todos los candados del mapa y resolver el gran misterio de la isla.
+        </div>
+        
+        <div class="medalla-pirata">👑🥇🦜</div>
+        
+        <div class="firma-capitana">
+            ________________________________________<br>
+            <b>Firma: Capitana Sabiduría</b>
+        </div>
+        
+        <button class="btn-imprimir" id="btn-imprimir-accion" onclick="window.print()">🖨️ Imprimir Diploma Oficial</button>
+    </div>
+
+    <script>
+        const pasapalabraDefiniciones = [
+            { letra: "A", palabra: "andalucía", def: "Comunidad autónoma en la que vives y que celebramos su día el 28 de febrero." },
+            { letra: "B", palabra: "bancos", def: "Objetos que han puesto en el patio que sirven para sentarse, hacer amigos y solucionar conflictos." },
+            { letra: "C", palabra: "constitución", def: "Es un libro en el que aparecen todos nuestros derechos y obligaciones como ciudadanos y que da nombre a tu cole." },
+            { letra: "D", palabra: "datos", def: "Cuando hacemos un problema lo primero que tenemos que hacer es buscar los..." },
+            { letra: "E", palabra: "europa", def: "Continente en el que vivimos." },
+            { letra: "F", palabra: "flor", def: "La profe de infantil que siempre está en la biblioteca se llama..." },
+            { letra: "G", palabra: "gracias", def: "Siempre tengo que darla cuando me hacen un favor." },
+            { letra: "H", palabra: "humor", def: "Si me gusta reírme, tengo mucho sentido del..." },
+            { letra: "I", palabra: "inma", def: "La maestra de música del cole se llama..." },
+            { letra: "J", palabra: "jugar", def: "Cuando estás en el recreo sueles..." },
+            { letra: "K", palabra: "kitchen", def: "Cocina en inglés." },
+            { letra: "L", palabra: "lengua", def: "Asignatura en la que aprendemos a leer, escribir, expresarnos,..." },
+            { letra: "M", palabra: "música", def: "Asignatura en la que cantas, bailas y tocas instrumentos." },
+            { letra: "N", palabra: "naturaleza", def: "Conjunto de todas las cosas que existen y que no han sido creadas por el ser humano." },
+            { letra: "O", palabra: "obediente", def: "Cuando haces caso a tu familia y a tus profes eres una persona..." }, 
+            { letra: "Ñ", palabra: "españa", def: "Contiene la Ñ: País en el que vives." }, 
+            { letra: "P", palabra: "pili", def: "La Directora de nuestro cole es la seño..." },
+            { letra: "Q", palabra: "queso", def: "Alimento lácteo muy rico y nutritivo." },
+            { letra: "R", palabra: "recreo", def: "Momento en el que todo el alumnado juega a lo que quiere." },
+            { letra: "S", palabra: "selva", def: "Un terreno extenso, sin cultivar y muy poblado de árboles y plantas, que suele tener muchas lluvias." },
+            { letra: "T", palabra: "tierra", def: "El planeta en el que vivimos se llama..." },
+            { letra: "U", palabra: "universo", def: "Nuestro planeta Tierra forma parte de él como miles de millones de estrellas, es infinito. Hablamos del..." },
+            { letra: "V", palabra: "verdad", def: "Está muy mal decir mentiras, siempre hay que decir la..." },
+            { letra: "W", palabra: "wifi", def: "A veces en clase no podemos ver vídeos porque no hay conexión..." },
+            { letra: "X", palabra: "xilófono", def: "Instrumento de madera que seguramente has tocado en la clase de música." },
+            { letra: "Y", palabra: "yogur", def: "Es un producto lácteo que seguramente lo habrás traído alguna vez en el desayuno. Los hay de diferentes sabores: fresa, plátano,..." },
+            { letra: "Z", palabra: "zapatos", def: "Te los colocas en los pies para no caminar descalzos/as." }
+        ];
+
+        let indice = 0;
+        let juegoActivo = false;
+        let modoNombreFinal = false;
+
+        const letraGrande = document.getElementById('letra-grande');
+        const definicionBox = document.getElementById('definicion-box');
+        const feedbackDiv = document.getElementById('feedback');
+        const btn = document.getElementById('btn');
+        const progresoDiv = document.getElementById('progreso');
+        const userInput = document.getElementById('user-input');
+        const formularioNombre = document.getElementById('formulario-nombre');
+        const nombreFinalInput = document.getElementById('nombre-final');
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playTone(freq, type, duration) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.value = freq;
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        const sonidoAcierto = () => playTone(587.33, 'sine', 0.25);
+        const sonidoError = () => playTone(140, 'triangle', 0.35);
+        const sonidoVictoria = () => {
+            playTone(523.25, 'sine', 0.2);
+            setTimeout(() => playTone(659.25, 'sine', 0.2), 150);
+            setTimeout(() => playTone(783.99, 'sine', 0.2), 300);
+            setTimeout(() => playTone(1046.50, 'sine', 0.5), 450);
+        };
+
+        function limpiarTextoEstricto(text) {
+            return text.toLowerCase().trim();
+        }
+
+        function comprobarRespuesta() {
+            if (!juegoActivo) return;
+            
+            const intento = limpiarTextoEstricto(userInput.value);
+            const objetivo = limpiarTextoEstricto(pasapalabraDefiniciones[indice].palabra);
+
+            if (intento === objetivo) {
+                sonidoAcierto();
+                procesarAcierto();
+            } else {
+                sonidoError();
+                procesarFallo();
+            }
+        }
+
+        function procesarAcierto() {
+            userInput.disabled = true;
+            letraGrande.classList.add('correcto');
+            feedbackDiv.innerHTML = "<b style='color:var(--acierto);'>¡RESPUESTA CORRECTA! 🌟</b>";
+            
+            setTimeout(() => {
+                indice++;
+                if (indice >= pasapalabraDefiniciones.length) {
+                    finalizarJuegoExito();
+                } else {
+                    userInput.disabled = false;
+                    userInput.value = "";
+                    actualizarPantalla();
+                    userInput.focus();
+                }
+            }, 1300);
+        }
+
+        function procesarFallo() {
+            juegoActivo = false;
+            letraGrande.classList.add('error-anim');
+            userInput.style.display = 'none';
+            feedbackDiv.innerHTML = "<b style='color:var(--error);'>¡ERROR ORTOGRÁFICO O PALABRA INCORRECTA! ❌</b>";
+            
+            const antiguoIndice = indice;
+            indice = Math.max(0, indice - 5);
+            const casillasRetrocedidas = antiguoIndice - indice;
+
+            let mensajeSancion = "";
+            if (casillasRetrocedidas > 0) {
+                mensajeSancion = `<br><br><span style='color:var(--error); font-weight:bold;'>⚠️ ¡SANCIÓN DE LA CAPITANA! Retrocedéis ${casillasRetrocedidas} letras en el rosco por el fallo.</span>`;
+            } else {
+                mensajeSancion = `<br><br><span style='color:var(--error); font-weight:bold;'>⚠️ ¡Revisad las tildes! Volvéis a empezar desde la letra A.</span>`;
+            }
+
+            definicionBox.innerHTML = "¡Vaya! La palabra no es del todo correcta. Recordad que <b>las tildes son obligatorias</b>." + mensajeSancion;
+            
+            btn.style.display = 'inline-block';
+            btn.style.background = 'var(--error)';
+            btn.style.boxShadow = '0 5px 0 #9b2c2c';
+            btn.textContent = "Intentarlo de nuevo 🔄";
+            
+            btn.onclick = () => {
+                juegoActivo = true;
+                letraGrande.classList.remove('error-anim');
+                btn.style.display = 'inline-block';
+                btn.style.background = 'var(--azul-principal)';
+                btn.style.boxShadow = '0 5px 0 #1a446c';
+                btn.textContent = "Comprobar palabra ✔️";
+                
+                userInput.value = "";
+                userInput.style.display = 'inline-block';
+                actualizarPantalla();
+                userInput.focus();
+                btn.onclick = comprobarRespuesta;
+            };
+        }
+
+        function actualizarPantalla() {
+            const itemActual = pasapalabraDefiniciones[indice];
+            progresoDiv.textContent = `Letra ${indice + 1} de ${pasapalabraDefiniciones.length}`;
+            letraGrande.textContent = itemActual.letra;
+            letraGrande.classList.remove('correcto', 'error-anim');
+            feedbackDiv.textContent = "¡Cuidado con la ortografía y los acentos!";
+            definicionBox.textContent = itemActual.def;
+        }
+
+        function finalizarJuegoExito() {
+            juegoActivo = false;
+            modoNombreFinal = true;
+            sonidoVictoria();
+            
+            userInput.style.display = 'none';
+            progresoDiv.textContent = "¡MISIÓN CUMPLIDA!";
+            letraGrande.textContent = "👑";
+            letraGrande.classList.remove('correcto');
+            
+            definicionBox.innerHTML = "<b style='color:var(--acierto); font-size: 1.25rem;'>¡BRUTAL! ¡HABÉIS COMPLETADO EL ROSCO!</b><br><br>Vuestra excelente ortografía y memoria han superado el último candado. ¡El cofre final de la capitana está listo para ser abierto!";
+            feedbackDiv.innerHTML = "<b>¡Enhorabuena, habéis ganado la Búsqueda del Tesoro!</b> 🥳🎉";
+            
+            formularioNombre.style.display = 'block';
+            nombreFinalInput.focus();
+            
+            btn.style.display = 'inline-block';
+            btn.style.background = 'var(--oro)';
+            btn.style.color = '#2d3748';
+            btn.style.boxShadow = '0 5px 0 #b7791f';
+            btn.textContent = "Generar Diploma Oficial 📜";
+            
+            btn.onclick = generarDiplomaDesdePantalla;
+        }
+
+        function generarDiplomaDesdePantalla() {
+            const nombreIngresado = nombreFinalInput.value;
+            
+            if (nombreIngresado.trim() !== "") {
+                document.getElementById('contenedor-juego').style.display = 'none';
+                document.getElementById('diploma-nombre').textContent = nombreIngresado.toUpperCase();
+                document.getElementById('seccion-diploma').style.display = 'block';
+            } else {
+                alert("¡Por favor, escribe un nombre válido para confeccionar tu galardón!");
+                nombreFinalInput.focus();
+            }
+        }
+
+        window.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                if (modoNombreFinal) {
+                    generarDiplomaDesdePantalla();
+                } else {
+                    comprobarRespuesta();
+                }
+            }
+        });
+
+        btn.onclick = () => {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            indice = 0;
+            juegoActivo = true;
+            modoNombreFinal = false;
+            userInput.style.display = 'inline-block';
+            formularioNombre.style.display = 'none';
+            btn.textContent = "Comprobar palabra ✔️";
+            actualizarPantalla();
+            userInput.focus();
+            btn.onclick = comprobarRespuesta;
+        };
+    </script>
+</body>
+</html>
