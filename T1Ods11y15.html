@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>El Misterio del Árbol Gris - Actividades Interactivas ODS</title>
+
+  <!-- Fuentes Google: Fredoka (Títulos divertidos) y Nunito (Lectura cómoda) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,500;0,700;0,800;1,600&display=swap" rel="stylesheet">
+
+  <!-- Librería html2pdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #2E7D32;
+      --primary-dark: #1B5E20;
+      --primary-light: #E8F5E9;
+      --secondary: #0288D1;
+      --secondary-light: #E1F5FE;
+      --accent: #FF9800;
+      --accent-hover: #F57C00;
+      --bg: #F0F7F4;
+      --card-bg: #FFFFFF;
+      --text: #2C3E50;
+      --border: #E2E8F0;
+      --correct: #2E7D32;
+      --incorrect: #D32F2F;
+      --gold: #FFB300;
+      --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05);
+      --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.08);
+      --shadow-btn: 0 4px 0px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); color: var(--text); padding: 10px; line-height: 1.6; min-height: 100vh; }
+
+    @media (min-width: 600px) { body { padding: 20px; } }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 28px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      border: 4px solid #E2E8F0;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2E7D32, #1B5E20);
+      color: white;
+      padding: 24px 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    header h1 { font-family: 'Fredoka', sans-serif; font-size: clamp(1.6rem, 4vw, 2.4rem); letter-spacing: 0.5px; margin-bottom: 6px; text-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+    header p { font-size: clamp(0.95rem, 2.5vw, 1.15rem); opacity: 0.95; font-weight: 700; background: rgba(255,255,255,0.15); display: inline-block; padding: 4px 16px; border-radius: 20px; }
+
+    /* NAVEGACIÓN DESLIZABLE EN MÓVILES */
+    nav {
+      display: flex;
+      background-color: var(--primary-light);
+      border-bottom: 3px solid var(--border);
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding: 6px;
+      gap: 6px;
+    }
+
+    nav::-webkit-scrollbar { height: 6px; }
+    nav::-webkit-scrollbar-thumb { background: #C8E6C9; border-radius: 10px; }
+
+    nav button {
+      flex: 0 0 auto;
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #455A64;
+      cursor: pointer;
+      border-radius: 14px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    nav button:hover { background-color: #C8E6C9; color: var(--primary-dark); }
+    nav button.active { background-color: var(--primary); color: white; box-shadow: var(--shadow-sm); }
+
+    .tab-content { display: none; padding: 20px 16px; }
+    @media (min-width: 600px) { .tab-content { padding: 32px 28px; } }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* BANNER ODS */
+    .ods-banner {
+      background: linear-gradient(135deg, #FFF8E1, #FFE0B2);
+      border: 3px solid #FFB74D;
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    @media (min-width: 600px) { .ods-banner { flex-direction: row; text-align: left; } }
+
+    .ods-badge {
+      background: #F57C00;
+      color: white;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem;
+      padding: 10px 18px;
+      border-radius: 16px;
+      text-align: center;
+      width: 100%;
+      max-width: 180px;
+      box-shadow: 0 4px 0 #E65100;
+    }
+
+    .ods-info h3 { font-family: 'Fredoka', sans-serif; color: #E65100; font-size: 1.25rem; margin-bottom: 4px; }
+    .ods-info p { font-size: 0.95rem; color: #5D4037; font-weight: 600; line-height: 1.4; margin-bottom: 4px; }
+
+    /* HISTORIA */
+    .story-card {
+      background-color: #FAFCF8;
+      border: 3px solid #C0CA33;
+      border-radius: 20px;
+      padding: 20px;
+      font-size: 1.08rem;
+      color: #2E7D32;
+      box-shadow: var(--shadow-sm);
+    }
+    @media (min-width: 600px) { .story-card { padding: 30px; } }
+
+    .story-card h2 { font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: 1.8rem; margin-bottom: 15px; text-align: center; }
+    .story-card p { margin-bottom: 16px; text-align: justify; color: #37474F; font-weight: 600; }
+
+    .section-title { font-family: 'Fredoka', sans-serif; font-size: 1.6rem; color: var(--primary-dark); margin-bottom: 8px; }
+    .section-desc { margin-bottom: 22px; font-size: 1rem; font-weight: 600; color: #455A64; background: #F1F8E9; padding: 14px 18px; border-radius: 16px; border-left: 6px solid var(--primary); }
+
+    /* PREGUNTAS / TEST */
+    .question-block { background: #FFF; border: 2.5px solid var(--border); border-radius: 18px; padding: 18px; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+    .question-block p.q-text { font-weight: 800; font-size: 1.1rem; margin-bottom: 14px; color: #1A237E; }
+
+    .options-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 600px) { .options-grid { grid-template-columns: 1fr 1fr; } }
+
+    .option-label { display: flex; align-items: center; padding: 14px 16px; background: #F8FAFC; border: 2px solid #E2E8F0; border-radius: 14px; cursor: pointer; font-weight: 700; transition: all 0.2s; }
+    .option-label:hover { background: #E8F5E9; border-color: var(--primary); }
+    .option-label input { margin-right: 12px; transform: scale(1.3); }
+
+    /* EMPAREJAR */
+    .matching-container { display: grid; grid-template-columns: 1fr; gap: 15px; }
+    @media (min-width: 600px) { .matching-container { grid-template-columns: 1fr 1fr; gap: 20px; } }
+
+    .matching-column { display: flex; flex-direction: column; gap: 10px; }
+
+    .match-btn { padding: 14px 16px; background: #F8FAFC; border: 2.5px solid var(--border); border-radius: 14px; font-weight: 800; cursor: pointer; text-align: center; transition: all 0.2s; font-size: 1rem; color: #37474F; box-shadow: 0 3px 0 var(--border); position: relative; }
+    .match-btn:active { transform: translateY(2px); box-shadow: none; }
+    .match-btn.selected { background: #FFF9C4 !important; border-color: #FBC02D !important; color: #333 !important; transform: scale(1.02); }
+    .match-btn.matched-btn { position: relative; }
+    .match-btn.matched-btn:hover::after {
+      content: " ✕ Deshacer";
+      font-size: 0.8rem;
+      font-weight: bold;
+      opacity: 0.9;
+      margin-left: 6px;
+    }
+
+    .antonym-item { display: flex; flex-direction: column; gap: 8px; padding: 14px 18px; background: #FFF; border: 2.5px solid var(--border); border-radius: 16px; margin-bottom: 12px; font-weight: 800; }
+    @media (min-width: 500px) { .antonym-item { flex-direction: row; align-items: center; justify-content: space-between; } }
+    .antonym-item select { padding: 10px 14px; border-radius: 12px; border: 2px solid var(--border); font-weight: 700; font-size: 0.95rem; background: #FAFAFA; cursor: pointer; }
+
+    .caps-item { background: #FFF; border: 2.5px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
+    .caps-item p { margin-bottom: 8px; font-weight: 800; }
+    .caps-item input[type="text"] { width: 100%; padding: 12px 16px; font-size: 1rem; border: 2px solid var(--border); border-radius: 12px; font-weight: 600; outline: none; }
+    .caps-item input[type="text"]:focus { border-color: var(--primary); background: #F4FBF7; }
+
+    /* SOPA DE LETRAS RESPONSIVE (12x12) */
+    .wordsearch-container { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    @media (min-width: 750px) { .wordsearch-container { flex-direction: row; align-items: flex-start; justify-content: space-between; } }
+
+    .ws-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(22px, 32px));
+      grid-template-rows: repeat(12, minmax(22px, 32px));
+      gap: 3px;
+      background: #E2E8F0;
+      padding: 8px;
+      border-radius: 16px;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    .ws-cell {
+      aspect-ratio: 1;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: clamp(0.85rem, 2.2vw, 1.1rem);
+      border-radius: 6px;
+      cursor: pointer;
+      color: #334155;
+      transition: background 0.2s;
+    }
+
+    .ws-cell.selected { background: #FFE082; color: #B78103; }
+    .ws-cell.found { background: #81C784; color: white; }
+
+    .ws-words-list { background: #F8FAFC; border: 2.5px solid var(--border); border-radius: 18px; padding: 18px; flex: 1; width: 100%; }
+    .ws-words-list h4 { margin-bottom: 12px; color: var(--primary-dark); font-family: 'Fredoka', sans-serif; font-size: 1.2rem; }
+    .ws-words-list ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .ws-words-list li {
+      padding: 10px 14px;
+      background: white;
+      border-radius: 12px;
+      border: 2px solid #CBD5E1;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: #1E293B;
+    }
+
+    .hint-btn {
+      background: #FFF3E0;
+      border: 2px solid #FFB74D;
+      color: #E65100;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .hint-btn:hover { background: #FFE0B2; transform: scale(1.03); }
+
+    .ws-target-word { display: inline-block; margin-left: 6px; color: #1565C0; font-weight: 800; background: #E3F2FD; padding: 2px 8px; border-radius: 6px; }
+
+    .ws-words-list li.found-item { background: #D1FAE5; border-color: #10B981; color: #047857; text-decoration: line-through; }
+    .ws-words-list li.found-item .ws-target-word { color: #047857; background: transparent; }
+
+    /* ORDENAR ORACIÓN */
+    .sentence-container {
+      background: #FFF;
+      border: 3px dashed var(--gold);
+      border-radius: 18px;
+      min-height: 80px;
+      padding: 12px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .words-container {
+      background: #F1F5F9;
+      border-radius: 18px;
+      padding: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .word-btn {
+      padding: 10px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: 0.2s;
+      background: white;
+      box-shadow: 0 4px 0px #CFD8DC;
+      border: 2px solid #B0BEC5;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    .word-btn:active { transform: translateY(2px); box-shadow: 0 2px 0px #CFD8DC; }
+    .word-btn.selected { background: var(--primary); color: white; border-color: var(--primary-dark); box-shadow: 0 4px 0px var(--primary-dark); }
+    .word-btn.used { opacity: 0.25; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .controls-ordena { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+    .controls-ordena button {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px;
+      border: none;
+      border-radius: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      font-size: 1rem;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    }
+    .btn-check { background: var(--primary); }
+    .btn-clear { background: #E53935; }
+    .btn-next-ord { background: var(--accent); }
+
+    .next-activity-wrapper { margin-top: 30px; display: flex; justify-content: flex-end; }
+
+    .btn-next-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white !important;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--primary-dark);
+      transition: all 0.2s ease;
+    }
+    .btn-next-tab:hover { background: var(--primary-dark); transform: translateX(4px); }
+
+    .finish-area { text-align: center; margin-top: 30px; padding: 15px; }
+    .btn-submit { background: linear-gradient(135deg, #2E7D32, #1B5E20); color: white; font-family: 'Fredoka', sans-serif; font-size: 1.3rem; padding: 14px 36px; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 0 #134617; }
+    .btn-submit:active { transform: translateY(3px); box-shadow: 0 3px 0 #134617; }
+
+    .feedback-card-wrapper { background: #FFF; border: 3px solid var(--primary); border-radius: 20px; padding: 20px; margin-top: 10px; box-shadow: var(--shadow-sm); width: 100%; }
+    .feedback-header-box { text-align: center; border-bottom: 2px solid #E8F5E9; padding-bottom: 15px; margin-bottom: 15px; }
+    .feedback-header-box h2 { font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: 1.6rem; }
+
+    .score-badge { display: inline-block; background: var(--primary); color: white; font-family: 'Fredoka', sans-serif; font-size: 1.8rem; padding: 10px 28px; border-radius: 30px; margin: 10px 0; box-shadow: 0 4px 0 var(--primary-dark); }
+
+    .feedback-details { text-align: left; margin-top: 15px; background: #F8FAFC; padding: 15px; border-radius: 14px; border: 2px solid #E2E8F0; }
+    .feedback-item { padding: 8px 0; border-bottom: 1px solid #EDF2F7; font-size: 0.95rem; line-height: 1.4; font-weight: 700; }
+    .correct-txt { color: var(--correct); }
+    .incorrect-txt { color: var(--incorrect); }
+    .placeholder-msg { font-size: 1.1rem; color: #78909C; font-weight: 700; font-style: italic; margin: 40px 0; text-align: center; }
+
+    .action-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 25px; }
+    .btn-action { font-family: 'Fredoka', sans-serif; font-size: 1.1rem; padding: 12px 26px; border: none; border-radius: 30px; cursor: pointer; color: white; box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+    .btn-pdf { background: #D32F2F; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🌳 El Misterio del Árbol Gris 🌳</h1>
+    <p>Actividades Interactivas de Comprensión Lectora y Lengua</p>
+  </header>
+
+  <nav id="navbar">
+    <button class="tab-btn active" id="btn-cuento" onclick="switchTab('cuento')">📖 Cuento</button>
+    <button class="tab-btn" id="btn-test" onclick="switchTab('test')">📝 Test (10)</button>
+    <button class="tab-btn" id="btn-sinonimos" onclick="switchTab('sinonimos')">🔗 Sinónimos 1</button>
+    <button class="tab-btn" id="btn-sinonimos2" onclick="switchTab('sinonimos2')">📋 Sinónimos 2</button>
+    <button class="tab-btn" id="btn-sopa-sin" onclick="switchTab('sopa-sin')">🔍 Sopa Sinónimos</button>
+    <button class="tab-btn" id="btn-antonimos" onclick="switchTab('antonimos')">⚡ Antónimos 1</button>
+    <button class="tab-btn" id="btn-antonimos2" onclick="switchTab('antonimos2')">🧩 Antónimos 2</button>
+    <button class="tab-btn" id="btn-sopa-ant" onclick="switchTab('sopa-ant')">🔍 Sopa Antónimos</button>
+    <button class="tab-btn" id="btn-ordenar" onclick="switchTab('ordenar')">🔤 Ordenar</button>
+    <button class="tab-btn" id="btn-mayusculas" onclick="switchTab('mayusculas')">🔠 Mayúsculas</button>
+    <button class="tab-btn" id="btn-resultados" onclick="switchTab('resultados')">🏆 Resultados</button>
+  </nav>
+
+  <!-- TAB 1: CUENTO & ODS -->
+  <div id="cuento" class="tab-content active">
+    <div class="ods-banner">
+      <div class="ods-badge">🌍 ODS 11 y 15<br><span style="font-size:0.85rem; font-weight:normal;">Agenda 2030</span></div>
+      <div class="ods-info">
+        <h3>Objetivos de Desarrollo Sostenible de la Actividad</h3>
+        <p><strong>ODS 11: Ciudades y Comunidades Sostenibles</strong> — Reducir la contaminación urbana y fomentar espacios verdes peatonales.</p>
+        <p><strong>ODS 15: Vida de Ecosistemas Terrestres</strong> — Proteger la flora local, los árboles urbanos y la biodiversidad.</p>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <h2>📖 El misterio del árbol gris</h2>
+      <p>En el corazón de Valle Hermoso, entre calles adoquinadas y el bullicio de los coches, resistía un enorme y antiguo roble al que todos llamaban Silvano. Sin embargo, de un tiempo a esta parte, el pueblo ya no hacía honor a su nombre. El humo del tráfico cubría los tejados con un manto plomizo, las papeleras desbordaban plástico por los parques y un ruido ensordecedor ahogaba el canto de las aves.</p>
+      <p>Pero lo más inquietante no era el tráfico. Lo peor le estaba ocurriendo a Silvano: sus hojas, verde esmeralda durante décadas, se estaban volviendo completamente grises y duras como la piedra.</p>
+      <p>Valeria y Mateo, dos compañeros de diez años con un olfato especial para los misterios, decidieron investigar. Una tarde de octubre, escondidos tras el tronco rugoso del roble, descubrieron algo insólito: cuando el rugido de los motores y el humo se volvían insoportables, las ramas del árbol susurraban crujidos de dolor y soltaban una extraña resina plateada.</p>
+      <p>—No está enfermo por vejez, Mateo —murmuró Valeria, tocando la corteza helada—. Se está asfixiando. El aire sucio y el cemento le están quitando la vida.</p>
+      <p>En ese momento, entre la resina del tronco, Mateo vio brillar algo: un viejo medallón de bronce grabado con un lema medio borrado: <em>«Si el gigante de madera cae, la sombra gris el pueblo cubrirá»</em>.</p>
+      <p>Asustados pero decididos, los dos amigos sabían que no tenían mucho tiempo. Al día siguiente, la empresa constructora contratada por el ayuntamiento pretendía talar el roble para edificar un enorme aparcamiento privado de cuatro plantas.</p>
+      <p>Esa misma noche, Valeria y Mateo organizaron una manifestación. Con la ayuda de la Asociación de Vecinos y utilizando las redes sociales de la escuela, convocaron a todo el pueblo al amanecer.</p>
+      <p>Cuando los camiones de construcción y las sierras mecánicas llegaron a la plaza, se encontraron con una muralla humana. Decenas de personas sostenían pancartas con propuestas para salvar el entorno: carriles para bicicletas, autobuses eléctricos, zonas verdes para jugar y huertos comunitarios. Valeria se adelantó y, con voz firme frente al encargado de obras, leyó la inscripción del medallón y explicó cómo el roble estaba muriendo por la contaminación que todo el mundo generaba.</p>
+      <p>El murmullo de los vecinos se convirtió en un clamor. Los constructores, al ver la unión del pueblo y la fuerza de sus argumentos, tuvieron que detener la maquinaria. La propia alcaldesa, presente en la multitud, prometió revisar el plan urbanístico para transformar el centro en un espacio libre de humos y contaminación.</p>
+      <p>Pocos meses después, las máquinas no trajeron cemento, sino tierra fértil y flores. Las calles principales se hicieron peatonales y el tráfico se redujo mucho. Una mañana de primavera, mientras Valeria y Mateo leían bajo la sombra del roble, una suave brisa hizo temblar sus ramas: las hojas grises habían caído para dar paso a miles de brotes verdes y brillantes. Silvano volvía a respirar, y Valle Hermoso había recuperado, al fin, su verdadero nombre.</p>
+    </div>
+
+    <div class="next-activity-wrapper">
+      <button class="btn-next-tab" onclick="switchTab('test')">Siguiente actividad ➡️</button>
+    </div>
+  </div>
+
+  <!-- TAB 2: TEST -->
+  <div id="test" class="tab-content">
+    <div class="section-title">📝 Cuestionario de Lectura</div>
+    <div class="section-desc">Responde a las 10 preguntas tipo test sobre la historia del cuento.</div>
+    <div id="test-questions"></div>
+    <div class="next-activity-wrapper">
+      <button class="btn-next-tab" onclick="switchTab('sinonimos')">Siguiente actividad ➡️</button>
+    </div>
+  </div>
+
+  <!-- TAB 3: SINÓNIMOS 1 (EMPAREJAR MODIFICABLE) -->
+  <div id="sinonimos" class="tab-content">
+    <div class="section-title">🔗 Actividad de Sinónimos 1 (Emparejar)</div>
+    <div class="section-desc">Haz clic en una palabra de la izquierda y luego en su sinónimo correspondiente a la derecha. <strong>Si quieres cambiar una respuesta, vuelve a hacer clic sobre cualquier palabra emparejada para deshacerla.</strong></div>
+    <div class="matching-container">
+      <div class="matching-column" id="syn-left"></div>
+      <div class="matching-column" id="syn-right"></div>
+    </div>
+    <div class="next-activity-wrapper">
+      <button class="btn-next-tab" onclick="switchTab('sinonimos2')">Siguiente actividad ➡️</button>
+    </div>
+  </div>
+
+  <!-- TAB 4: SINÓNIMOS 2 (DESPLEGABLE) -->
+  <div id="sinonimos2" class="tab-content">
+    <div class="section-title">📋 Actividad de Sinónimos 2 (Selección)</div>
+    <div class="section-desc">Elige la palabra que significa lo mismo (sinónimo) en cada opción sencilla. Puedes cambiar tu elección en cualquier momento.</div>
+    <div id="synonyms2-list"></div>
+    <div class="next-activity-wrapper">
+      <button class="btn-next-tab" onclick="switchTab('sopa-sin')">Siguiente actividad ➡️</button>
+    </div>
+  </div>
+
+  <!-- TAB 5: SOPA DE LETRAS DE SINÓNIMOS -->
+  <div id="sopa-sin" class="tab-content">
+    <div class="section-title">🔍 Sopa de Letras: Deduce y Busca el Sinónimo</div>
+    <div class="section-desc">Piensa cuál es el <strong>sinónimo</strong> de cada palabra de la lista y encuéntralo en el tablero. Las palabras pueden estar en horizontal, vertical o diagonal. Si necesitas ayuda, pulsa el botón de 💡 <strong>Pista</strong>.</div>
+    <div class="wordsearch-container">
+      <div class="ws-grid" id="ws-grid-sin"></div>
+      <div class="ws-words-list">
+        <h4>Encuentra los sinónimos de:</h4>
+        <ul id="ws-list-sin"></ul>
+      </div>
+    </div>
+    <div class="next-activity-wrapper">
+      <button class="btn-next-tab" onclick="switchTab('antonimos')">Siguiente actividad ➡️</button>
+    </div>
+  </div>
+
+  <!-- TAB 6: ANTÓNIMOS 1 (DESPLEGABLE) -->
+  <div id="antonimos" class="tab-content">
+    <div class="section-title">⚡ Actividad de Antónimos 1 (Selección)</div>
+    <div class="section-desc">Selecciona la palabra opuesta (antónimo) correcta para cada término sencillo. Puedes cambiar de opción siempre que quieras.</div>
+    <div id="antonyms-list"></div>
+    <div class="next-activity-wrapper">
+      <button class="btn-next-tab" onclick="switchTab('antonimos2')">Siguiente actividad ➡️</button>
+    </div>
+  </div>
+
+  <!-- TAB 7: ANTÓNIMOS 2 (EMPAREJAR MODIFICABLE) -->
+  <div id="antonimos2" class="tab-content">
+    <div class="section-title">🧩 Actividad de Antónimos 2 (Emparejar)</div>
+    <div class="section-desc">Empareja cada palabra con su antónimo (lo contrario). <strong>Si quieres corregir una opción, haz clic sobre cualquiera de las palabras unidas para desemparejarlas.</strong></div>
+    <div class="matching-container">
+      <div class="matching-column" id="ant2-left"></div>
+      <div class="matching-column" id="ant2-right"></div>
+    </div>
+    <div class="next-activity-wrapper">
+      <button class="btn-next-tab" onclick="switchTab('sopa-ant')">Siguiente actividad ➡️</button>
+    </div>
+  </div>
+
+  <!-- TAB 8: SOPA DE LETRAS DE ANTÓNIMOS -->
+  <div id="sopa-ant" class="tab-content">
+    <div class="section-title">🔍 Sopa de Letras: Deduce y Busca el Antónimo</div>
+    <div class="section-desc">Piensa cuál es el <strong>antónimo</strong> (palabra opuesta) de cada término y búscalo en la sopa. Las palabras pueden estar en horizontal, vertical o diagonal. Utiliza el botón 💡 <strong>Pista</strong> si lo necesitas.</div>
+    <div class="wordsearch-container">
+      <div class="ws-grid" id="ws-grid-ant"></div>
+      <div class="ws-words-list">
+        <h4>Encuentra los opuestos de:</h4>
+        <ul id="ws-list-ant"></ul>
+      </div>
+    </div>
+    <div class="next-activity-wrapper">
+      <button class="btn-next-tab" onclick="switchTab('ordenar')">Siguiente actividad ➡️</button>
+    </div>
+  </div>
+
+  <!-- TAB 9: ORDENAR ORACIÓN -->
+  <div id="ordenar" class="tab-content">
+    <div class="section-title">🔤 Ordena la Oración</div>
+    <div class="section-desc">Haz clic en las palabras en el orden correcto para formar oraciones sencillas del cuento.</div>
+    
+    <div style="text-align: center; font-weight:800; color:var(--primary-dark); margin-bottom:10px; font-size:1.1rem;">
+      Oración <span id="ord-current-idx">1</span> de 5
+    </div>
+
+    <div class="sentence-container" id="ord-drop-zone"></div>
+    <div class="words-container" id="ord-words-zone"></div>
+    <div id="ord-message" style="text-align:center; font-weight:800; min-height:30px; margin-bottom:10px; font-size:1.1rem;"></div>
+
+    <div class="controls-ordena">
+      <button class="btn-clear" onclick="clearOrdSentence()">🗑️ Limpiar</button>
+      <button class="btn-check" onclick="checkOrdSentence()">✅ Comprobar</button>
+      <button class="btn-next-ord" id="btn-next-ord-sentence" onclick="nextOrdSentence()" disabled>Siguiente ⏭️</button>
+    </div>
+
+    <div class="next-activity-wrapper">
+      <button class="btn-next-tab" onclick="switchTab('mayusculas')">Siguiente actividad ➡️</button>
+    </div>
+  </div>
+
+  <!-- TAB 10: MAYÚSCULAS -->
+  <div id="mayusculas" class="tab-content">
+    <div class="section-title">🔠 Reglas de Uso de Mayúsculas</div>
+    <div class="section-desc">Recuerda: Se escribe mayúscula al inicio de un texto, después de un punto y en nombres propios. Los cargos van en minúscula.</div>
+    
+    <div class="caps-item">
+      <p>1. Escribe correctamente la siguiente oración aplicando las mayúsculas donde corresponda:</p>
+      <p style="color:#666; font-style:italic; margin-bottom:10px;">el pasado lunes, valeria y mateo viajaron a valle hermoso.</p>
+      <input type="text" id="cap1" placeholder="Escribe aquí la frase corregida...">
+    </div>
+    
+    <div class="caps-item">
+      <p>2. Escribe correctamente la siguiente oración:</p>
+      <p style="color:#666; font-style:italic; margin-bottom:10px;">en el mes de octubre, la asociación de vecinos protegió a silvano.</p>
+      <input type="text" id="cap2" placeholder="Escribe aquí la frase corregida...">
+    </div>
+    
+    <div class="caps-item">
+      <p>3. Escribe correctamente el nombre propio del pueblo del cuento:</p>
+      <input type="text" id="cap3" placeholder="Nombre del pueblo...">
+    </div>
+
+    <div class="caps-item">
+      <p>4. Escribe correctamente la siguiente oración:</p>
+      <p style="color:#666; font-style:italic; margin-bottom:10px;">la directora de obras escuchó a los niños.</p>
+      <input type="text" id="cap4" placeholder="Escribe aquí la frase corregida...">
+    </div>
+
+    <div class="finish-area">
+      <button class="btn-submit" onclick="evaluateAll()">🏆 Finalizar y Ver Resultados</button>
+    </div>
+
+    <div class="next-activity-wrapper">
+      <button class="btn-next-tab" onclick="switchTab('resultados')">Siguiente actividad ➡️</button>
+    </div>
+  </div>
+
+  <!-- TAB 11: RESULTADOS -->
+  <div id="resultados" class="tab-content">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <button class="btn-submit" onclick="evaluateAll()">🏆 Finalizar y Ver Resultados</button>
+    </div>
+
+    <div id="results-placeholder" class="placeholder-msg">
+      Aún no has completado la evaluación. Haz clic en el botón de arriba para calcular tu puntuación y generar tu informe.
+    </div>
+
+    <div id="results-body" style="display:none;">
+      <div class="feedback-card-wrapper" id="pdf-content">
+        <div class="feedback-header-box">
+          <h2>🎓 Informe de Resultados: El Misterio del Árbol Gris 🎓</h2>
+          <p style="color:#555; font-size:0.95rem; font-weight:700;">Comprensión Lectora, Gramática y Concienciación ODS</p>
+        </div>
+
+        <div style="text-align: center;">
+          <div class="score-badge" id="total-score">0 / 100 Puntos</div>
+          <p id="score-msg" style="font-size: 1.3rem; font-weight:800; color:#2E7D32;"></p>
+        </div>
+
+        <div class="feedback-details" id="feedback-list"></div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn-action btn-pdf" onclick="generatePDF()">📄 Descargar PDF de Resultados</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const pairColors = [
+    { bg: '#E3F2FD', border: '#1976D2', text: '#0D47A1' },
+    { bg: '#FFEBEE', border: '#D32F2F', text: '#B71C1C' },
+    { bg: '#F3E5F5', border: '#7B1FA2', text: '#4A148C' },
+    { bg: '#FFF3E0', border: '#F57C00', text: '#E65100' },
+    { bg: '#E8F5E9', border: '#388E3C', text: '#1B5E20' },
+    { bg: '#FCE4EC', border: '#C2185B', text: '#880E4F' }
+  ];
+
+  const testData = [
+    { q: "1. ¿Cómo llamaban los habitantes del pueblo al antiguo roble?", options: ["a) Fulano", "b) Zutano", "c) Silvano", "d) Mengano"], correct: 2 },
+    { q: "2. ¿Qué problema afectaba al pueblo de Valle Hermoso al principio del cuento?", options: ["a) El humo del tráfico, la basura y el ruido ensordecedor.", "b) Había una gran sequía y los ríos se habían secado.", "c) Las fábricas habían destruido todas las casas del centro.", "d) El parque estaba cerrado por obras desde hacía años."], correct: 0 },
+    { q: "3. ¿Qué descubrieron Valeria y Mateo escondidos tras el tronco una tarde de octubre?", options: ["a) Un nido de aves abandonado por el humo.", "b) Un mapa secreto del ayuntamiento oculto en las raíces.", "c) A los obreros colocando las primeras sierras mecánicas.", "d) Que el árbol susurraba crujidos de dolor y soltaba resina plateada."], correct: 3 },
+    { q: "4. ¿Qué proyecto quería llevar a cabo la empresa constructora en el lugar del roble?", options: ["a) Construir un centro comercial de varias plantas.", "b) Edificar un aparcamiento privado de cuatro plantas.", "c) Hacer una carretera de tres carriles.", "d) Construir un bloque de viviendas modernas."], correct: 1 },
+    { q: "5. ¿A quiénes acudieron los niños para organizar la protesta nocturna?", options: ["a) A la alcaldesa y al encargado de obras.", "b) A los medios de comunicación y a la policía.", "c) A la Asociación de Vecinos y a la comunidad escolar.", "d) Solo a sus familias y amigos cercanos."], correct: 2 },
+    { q: "6. ¿Qué ocurrió finalmente con las hojas del roble en primavera?", options: ["a) Se quedaron grises pero el árbol volvió a dar frutos.", "b) Cayeron las hojas grises y brotaron miles de brotes verdes y brillantes.", "c) Se volvieron de color dorado gracias a la resina plateada.", "d) Se cayeron todas las hojas y el árbol tardó años en recuperarse."], correct: 1 },
+    { q: "7. ¿Por qué el cuento dice que el pueblo \"ya no hacía honor a su nombre\"?", options: ["a) Porque antes se llamaba Valle Verde y le cambiaron la denominación.", "b) Porque los vecinos ya no eran amables con los visitantes.", "c) Porque las montañas de alrededor habían desaparecido.", "d) Porque se llamaba Valle Hermoso, pero la contaminación y el humo lo habían afeado."], correct: 3 },
+    { q: "8. ¿Qué significaba la frase del medallón: \"Si el gigante de madera cae, la sombra gris el pueblo cubrirá\"?", options: ["a) Que si talaban el árbol, construirían un edificio muy alto que daría sombra a la plaza.", "b) Que la destrucción de la naturaleza traería más contaminación y tristeza al pueblo.", "c) Que el árbol se caería sobre las casas si no lo cuidaban a tiempo.", "d) Que las hojas grises del roble taparían la luz del sol para siempre."], correct: 1 },
+    { q: "9. ¿Por qué las propuestas de las pancartas (carriles bici, autobuses eléctricos, huertos) eran una alternativa efectiva al aparcamiento?", options: ["a) Porque reducían el uso de coches, disminuían la contaminación y promovían un pueblo sostenible.", "b) Porque eran más baratas de construir que un aparcamiento de cuatro plantas.", "c) Porque hacían que el centro del pueblo fuera más bonito para los turistas.", "d) Porque convencían a los constructores de invertir en otro negocio."], correct: 0 },
+    { q: "10. ¿Qué enseñanza principal transmite la historia sobre la participación del alumnado y los jóvenes?", options: ["a) Que los/as niños/as solo deben observar los problemas hasta ser adultos/as.", "b) Que las decisiones sobre el entorno solo corresponden al alcalde y las empresas.", "c) Que los problemas medioambientales solo se solucionan mediante la tecnología moderna.", "d) Que la voz de los jóvenes puede movilizar a la comunidad y lograr cambios positivos reales."], correct: 3 }
+  ];
+
+  const synData = [
+    { word: "Grande", syn: "Enorme" },
+    { word: "Bonito", syn: "Lindo" },
+    { word: "Cortar", syn: "Talar" },
+    { word: "Gritar", syn: "Vocear" },
+    { word: "Aparecer", syn: "Brotar" },
+    { word: "Ruido", syn: "Bullicio" }
+  ];
+
+  const synData2 = [
+    { word: "Contento", options: ["Alegre", "Triste", "Enojado"], correct: 0 },
+    { word: "Hablar", options: ["Charlar", "Mirar", "Correr"], correct: 0 },
+    { word: "Empezar", options: ["Terminar", "Comenzar", "Parar"], correct: 1 },
+    { word: "Saber", options: ["Conocer", "Ignorar", "Olvidar"], correct: 0 },
+    { word: "Escuchar", options: ["Oír", "Ver", "Tocar"], correct: 0 },
+    { word: "Cuidar", options: ["Romper", "Proteger", "Abandonar"], correct: 1 }
+  ];
+
+  const antData = [
+    { word: "Viejo", options: ["Anciano", "Nuevo", "Gordo"], correct: 1 },
+    { word: "Frío", options: ["Helado", "Caliente", "Duro"], correct: 1 },
+    { word: "Subir", options: ["Bajar", "Aumentar", "Saltar"], correct: 0 },
+    { word: "Unión", options: ["Separación", "Junta", "Amistad"], correct: 0 },
+    { word: "Oscuro", options: ["Claro", "Negro", "Sombreado"], correct: 0 },
+    { word: "Limpiar", options: ["Lavar", "Ensuciar", "Arreglar"], correct: 1 }
+  ];
+
+  const antData2 = [
+    { word: "Silencio", ant: "Ruido" },
+    { word: "Parar", ant: "Continuar" },
+    { word: "Cerca", ant: "Lejos" },
+    { word: "Rápido", ant: "Lento" },
+    { word: "Fuerte", ant: "Débil" },
+    { word: "Avanzar", ant: "Retroceder" }
+  ];
+
+  /* DATOS Y MATRICES 12x12 REVISADAS CON MÚLTIPLES DIRECCIONES */
+  const sopaSinonimosData = [
+    { base: "Grande", target: "ENORME" },
+    { base: "Bonito", target: "LINDO" },
+    { base: "Parar", target: "DETENER" },
+    { base: "Grave", target: "SERIO" },
+    { base: "Casa", target: "HOGAR" },
+    { base: "Camino", target: "SENDA" },
+    { base: "Alegre", target: "FELIZ" },
+    { base: "Ayuda", target: "APOYO" }
+  ];
+
+  /*
+    Orientaciones en matriz Sinónimos:
+    - ENORME: H (Fila 0, Col 0..5)
+    - LINDO: V (Fila 0..4, Col 8)
+    - DETENER: H (Fila 2, Col 2..8)
+    - SERIO: D (Fila 3..7, Col 1..5)
+    - HOGAR: V (Fila 5..9, Col 11)
+    - SENDA: V (Fila 6..10, Col 0)
+    - FELIZ: H (Fila 8, Col 3..7)
+    - APOYO: H (Fila 10, Col 2..6)
+  */
+  const gridSinMatrix = [
+    ['E','N','O','R','M','E','K','P','L','R','A','M'],
+    ['X','T','R','A','M','O','L','I','I','B','U','C'],
+    ['P','M','D','E','T','E','N','E','R','O','S','F'],
+    ['C','S','R','M','V','L','O','Q','D','N','P','X'],
+    ['B','I','E','C','A','G','R','O','O','M','T','K'],
+    ['V','N','R','T','R','O','S','T','U','W','Z','H'],
+    ['S','U','I','K','I','I','P','L','M','A','B','O'],
+    ['E','L','M','O','O','O','O','P','Q','N','C','G'],
+    ['N','P','S','F','E','L','I','Z','B','I','D','A'],
+    ['D','O','X','T','Z','G','A','M','O','C','E','R'],
+    ['A','T','A','P','O','Y','O','D','T','O','F','K'],
+    ['L','R','M','V','W','C','D','E','R','L','A','S']
+  ];
+
+  const sopaAntonimosData = [
+    { base: "Limpio", target: "SUCIO" },
+    { base: "Rápido", target: "LENTO" },
+    { base: "Alegre", target: "TRISTE" },
+    { base: "Fuerte", target: "DEBIL" },
+    { base: "Alto", target: "BAJO" },
+    { base: "Dulce", target: "AMARGO" },
+    { base: "Lleno", target: "VACIO" },
+    { base: "Noche", target: "DIA" }
+  ];
+
+  /*
+    Orientaciones en matriz Antónimos:
+    - SUCIO: H (Fila 0, Col 1..5)
+    - LENTO: D (Fila 1..5, Col 2..6)
+    - TRISTE: V (Fila 2..7, Col 0)
+    - DEBIL: H (Fila 6, Col 2..6)
+    - BAJO: V (Fila 7..10, Col 10)
+    - AMARGO: V (Fila 3..8, Col 8)
+    - VACIO: H (Fila 4, Col 5..9)
+    - DIA: H (Fila 11, Col 4..6)
+  */
+  const gridAntMatrix = [
+    ['P','S','U','C','I','O','C','F','G','H','J','K'],
+    ['M','A','L','I','N','O','P','R','S','T','U','V'],
+    ['T','B','Q','E','M','K','L','N','W','X','Y','Z'],
+    ['R','C','O','R','N','A','B','C','A','D','E','F'],
+    ['I','D','E','O','T','V','A','C','I','O','G','H'],
+    ['S','E','F','S','A','P','O','L','M','R','I','J'],
+    ['T','F','D','E','B','I','L','Q','A','T','U','K'],
+    ['E','G','H','I','C','J','K','L','R','M','B','N'],
+    ['L','O','P','Q','R','S','T','U','G','V','A','W'],
+    ['X','Y','Z','A','B','C','D','E','O','F','J','G'],
+    ['H','I','J','K','L','M','N','O','P','Q','O','R'],
+    ['S','T','U','V','D','I','A','W','X','Y','Z','A']
+  ];
+
+  const ordData = [
+    { s: "Silvano era un antiguo roble grande.", words: ["Silvano", "era", "un", "antiguo", "roble", "grande."] },
+    { s: "Las hojas se volvían muy grises.", words: ["Las", "hojas", "se", "volvían", "muy", "grises."] },
+    { s: "Valeria y Mateo investigaron el misterio.", words: ["Valeria", "y", "Mateo", "investigaron", "el", "misterio."] },
+    { s: "El pueblo protegió el árbol verde.", words: ["El", "pueblo", "protegió", "el", "árbol", "verde."] },
+    { s: "Nuevos brotes verdes volvieron a nacer.", words: ["Nuevos", "brotes", "verdes", "volvieron", "a", "nacer."] }
+  ];
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    const activeBtn = document.getElementById('btn-' + tabId);
+    activeBtn.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+
+    activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
+  function renderTest() {
+    const container = document.getElementById('test-questions');
+    testData.forEach((q, idx) => {
+      const block = document.createElement('div');
+      block.className = 'question-block';
+      let html = `<p class="q-text">${q.q}</p><div class="options-grid">`;
+      q.options.forEach((opt, oIdx) => {
+        html += `<label class="option-label"><input type="radio" name="q${idx}" value="${oIdx}">${opt}</label>`;
+      });
+      html += `</div>`;
+      block.innerHTML = html;
+      container.appendChild(block);
+    });
+  }
+
+  /* SINÓNIMOS 1 */
+  let syn1SelectedLeft = null;
+  let syn1Matches = {}; 
+  let syn1PairCount = 0;
+
+  function renderSynonyms() {
+    const leftCol = document.getElementById('syn-left');
+    const rightCol = document.getElementById('syn-right');
+    leftCol.innerHTML = '';
+    rightCol.innerHTML = '';
+
+    const shuffledRight = [...synData].sort(() => Math.random() - 0.5);
+
+    synData.forEach((item, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'match-btn';
+      btn.textContent = item.word;
+      btn.dataset.leftIdx = idx;
+      btn.onclick = () => handleSyn1LeftClick(btn, idx);
+      leftCol.appendChild(btn);
+    });
+
+    shuffledRight.forEach((item) => {
+      const btn = document.createElement('button');
+      btn.className = 'match-btn';
+      btn.textContent = item.syn;
+      btn.dataset.synText = item.syn;
+      btn.onclick = () => handleSyn1RightClick(btn, item.syn);
+      rightCol.appendChild(btn);
+    });
+  }
+
+  function unpairSyn1(leftIdx) {
+    if (!syn1Matches[leftIdx]) return;
+
+    const { leftBtn, rightBtn } = syn1Matches[leftIdx];
+
+    resetBtnStyle(leftBtn);
+    delete leftBtn.dataset.matched;
+    leftBtn.classList.remove('matched-btn');
+
+    resetBtnStyle(rightBtn);
+    delete rightBtn.dataset.matched;
+    delete rightBtn.dataset.pairedWith;
+    rightBtn.classList.remove('matched-btn');
+
+    delete syn1Matches[leftIdx];
+  }
+
+  function resetBtnStyle(btn) {
+    btn.classList.remove('selected');
+    btn.style.backgroundColor = '';
+    btn.style.borderColor = '';
+    btn.style.color = '';
+    btn.style.boxShadow = '';
+  }
+
+  function handleSyn1LeftClick(btn, idx) {
+    if (btn.dataset.matched === "true") {
+      unpairSyn1(idx);
+      if (syn1SelectedLeft && syn1SelectedLeft.idx === idx) {
+        syn1SelectedLeft = null;
+      }
+      return;
+    }
+
+    if (syn1SelectedLeft && syn1SelectedLeft.idx === idx) {
+      btn.classList.remove('selected');
+      syn1SelectedLeft = null;
+      return;
+    }
+
+    document.querySelectorAll('#syn-left .match-btn:not([data-matched="true"])').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    syn1SelectedLeft = { btn, idx };
+  }
+
+  function handleSyn1RightClick(btn, synText) {
+    if (btn.dataset.matched === "true") {
+      const pairedLeftIdx = btn.dataset.pairedWith;
+      if (pairedLeftIdx !== undefined) {
+        unpairSyn1(pairedLeftIdx);
+      }
+      return;
+    }
+
+    if (!syn1SelectedLeft) return;
+
+    const leftIdx = syn1SelectedLeft.idx;
+    const leftBtn = syn1SelectedLeft.btn;
+
+    const color = pairColors[syn1PairCount % pairColors.length];
+    syn1PairCount++;
+
+    [leftBtn, btn].forEach(b => {
+      b.classList.remove('selected');
+      b.classList.add('matched-btn');
+      b.dataset.matched = "true";
+      b.style.backgroundColor = color.bg;
+      b.style.borderColor = color.border;
+      b.style.color = color.text;
+      b.style.boxShadow = 'none';
+    });
+
+    btn.dataset.pairedWith = leftIdx;
+
+    syn1Matches[leftIdx] = {
+      syn: synText,
+      leftBtn: leftBtn,
+      rightBtn: btn
+    };
+
+    syn1SelectedLeft = null;
+  }
+
+  /* SINÓNIMOS 2 */
+  function renderSynonyms2() {
+    const container = document.getElementById('synonyms2-list');
+    container.innerHTML = '';
+    synData2.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'antonym-item';
+      let optionsHtml = `<option value="">-- Selecciona --</option>`;
+      item.options.forEach((opt, oIdx) => { optionsHtml += `<option value="${oIdx}">${opt}</option>`; });
+      div.innerHTML = `<span>¿Sinónimo de "<strong>${item.word}</strong>"?</span><select id="syn2-${idx}">${optionsHtml}</select>`;
+      container.appendChild(div);
+    });
+  }
+
+  /* ANTÓNIMOS 1 */
+  function renderAntonyms() {
+    const container = document.getElementById('antonyms-list');
+    container.innerHTML = '';
+    antData.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'antonym-item';
+      let optionsHtml = `<option value="">-- Selecciona --</option>`;
+      item.options.forEach((opt, oIdx) => { optionsHtml += `<option value="${oIdx}">${opt}</option>`; });
+      div.innerHTML = `<span>¿Antónimo de "<strong>${item.word}</strong>"?</span><select id="ant-${idx}">${optionsHtml}</select>`;
+      container.appendChild(div);
+    });
+  }
+
+  /* ANTÓNIMOS 2 */
+  let ant2SelectedLeft = null;
+  let ant2Matches = {}; 
+  let ant2PairCount = 0;
+
+  function renderAntonyms2() {
+    const leftCol = document.getElementById('ant2-left');
+    const rightCol = document.getElementById('ant2-right');
+    leftCol.innerHTML = '';
+    rightCol.innerHTML = '';
+
+    const shuffledRight = [...antData2].sort(() => Math.random() - 0.5);
+
+    antData2.forEach((item, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'match-btn';
+      btn.textContent = item.word;
+      btn.dataset.leftIdx = idx;
+      btn.onclick = () => handleAnt2LeftClick(btn, idx);
+      leftCol.appendChild(btn);
+    });
+
+    shuffledRight.forEach((item) => {
+      const btn = document.createElement('button');
+      btn.className = 'match-btn';
+      btn.textContent = item.ant;
+      btn.dataset.antText = item.ant;
+      btn.onclick = () => handleAnt2RightClick(btn, item.ant);
+      rightCol.appendChild(btn);
+    });
+  }
+
+  function unpairAnt2(leftIdx) {
+    if (!ant2Matches[leftIdx]) return;
+
+    const { leftBtn, rightBtn } = ant2Matches[leftIdx];
+
+    resetBtnStyle(leftBtn);
+    delete leftBtn.dataset.matched;
+    leftBtn.classList.remove('matched-btn');
+
+    resetBtnStyle(rightBtn);
+    delete rightBtn.dataset.matched;
+    delete rightBtn.dataset.pairedWith;
+    rightBtn.classList.remove('matched-btn');
+
+    delete ant2Matches[leftIdx];
+  }
+
+  function handleAnt2LeftClick(btn, idx) {
+    if (btn.dataset.matched === "true") {
+      unpairAnt2(idx);
+      if (ant2SelectedLeft && ant2SelectedLeft.idx === idx) {
+        ant2SelectedLeft = null;
+      }
+      return;
+    }
+
+    if (ant2SelectedLeft && ant2SelectedLeft.idx === idx) {
+      btn.classList.remove('selected');
+      ant2SelectedLeft = null;
+      return;
+    }
+
+    document.querySelectorAll('#ant2-left .match-btn:not([data-matched="true"])').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    ant2SelectedLeft = { btn, idx };
+  }
+
+  function handleAnt2RightClick(btn, antText) {
+    if (btn.dataset.matched === "true") {
+      const pairedLeftIdx = btn.dataset.pairedWith;
+      if (pairedLeftIdx !== undefined) {
+        unpairAnt2(pairedLeftIdx);
+      }
+      return;
+    }
+
+    if (!ant2SelectedLeft) return;
+
+    const leftIdx = ant2SelectedLeft.idx;
+    const leftBtn = ant2SelectedLeft.btn;
+
+    const color = pairColors[ant2PairCount % pairColors.length];
+    ant2PairCount++;
+
+    [leftBtn, btn].forEach(b => {
+      b.classList.remove('selected');
+      b.classList.add('matched-btn');
+      b.dataset.matched = "true";
+      b.style.backgroundColor = color.bg;
+      b.style.borderColor = color.border;
+      b.style.color = color.text;
+      b.style.boxShadow = 'none';
+    });
+
+    btn.dataset.pairedWith = leftIdx;
+
+    ant2Matches[leftIdx] = {
+      ant: antText,
+      leftBtn: leftBtn,
+      rightBtn: btn
+    };
+
+    ant2SelectedLeft = null;
+  }
+
+  /* SOPA DE LETRAS */
+  let foundSopaSin = [];
+  let foundSopaAnt = [];
+
+  function createWordSearch(gridId, listId, matrix, dataList, foundArray) {
+    const gridEl = document.getElementById(gridId);
+    const listEl = document.getElementById(listId);
+
+    gridEl.innerHTML = '';
+    listEl.innerHTML = '';
+
+    dataList.forEach((item, idx) => {
+      const li = document.createElement('li');
+      li.id = `${gridId}-item-${idx}`;
+
+      const textSpan = document.createElement('span');
+      textSpan.innerHTML = `<strong>${item.base}</strong>: `;
+
+      const hintContainer = document.createElement('span');
+      hintContainer.id = `${gridId}-hint-${idx}`;
+
+      const hintBtn = document.createElement('button');
+      hintBtn.className = 'hint-btn';
+      hintBtn.innerHTML = '💡 Pista';
+      hintBtn.onclick = () => toggleHint(gridId, idx, item.target, hintBtn);
+
+      li.appendChild(textSpan);
+      li.appendChild(hintContainer);
+      li.appendChild(hintBtn);
+
+      listEl.appendChild(li);
+    });
+
+    let selectedCells = [];
+
+    matrix.forEach((row, rIdx) => {
+      row.forEach((char, cIdx) => {
+        const cell = document.createElement('div');
+        cell.className = 'ws-cell';
+        cell.innerText = char;
+        cell.dataset.row = rIdx;
+        cell.dataset.col = cIdx;
+
+        cell.onclick = () => {
+          if (cell.classList.contains('found')) return;
+
+          if (cell.classList.contains('selected')) {
+            cell.classList.remove('selected');
+            selectedCells = selectedCells.filter(c => c !== cell);
+          } else {
+            cell.classList.add('selected');
+            selectedCells.push(cell);
+          }
+
+          const currentWord = selectedCells.map(c => c.innerText).join('');
+          dataList.forEach((item, idx) => {
+            if (currentWord === item.target && !foundArray.includes(item.target)) {
+              foundArray.push(item.target);
+              selectedCells.forEach(c => {
+                c.classList.remove('selected');
+                c.classList.add('found');
+              });
+
+              const liItem = document.getElementById(`${gridId}-item-${idx}`);
+              liItem.classList.add('found-item');
+
+              const hintContainer = document.getElementById(`${gridId}-hint-${idx}`);
+              hintContainer.innerHTML = `<span class="ws-target-word">${item.target}</span>`;
+
+              const btn = liItem.querySelector('.hint-btn');
+              if (btn) btn.style.display = 'none';
+
+              selectedCells = [];
+            }
+          });
+        };
+
+        gridEl.appendChild(cell);
+      });
+    });
+  }
+
+  function toggleHint(gridId, idx, wordTarget, btnEl) {
+    const container = document.getElementById(`${gridId}-hint-${idx}`);
+    if (btnEl.dataset.state === 'shown') {
+      container.innerHTML = '';
+      btnEl.innerHTML = '💡 Pista';
+      btnEl.dataset.state = 'hidden';
+    } else {
+      container.innerHTML = `<span class="ws-target-word">${wordTarget}</span>`;
+      btnEl.innerHTML = '🙈 Ocultar';
+      btnEl.dataset.state = 'shown';
+    }
+  }
+
+  /* ORDENAR ORACIÓN */
+  let ordIdx = 0;
+  let ordUserSentence = [];
+  let ordResults = [];
+
+  function initOrdLevel() {
+    const dropZone = document.getElementById('ord-drop-zone');
+    const wordsZone = document.getElementById('ord-words-zone');
+    const msg = document.getElementById('ord-message');
+    const nextBtn = document.getElementById('btn-next-ord-sentence');
+
+    dropZone.innerHTML = '';
+    wordsZone.innerHTML = '';
+    ordUserSentence = [];
+    msg.innerText = '';
+    nextBtn.disabled = true;
+
+    document.getElementById('ord-current-idx').innerText = ordIdx + 1;
+
+    let words = [...ordData[ordIdx].words];
+    words.sort(() => Math.random() - 0.5);
+
+    words.forEach(w => {
+      const btn = document.createElement('button');
+      btn.className = 'word-btn';
+      btn.innerText = w;
+      btn.onclick = () => selectOrdWord(w, btn);
+      wordsZone.appendChild(btn);
+    });
+  }
+
+  function selectOrdWord(word, btn) {
+    if (btn.classList.contains('used')) return;
+    ordUserSentence.push(word);
+    btn.classList.add('used');
+
+    const span = document.createElement('button');
+    span.className = 'word-btn selected';
+    span.innerText = word;
+    span.onclick = () => deselectOrdWord(word, btn, span);
+    document.getElementById('ord-drop-zone').appendChild(span);
+  }
+
+  function deselectOrdWord(word, originalBtn, span) {
+    ordUserSentence = ordUserSentence.filter(w => w !== word);
+    originalBtn.classList.remove('used');
+    span.remove();
+  }
+
+  function clearOrdSentence() {
+    initOrdLevel();
+  }
+
+  function checkOrdSentence() {
+    const result = ordUserSentence.join(' ');
+    const correct = ordData[ordIdx].s;
+    const msg = document.getElementById('ord-message');
+
+    if (result === correct) {
+      msg.innerText = '¡Excelente! ✨ Oración correcta.';
+      msg.style.color = 'var(--correct)';
+      ordResults[ordIdx] = true;
+      document.getElementById('btn-next-ord-sentence').disabled = false;
+    } else {
+      msg.innerText = 'Revisa el orden... ❌ Inténtalo de nuevo.';
+      msg.style.color = 'var(--incorrect)';
+      ordResults[ordIdx] = false;
+    }
+  }
+
+  function nextOrdSentence() {
+    ordIdx++;
+    if (ordIdx < ordData.length) {
+      initOrdLevel();
+    } else {
+      document.getElementById('ord-message').innerText = '🎉 ¡Has completado todas las oraciones!';
+      document.getElementById('btn-next-ord-sentence').disabled = true;
+    }
+  }
+
+  renderTest();
+  renderSynonyms();
+  renderSynonyms2();
+  createWordSearch('ws-grid-sin', 'ws-list-sin', gridSinMatrix, sopaSinonimosData, foundSopaSin);
+  renderAntonyms();
+  renderAntonyms2();
+  createWordSearch('ws-grid-ant', 'ws-list-ant', gridAntMatrix, sopaAntonimosData, foundSopaAnt);
+  initOrdLevel();
+
+  function evaluateAll() {
+    let score = 0;
+    let maxScore = 59; 
+    let feedbackHtml = '';
+
+    // Test
+    testData.forEach((q, idx) => {
+      const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+      if (selected && parseInt(selected.value) === q.correct) {
+        score++;
+        feedbackHtml += `<div class="feedback-item correct-txt">✓ Test Pregunta ${idx+1}: ¡Correcta!</div>`;
+      } else {
+        feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Test Pregunta ${idx+1}: Incorrecta. La respuesta correcta era (${['a','b','c','d'][q.correct]}).</div>`;
+      }
+    });
+
+    // Sinónimos 1
+    synData.forEach((item, idx) => {
+      const matchObj = syn1Matches[idx];
+      if (matchObj && matchObj.syn === item.syn) {
+        score++;
+        feedbackHtml += `<div class="feedback-item correct-txt">✓ Sinónimo 1 de "${item.word}": Correcto.</div>`;
+      } else {
+        feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Sinónimo 1 de "${item.word}": Incorrecto o no seleccionado (era "${item.syn}").</div>`;
+      }
+    });
+
+    // Sinónimos 2
+    synData2.forEach((item, idx) => {
+      const select = document.getElementById(`syn2-${idx}`);
+      if (select && parseInt(select.value) === item.correct) {
+        score++;
+        feedbackHtml += `<div class="feedback-item correct-txt">✓ Sinónimo 2 de "${item.word}": Correcto.</div>`;
+      } else {
+        feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Sinónimo 2 de "${item.word}": Incorrecto (era "${item.options[item.correct]}").</div>`;
+      }
+    });
+
+    // Sopa Sinónimos
+    sopaSinonimosData.forEach((item) => {
+      if (foundSopaSin.includes(item.target)) {
+        score++;
+        feedbackHtml += `<div class="feedback-item correct-txt">✓ Sopa de Sinónimos: Encontraste "${item.target}".</div>`;
+      } else {
+        feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Sopa de Sinónimos: Falta encontrar "${item.target}".</div>`;
+      }
+    });
+
+    // Antónimos 1
+    antData.forEach((item, idx) => {
+      const select = document.getElementById(`ant-${idx}`);
+      if (select && parseInt(select.value) === item.correct) {
+        score++;
+        feedbackHtml += `<div class="feedback-item correct-txt">✓ Antónimo 1 de "${item.word}": Correcto.</div>`;
+      } else {
+        feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Antónimo 1 de "${item.word}": Incorrecto (era "${item.options[item.correct]}").</div>`;
+      }
+    });
+
+    // Antónimos 2
+    antData2.forEach((item, idx) => {
+      const matchObj = ant2Matches[idx];
+      if (matchObj && matchObj.ant === item.ant) {
+        score++;
+        feedbackHtml += `<div class="feedback-item correct-txt">✓ Antónimo 2 de "${item.word}": Correcto.</div>`;
+      } else {
+        feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Antónimo 2 de "${item.word}": Incorrecto o no seleccionado (era "${item.ant}").</div>`;
+      }
+    });
+
+    // Sopa Antónimos
+    sopaAntonimosData.forEach((item) => {
+      if (foundSopaAnt.includes(item.target)) {
+        score++;
+        feedbackHtml += `<div class="feedback-item correct-txt">✓ Sopa de Antónimos: Encontraste "${item.target}".</div>`;
+      } else {
+        feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Sopa de Antónimos: Falta encontrar "${item.target}".</div>`;
+      }
+    });
+
+    // Ordenar Oraciones
+    ordData.forEach((item, idx) => {
+      if (ordResults[idx] === true) {
+        score++;
+        feedbackHtml += `<div class="feedback-item correct-txt">✓ Ordenar Oración ${idx+1}: Correcta.</div>`;
+      } else {
+        feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Ordenar Oración ${idx+1}: Incorrecta o sin completar.</div>`;
+      }
+    });
+
+    // Mayúsculas
+    const cap1 = document.getElementById('cap1').value.trim();
+    const cap2 = document.getElementById('cap2').value.trim();
+    const cap3 = document.getElementById('cap3').value.trim().toLowerCase();
+    const cap4 = document.getElementById('cap4').value.trim();
+
+    if (cap1.startsWith("El") && cap1.includes("Valeria") && cap1.includes("Mateo") && cap1.includes("Valle Hermoso")) {
+      score++;
+      feedbackHtml += `<div class="feedback-item correct-txt">✓ Mayúsculas Frase 1: ¡Muy bien!</div>`;
+    } else {
+      feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Mayúsculas Frase 1: Revisa inicio de frase y nombres propios.</div>`;
+    }
+
+    if (cap2.startsWith("En") && cap2.includes("Asociación de Vecinos") && cap2.includes("Silvano")) {
+      score++;
+      feedbackHtml += `<div class="feedback-item correct-txt">✓ Mayúsculas Frase 2: ¡Excelente!</div>`;
+    } else {
+      feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Mayúsculas Frase 2: Recuerda la mayúscula inicial, "Asociación de Vecinos" y "Silvano".</div>`;
+    }
+
+    if (cap3 === "valle hermoso") {
+      score++;
+      feedbackHtml += `<div class="feedback-item correct-txt">✓ Nombre del Pueblo: ¡Correcto! Valle Hermoso.</div>`;
+    } else {
+      feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Nombre del Pueblo: La respuesta correcta es Valle Hermoso.</div>`;
+    }
+
+    if (cap4.startsWith("La") && cap4.includes("directora de obras")) {
+      score++;
+      feedbackHtml += `<div class="feedback-item correct-txt">✓ Mayúsculas Frase 4: ¡Perfecto! Los cargos van en minúscula.</div>`;
+    } else {
+      feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Mayúsculas Frase 4: Revisa la mayúscula inicial y recuerda que los cargos van en minúscula.</div>`;
+    }
+
+    const percent = Math.round((score / maxScore) * 100);
+    
+    document.getElementById('results-placeholder').style.display = 'none';
+    document.getElementById('results-body').style.display = 'block';
+    
+    document.getElementById('total-score').textContent = `${percent}% (${score} / ${maxScore} Puntos)`;
+    document.getElementById('score-msg').textContent = percent >= 80 ? "🌟 ¡Excelente trabajo!" : "💪 ¡Buen intento, sigue practicando!";
+    document.getElementById('feedback-list').innerHTML = feedbackHtml;
+    
+    switchTab('resultados');
+  }
+
+  function generatePDF() {
+    const element = document.getElementById('pdf-content');
+
+    const opt = {
+      margin:       [0.3, 0.3, 0.3, 0.3],
+      filename:     'Resultados_Arbol_Gris.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, scrollY: 0, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+      pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    html2pdf().set(opt).from(element).save();
+  }
+</script>
+</body>
+</html>
