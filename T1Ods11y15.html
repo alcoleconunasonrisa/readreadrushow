@@ -39,6 +39,49 @@
 
     @media (min-width: 600px) { body { padding: 20px; } }
 
+    /* BOTÓN FLOTANTE HOME (CASITA) */
+    .btn-home-floating {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 9999;
+      background-color: var(--card-bg);
+      color: var(--primary-dark);
+      border: 3px solid var(--primary);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    .btn-home-floating:hover {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      transform: scale(1.1);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-home-floating:active {
+      transform: scale(0.95);
+    }
+
+    @media (max-width: 600px) {
+      .btn-home-floating {
+        width: 44px;
+        height: 44px;
+        font-size: 1.3rem;
+        top: 10px;
+        left: 10px;
+      }
+    }
+
     .container {
       max-width: 950px;
       margin: 0 auto;
@@ -355,6 +398,11 @@
 </head>
 <body>
 
+<!-- BOTÓN FLOTANTE HOME -->
+<a href="main-index.html" class="btn-home-floating" title="Volver al menú principal">
+  🏠
+</a>
+
 <div class="container">
   <header>
     <h1>🌳 El Misterio del Árbol Gris 🌳</h1>
@@ -645,7 +693,6 @@
     { word: "Avanzar", ant: "Retroceder" }
   ];
 
-  /* DATOS Y MATRICES 12x12 REVISADAS CON MÚLTIPLES DIRECCIONES */
   const sopaSinonimosData = [
     { base: "Grande", target: "ENORME" },
     { base: "Bonito", target: "LINDO" },
@@ -657,17 +704,6 @@
     { base: "Ayuda", target: "APOYO" }
   ];
 
-  /*
-    Orientaciones en matriz Sinónimos:
-    - ENORME: H (Fila 0, Col 0..5)
-    - LINDO: V (Fila 0..4, Col 8)
-    - DETENER: H (Fila 2, Col 2..8)
-    - SERIO: D (Fila 3..7, Col 1..5)
-    - HOGAR: V (Fila 5..9, Col 11)
-    - SENDA: V (Fila 6..10, Col 0)
-    - FELIZ: H (Fila 8, Col 3..7)
-    - APOYO: H (Fila 10, Col 2..6)
-  */
   const gridSinMatrix = [
     ['E','N','O','R','M','E','K','P','L','R','A','M'],
     ['X','T','R','A','M','O','L','I','I','B','U','C'],
@@ -694,17 +730,6 @@
     { base: "Noche", target: "DIA" }
   ];
 
-  /*
-    Orientaciones en matriz Antónimos:
-    - SUCIO: H (Fila 0, Col 1..5)
-    - LENTO: D (Fila 1..5, Col 2..6)
-    - TRISTE: V (Fila 2..7, Col 0)
-    - DEBIL: H (Fila 6, Col 2..6)
-    - BAJO: V (Fila 7..10, Col 10)
-    - AMARGO: V (Fila 3..8, Col 8)
-    - VACIO: H (Fila 4, Col 5..9)
-    - DIA: H (Fila 11, Col 4..6)
-  */
   const gridAntMatrix = [
     ['P','S','U','C','I','O','C','F','G','H','J','K'],
     ['M','A','L','I','N','O','P','R','S','T','U','V'],
