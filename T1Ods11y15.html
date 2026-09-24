@@ -2,15 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <title>El Misterio del Árbol Gris - Actividades Interactivas ODS</title>
 
-  <!-- Fuentes Google: Fredoka (Títulos divertidos) y Nunito (Lectura cómoda) -->
+  <!-- Typography & Styling Libraries -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,500;0,700;0,800;1,600&display=swap" rel="stylesheet">
-
-  <!-- Librería html2pdf -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
@@ -22,88 +21,102 @@
       --secondary-light: #E1F5FE;
       --accent: #FF9800;
       --accent-hover: #F57C00;
-      --bg: #F0F7F4;
+      --bg: #EDF7F2;
       --card-bg: #FFFFFF;
-      --text: #2C3E50;
-      --border: #E2E8F0;
+      --text: #1E293B;
+      --border: #CBD5E1;
       --correct: #2E7D32;
       --incorrect: #D32F2F;
       --gold: #FFB300;
-      --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05);
-      --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.08);
-      --shadow-btn: 0 4px 0px;
+      --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.06);
+      --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --min-touch: 48px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--bg); color: var(--text); padding: 10px; line-height: 1.6; min-height: 100vh; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Nunito', sans-serif; 
+      -webkit-tap-highlight-color: transparent; 
+    }
+
+    body { 
+      background-color: var(--bg); 
+      color: var(--text); 
+      padding: 10px; 
+      line-height: 1.6; 
+      min-height: 100vh; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
     @media (min-width: 600px) { body { padding: 20px; } }
 
-    /* BOTÓN FLOTANTE HOME (CASITA) */
+    /* FLOATING HOME BUTTON */
     .btn-home-floating {
       position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 9999;
+      top: 12px;
+      left: 12px;
+      z-index: 999;
       background-color: var(--card-bg);
       color: var(--primary-dark);
       border: 3px solid var(--primary);
-      width: 50px;
-      height: 50px;
+      width: var(--min-touch);
+      height: var(--min-touch);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       text-decoration: none;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      transition: all 0.2s ease-in-out;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s ease;
       cursor: pointer;
+      touch-action: manipulation;
     }
-
-    .btn-home-floating:hover {
-      background-color: var(--primary);
-      color: #FFFFFF;
-      transform: scale(1.1);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
-    }
-
-    .btn-home-floating:active {
-      transform: scale(0.95);
-    }
-
-    @media (max-width: 600px) {
-      .btn-home-floating {
-        width: 44px;
-        height: 44px;
-        font-size: 1.3rem;
-        top: 10px;
-        left: 10px;
-      }
-    }
+    .btn-home-floating:hover { background-color: var(--primary); color: #FFFFFF; transform: scale(1.08); }
+    .btn-home-floating:active { transform: scale(0.95); }
 
     .container {
-      max-width: 950px;
+      width: 100%;
+      max-width: 980px;
       margin: 0 auto;
       background: var(--card-bg);
-      border-radius: 28px;
+      border-radius: 24px;
       box-shadow: var(--shadow-md);
       overflow: hidden;
-      border: 4px solid #E2E8F0;
+      border: 3px solid var(--border);
     }
 
     header {
       background: linear-gradient(135deg, #2E7D32, #1B5E20);
       color: white;
-      padding: 24px 16px;
+      padding: 20px 16px 20px 65px;
       text-align: center;
       position: relative;
     }
+    @media (min-width: 600px) { header { padding: 24px 20px; } }
 
-    header h1 { font-family: 'Fredoka', sans-serif; font-size: clamp(1.6rem, 4vw, 2.4rem); letter-spacing: 0.5px; margin-bottom: 6px; text-shadow: 0 2px 4px rgba(0,0,0,0.15); }
-    header p { font-size: clamp(0.95rem, 2.5vw, 1.15rem); opacity: 0.95; font-weight: 700; background: rgba(255,255,255,0.15); display: inline-block; padding: 4px 16px; border-radius: 20px; }
+    header h1 { 
+      font-family: 'Fredoka', sans-serif; 
+      font-size: clamp(1.4rem, 4.5vw, 2.3rem); 
+      letter-spacing: 0.5px; 
+      margin-bottom: 6px; 
+      text-shadow: 0 2px 4px rgba(0,0,0,0.25); 
+    }
+    header p { 
+      font-size: clamp(0.85rem, 2.5vw, 1.1rem); 
+      opacity: 0.95; 
+      font-weight: 700; 
+      background: rgba(255,255,255,0.22); 
+      display: inline-block; 
+      padding: 4px 14px; 
+      border-radius: 20px; 
+    }
 
-    /* NAVEGACIÓN DESLIZABLE EN MÓVILES */
+    /* SCROLLABLE NAVIGATION */
     nav {
       display: flex;
       background-color: var(--primary-light);
@@ -111,138 +124,245 @@
       overflow-x: auto;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
-      padding: 6px;
-      gap: 6px;
+      padding: 8px;
+      gap: 8px;
+      touch-action: pan-x;
     }
-
     nav::-webkit-scrollbar { height: 6px; }
-    nav::-webkit-scrollbar-thumb { background: #C8E6C9; border-radius: 10px; }
+    nav::-webkit-scrollbar-track { background: var(--primary-light); }
+    nav::-webkit-scrollbar-thumb { background: #A5D6A7; border-radius: 10px; }
 
     nav button {
       flex: 0 0 auto;
-      padding: 10px 16px;
+      min-height: 44px;
+      padding: 8px 16px;
       border: none;
       background: transparent;
       font-size: 0.95rem;
       font-weight: 800;
-      color: #455A64;
+      color: #37474F;
       cursor: pointer;
-      border-radius: 14px;
+      border-radius: 12px;
       transition: all 0.2s ease;
       white-space: nowrap;
+      touch-action: manipulation;
     }
-
     nav button:hover { background-color: #C8E6C9; color: var(--primary-dark); }
     nav button.active { background-color: var(--primary); color: white; box-shadow: var(--shadow-sm); }
 
-    .tab-content { display: none; padding: 20px 16px; }
-    @media (min-width: 600px) { .tab-content { padding: 32px 28px; } }
+    .tab-content { display: none; padding: 18px 14px; }
+    @media (min-width: 600px) { .tab-content { padding: 28px 24px; } }
     .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* BANNER ODS */
+    /* ODS BANNER */
     .ods-banner {
       background: linear-gradient(135deg, #FFF8E1, #FFE0B2);
       border: 3px solid #FFB74D;
-      border-radius: 20px;
-      padding: 18px;
-      margin-bottom: 25px;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 20px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       align-items: center;
       box-shadow: var(--shadow-sm);
     }
-
     @media (min-width: 600px) { .ods-banner { flex-direction: row; text-align: left; } }
 
     .ods-badge {
       background: #F57C00;
       color: white;
       font-family: 'Fredoka', sans-serif;
-      font-size: 1.1rem;
-      padding: 10px 18px;
-      border-radius: 16px;
+      font-size: 1.05rem;
+      padding: 10px 16px;
+      border-radius: 14px;
       text-align: center;
       width: 100%;
-      max-width: 180px;
+      max-width: 200px;
       box-shadow: 0 4px 0 #E65100;
+      flex-shrink: 0;
     }
-
-    .ods-info h3 { font-family: 'Fredoka', sans-serif; color: #E65100; font-size: 1.25rem; margin-bottom: 4px; }
+    .ods-info h3 { font-family: 'Fredoka', sans-serif; color: #E65100; font-size: 1.2rem; margin-bottom: 4px; }
     .ods-info p { font-size: 0.95rem; color: #5D4037; font-weight: 600; line-height: 1.4; margin-bottom: 4px; }
 
-    /* HISTORIA */
+    /* AUDIO PLAYER BAR FOR CUENTO */
+    .audio-controls {
+      background: #E8F5E9;
+      border: 2px solid #A5D6A7;
+      border-radius: 16px;
+      padding: 12px 18px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .audio-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 0 var(--primary-dark);
+      transition: all 0.2s;
+    }
+    .audio-btn:active { transform: translateY(2px); box-shadow: none; }
+
+    /* STORY CARD */
     .story-card {
       background-color: #FAFCF8;
       border: 3px solid #C0CA33;
-      border-radius: 20px;
-      padding: 20px;
+      border-radius: 18px;
+      padding: 18px;
       font-size: 1.08rem;
       color: #2E7D32;
       box-shadow: var(--shadow-sm);
     }
-    @media (min-width: 600px) { .story-card { padding: 30px; } }
+    @media (min-width: 600px) { .story-card { padding: 26px; } }
+    .story-card h2 { font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: clamp(1.4rem, 3.5vw, 1.8rem); margin-bottom: 14px; text-align: center; }
+    .story-card p { margin-bottom: 14px; text-align: justify; color: #37474F; font-weight: 600; line-height: 1.6; }
 
-    .story-card h2 { font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: 1.8rem; margin-bottom: 15px; text-align: center; }
-    .story-card p { margin-bottom: 16px; text-align: justify; color: #37474F; font-weight: 600; }
+    .section-title { font-family: 'Fredoka', sans-serif; font-size: clamp(1.3rem, 3.5vw, 1.6rem); color: var(--primary-dark); margin-bottom: 8px; }
+    .section-desc { margin-bottom: 20px; font-size: 0.98rem; font-weight: 600; color: #455A64; background: #F1F8E9; padding: 12px 16px; border-radius: 14px; border-left: 5px solid var(--primary); }
 
-    .section-title { font-family: 'Fredoka', sans-serif; font-size: 1.6rem; color: var(--primary-dark); margin-bottom: 8px; }
-    .section-desc { margin-bottom: 22px; font-size: 1rem; font-weight: 600; color: #455A64; background: #F1F8E9; padding: 14px 18px; border-radius: 16px; border-left: 6px solid var(--primary); }
-
-    /* PREGUNTAS / TEST */
-    .question-block { background: #FFF; border: 2.5px solid var(--border); border-radius: 18px; padding: 18px; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
-    .question-block p.q-text { font-weight: 800; font-size: 1.1rem; margin-bottom: 14px; color: #1A237E; }
-
+    /* QUESTIONS / TEST */
+    .question-block { background: #FFF; border: 2.5px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 18px; box-shadow: var(--shadow-sm); }
+    .question-block p.q-text { font-weight: 800; font-size: 1.05rem; margin-bottom: 12px; color: #1A237E; }
     .options-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    @media (min-width: 600px) { .options-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 650px) { .options-grid { grid-template-columns: 1fr 1fr; } }
 
-    .option-label { display: flex; align-items: center; padding: 14px 16px; background: #F8FAFC; border: 2px solid #E2E8F0; border-radius: 14px; cursor: pointer; font-weight: 700; transition: all 0.2s; }
+    .option-label { 
+      display: flex; 
+      align-items: center; 
+      min-height: var(--min-touch);
+      padding: 10px 14px; 
+      background: #F8FAFC; 
+      border: 2px solid var(--border); 
+      border-radius: 12px; 
+      cursor: pointer; 
+      font-weight: 700; 
+      transition: all 0.2s; 
+      touch-action: manipulation;
+    }
     .option-label:hover { background: #E8F5E9; border-color: var(--primary); }
-    .option-label input { margin-right: 12px; transform: scale(1.3); }
+    .option-label input { margin-right: 12px; width: 20px; height: 20px; flex-shrink: 0; }
 
-    /* EMPAREJAR */
-    .matching-container { display: grid; grid-template-columns: 1fr; gap: 15px; }
-    @media (min-width: 600px) { .matching-container { grid-template-columns: 1fr 1fr; gap: 20px; } }
-
+    /* MATCHING LAYOUT (SYNONYMS & ANTONYMS) */
+    .matching-container { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 600px) { .matching-container { grid-template-columns: 1fr 1fr; gap: 16px; } }
     .matching-column { display: flex; flex-direction: column; gap: 10px; }
 
-    .match-btn { padding: 14px 16px; background: #F8FAFC; border: 2.5px solid var(--border); border-radius: 14px; font-weight: 800; cursor: pointer; text-align: center; transition: all 0.2s; font-size: 1rem; color: #37474F; box-shadow: 0 3px 0 var(--border); position: relative; }
+    .match-btn { 
+      min-height: var(--min-touch);
+      padding: 12px 14px; 
+      background: #F8FAFC; 
+      border: 2.5px solid var(--border); 
+      border-radius: 12px; 
+      font-weight: 800; 
+      cursor: pointer; 
+      text-align: center; 
+      transition: all 0.2s; 
+      font-size: 0.98rem; 
+      color: #37474F; 
+      box-shadow: 0 3px 0 var(--border); 
+      position: relative; 
+      word-break: break-word;
+      touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .match-btn:active { transform: translateY(2px); box-shadow: none; }
-    .match-btn.selected { background: #FFF9C4 !important; border-color: #FBC02D !important; color: #333 !important; transform: scale(1.02); }
-    .match-btn.matched-btn { position: relative; }
-    .match-btn.matched-btn:hover::after {
+    .match-btn.selected { background: #FFF9C4 !important; border-color: #FBC02D !important; color: #333 !important; transform: scale(1.01); }
+    .match-btn.matched-btn:hover::after, .match-btn.matched-btn:focus::after {
       content: " ✕ Deshacer";
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: bold;
       opacity: 0.9;
       margin-left: 6px;
     }
 
-    .antonym-item { display: flex; flex-direction: column; gap: 8px; padding: 14px 18px; background: #FFF; border: 2.5px solid var(--border); border-radius: 16px; margin-bottom: 12px; font-weight: 800; }
-    @media (min-width: 500px) { .antonym-item { flex-direction: row; align-items: center; justify-content: space-between; } }
-    .antonym-item select { padding: 10px 14px; border-radius: 12px; border: 2px solid var(--border); font-weight: 700; font-size: 0.95rem; background: #FAFAFA; cursor: pointer; }
+    /* DROPDOWNS */
+    .antonym-item { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 10px; 
+      padding: 14px 16px; 
+      background: #FFF; 
+      border: 2.5px solid var(--border); 
+      border-radius: 14px; 
+      margin-bottom: 12px; 
+      font-weight: 800; 
+    }
+    @media (min-width: 550px) { .antonym-item { flex-direction: row; align-items: center; justify-content: space-between; } }
+    .antonym-item select { 
+      min-height: var(--min-touch);
+      padding: 8px 12px; 
+      border-radius: 10px; 
+      border: 2px solid var(--border); 
+      font-weight: 700; 
+      font-size: 0.95rem; 
+      background: #FAFAFA; 
+      cursor: pointer; 
+      width: 100%;
+    }
+    @media (min-width: 550px) { .antonym-item select { width: auto; min-width: 180px; } }
 
-    .caps-item { background: #FFF; border: 2.5px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
+    /* CAPITALIZATION (MAYÚSCULAS) */
+    .caps-item { background: #FFF; border: 2.5px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
     .caps-item p { margin-bottom: 8px; font-weight: 800; }
-    .caps-item input[type="text"] { width: 100%; padding: 12px 16px; font-size: 1rem; border: 2px solid var(--border); border-radius: 12px; font-weight: 600; outline: none; }
+    .caps-item input[type="text"] { 
+      width: 100%; 
+      min-height: var(--min-touch);
+      padding: 10px 14px; 
+      font-size: 0.98rem; 
+      border: 2px solid var(--border); 
+      border-radius: 10px; 
+      font-weight: 600; 
+      outline: none; 
+    }
     .caps-item input[type="text"]:focus { border-color: var(--primary); background: #F4FBF7; }
 
-    /* SOPA DE LETRAS RESPONSIVE (12x12) */
-    .wordsearch-container { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-    @media (min-width: 750px) { .wordsearch-container { flex-direction: row; align-items: flex-start; justify-content: space-between; } }
+    /* WORDSEARCH (12x12 GRID) WITH CLICK & SWIPE SUPPORT */
+    .wordsearch-container { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      gap: 18px; 
+      width: 100%;
+    }
+    @media (min-width: 750px) { 
+      .wordsearch-container { flex-direction: row; align-items: flex-start; justify-content: space-between; } 
+    }
+
+    .ws-grid-wrapper {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 2px;
+      touch-action: none;
+    }
 
     .ws-grid {
       display: grid;
-      grid-template-columns: repeat(12, minmax(22px, 32px));
-      grid-template-rows: repeat(12, minmax(22px, 32px));
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-template-rows: repeat(12, minmax(0, 1fr));
       gap: 3px;
-      background: #E2E8F0;
-      padding: 8px;
-      border-radius: 16px;
+      background: #CBD5E1;
+      padding: 6px;
+      border-radius: 14px;
       user-select: none;
-      touch-action: manipulation;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
     }
 
     .ws-cell {
@@ -252,23 +372,30 @@
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: clamp(0.85rem, 2.2vw, 1.1rem);
-      border-radius: 6px;
+      font-size: clamp(0.75rem, 2.8vw, 1.05rem);
+      border-radius: 4px;
       cursor: pointer;
       color: #334155;
-      transition: background 0.2s;
+      transition: background 0.15s ease;
+      touch-action: none;
     }
-
     .ws-cell.selected { background: #FFE082; color: #B78103; }
     .ws-cell.found { background: #81C784; color: white; }
 
-    .ws-words-list { background: #F8FAFC; border: 2.5px solid var(--border); border-radius: 18px; padding: 18px; flex: 1; width: 100%; }
-    .ws-words-list h4 { margin-bottom: 12px; color: var(--primary-dark); font-family: 'Fredoka', sans-serif; font-size: 1.2rem; }
+    .ws-words-list { 
+      background: #F8FAFC; 
+      border: 2.5px solid var(--border); 
+      border-radius: 16px; 
+      padding: 16px; 
+      width: 100%; 
+      flex: 1;
+    }
+    .ws-words-list h4 { margin-bottom: 12px; color: var(--primary-dark); font-family: 'Fredoka', sans-serif; font-size: 1.15rem; }
     .ws-words-list ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
     .ws-words-list li {
-      padding: 10px 14px;
+      padding: 8px 12px;
       background: white;
-      border-radius: 12px;
+      border-radius: 10px;
       border: 2px solid #CBD5E1;
       font-weight: 800;
       display: flex;
@@ -276,35 +403,37 @@
       justify-content: space-between;
       gap: 8px;
       color: #1E293B;
+      font-size: 0.95rem;
+      min-height: 42px;
     }
 
     .hint-btn {
       background: #FFF3E0;
       border: 2px solid #FFB74D;
       color: #E65100;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 16px;
+      font-size: 0.8rem;
       font-weight: 800;
       cursor: pointer;
       transition: all 0.2s ease;
       white-space: nowrap;
+      min-height: 32px;
+      touch-action: manipulation;
     }
     .hint-btn:hover { background: #FFE0B2; transform: scale(1.03); }
-
-    .ws-target-word { display: inline-block; margin-left: 6px; color: #1565C0; font-weight: 800; background: #E3F2FD; padding: 2px 8px; border-radius: 6px; }
-
+    .ws-target-word { display: inline-block; margin-left: 4px; color: #1565C0; font-weight: 800; background: #E3F2FD; padding: 2px 6px; border-radius: 6px; font-size: 0.85rem; }
     .ws-words-list li.found-item { background: #D1FAE5; border-color: #10B981; color: #047857; text-decoration: line-through; }
     .ws-words-list li.found-item .ws-target-word { color: #047857; background: transparent; }
 
-    /* ORDENAR ORACIÓN */
+    /* SENTENCE ORDERING */
     .sentence-container {
       background: #FFF;
       border: 3px dashed var(--gold);
-      border-radius: 18px;
-      min-height: 80px;
-      padding: 12px;
-      margin-bottom: 15px;
+      border-radius: 16px;
+      min-height: 75px;
+      padding: 10px;
+      margin-bottom: 14px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
@@ -314,92 +443,126 @@
 
     .words-container {
       background: #F1F5F9;
-      border-radius: 18px;
-      padding: 14px;
+      border-radius: 16px;
+      padding: 12px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .word-btn {
-      padding: 10px 16px;
-      border-radius: 12px;
+      min-height: var(--min-touch);
+      padding: 8px 14px;
+      border-radius: 10px;
       cursor: pointer;
       font-weight: 800;
       transition: 0.2s;
       background: white;
-      box-shadow: 0 4px 0px #CFD8DC;
+      box-shadow: 0 3px 0px #CFD8DC;
       border: 2px solid #B0BEC5;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--text);
+      touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .word-btn:active { transform: translateY(2px); box-shadow: 0 2px 0px #CFD8DC; }
-    .word-btn.selected { background: var(--primary); color: white; border-color: var(--primary-dark); box-shadow: 0 4px 0px var(--primary-dark); }
+    .word-btn:active { transform: translateY(2px); box-shadow: 0 1px 0px #CFD8DC; }
+    .word-btn.selected { background: var(--primary); color: white; border-color: var(--primary-dark); box-shadow: 0 3px 0px var(--primary-dark); }
     .word-btn.used { opacity: 0.25; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    .controls-ordena { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+    .controls-ordena { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
     .controls-ordena button {
       flex: 1;
-      min-width: 120px;
-      padding: 12px;
+      min-width: 100px;
+      min-height: var(--min-touch);
+      padding: 10px;
       border: none;
-      border-radius: 14px;
+      border-radius: 12px;
       font-weight: 800;
       cursor: pointer;
       color: white;
-      font-size: 1rem;
-      box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+      font-size: 0.95rem;
+      box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+      touch-action: manipulation;
     }
     .btn-check { background: var(--primary); }
     .btn-clear { background: #E53935; }
     .btn-next-ord { background: var(--accent); }
 
-    .next-activity-wrapper { margin-top: 30px; display: flex; justify-content: flex-end; }
-
+    .next-activity-wrapper { margin-top: 24px; display: flex; justify-content: flex-end; }
     .btn-next-tab {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       background: var(--primary);
       color: white !important;
-      padding: 12px 24px;
+      min-height: var(--min-touch);
+      padding: 10px 20px;
       border-radius: 30px;
       font-weight: 800;
-      font-size: 1rem;
+      font-size: 0.95rem;
       border: none;
       cursor: pointer;
       box-shadow: 0 4px 0 var(--primary-dark);
       transition: all 0.2s ease;
+      touch-action: manipulation;
     }
-    .btn-next-tab:hover { background: var(--primary-dark); transform: translateX(4px); }
+    .btn-next-tab:hover { background: var(--primary-dark); transform: translateX(2px); }
 
-    .finish-area { text-align: center; margin-top: 30px; padding: 15px; }
-    .btn-submit { background: linear-gradient(135deg, #2E7D32, #1B5E20); color: white; font-family: 'Fredoka', sans-serif; font-size: 1.3rem; padding: 14px 36px; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 0 #134617; }
-    .btn-submit:active { transform: translateY(3px); box-shadow: 0 3px 0 #134617; }
+    .finish-area { text-align: center; margin-top: 24px; padding: 10px; }
+    .btn-submit { 
+      background: linear-gradient(135deg, #2E7D32, #1B5E20); 
+      color: white; 
+      font-family: 'Fredoka', sans-serif; 
+      font-size: 1.2rem; 
+      min-height: 52px;
+      padding: 12px 30px; 
+      border: none; 
+      border-radius: 50px; 
+      cursor: pointer; 
+      box-shadow: 0 5px 0 #134617; 
+      touch-action: manipulation;
+      width: 100%;
+      max-width: 340px;
+    }
+    .btn-submit:active { transform: translateY(2px); box-shadow: 0 2px 0 #134617; }
 
-    .feedback-card-wrapper { background: #FFF; border: 3px solid var(--primary); border-radius: 20px; padding: 20px; margin-top: 10px; box-shadow: var(--shadow-sm); width: 100%; }
-    .feedback-header-box { text-align: center; border-bottom: 2px solid #E8F5E9; padding-bottom: 15px; margin-bottom: 15px; }
-    .feedback-header-box h2 { font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: 1.6rem; }
+    /* RESULTS & EVALUATION */
+    .feedback-card-wrapper { background: #FFF; border: 3px solid var(--primary); border-radius: 18px; padding: 16px; margin-top: 10px; box-shadow: var(--shadow-sm); width: 100%; }
+    .feedback-header-box { text-align: center; border-bottom: 2px solid #E8F5E9; padding-bottom: 12px; margin-bottom: 12px; }
+    .feedback-header-box h2 { font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: 1.4rem; }
 
-    .score-badge { display: inline-block; background: var(--primary); color: white; font-family: 'Fredoka', sans-serif; font-size: 1.8rem; padding: 10px 28px; border-radius: 30px; margin: 10px 0; box-shadow: 0 4px 0 var(--primary-dark); }
-
-    .feedback-details { text-align: left; margin-top: 15px; background: #F8FAFC; padding: 15px; border-radius: 14px; border: 2px solid #E2E8F0; }
-    .feedback-item { padding: 8px 0; border-bottom: 1px solid #EDF2F7; font-size: 0.95rem; line-height: 1.4; font-weight: 700; }
+    .score-badge { display: inline-block; background: var(--primary); color: white; font-family: 'Fredoka', sans-serif; font-size: 1.6rem; padding: 8px 24px; border-radius: 30px; margin: 10px 0; box-shadow: 0 4px 0 var(--primary-dark); }
+    .feedback-details { text-align: left; margin-top: 12px; background: #F8FAFC; padding: 12px; border-radius: 12px; border: 2px solid #E2E8F0; }
+    .feedback-item { padding: 6px 0; border-bottom: 1px solid #EDF2F7; font-size: 0.9rem; line-height: 1.4; font-weight: 700; word-break: break-word; }
     .correct-txt { color: var(--correct); }
     .incorrect-txt { color: var(--incorrect); }
-    .placeholder-msg { font-size: 1.1rem; color: #78909C; font-weight: 700; font-style: italic; margin: 40px 0; text-align: center; }
+    .placeholder-msg { font-size: 1.05rem; color: #78909C; font-weight: 700; font-style: italic; margin: 30px 0; text-align: center; }
 
-    .action-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 25px; }
-    .btn-action { font-family: 'Fredoka', sans-serif; font-size: 1.1rem; padding: 12px 26px; border: none; border-radius: 30px; cursor: pointer; color: white; box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+    .action-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+    .btn-action { 
+      font-family: 'Fredoka', sans-serif; 
+      font-size: 1.05rem; 
+      min-height: var(--min-touch);
+      padding: 10px 22px; 
+      border: none; 
+      border-radius: 30px; 
+      cursor: pointer; 
+      color: white; 
+      box-shadow: 0 4px 0 rgba(0,0,0,0.2); 
+      touch-action: manipulation;
+    }
     .btn-pdf { background: #D32F2F; }
   </style>
 </head>
 <body>
 
-<!-- BOTÓN FLOTANTE HOME -->
-<a href="main-index.html" class="btn-home-floating" title="Volver al menú principal">
+<!-- FLOATING HOME BUTTON -->
+<a href="#" class="btn-home-floating" title="Volver al inicio" aria-label="Inicio" onclick="switchTab('cuento'); return false;">
   🏠
 </a>
 
@@ -409,6 +572,7 @@
     <p>Actividades Interactivas de Comprensión Lectora y Lengua</p>
   </header>
 
+  <!-- Navigation Tab Bar -->
   <nav id="navbar">
     <button class="tab-btn active" id="btn-cuento" onclick="switchTab('cuento')">📖 Cuento</button>
     <button class="tab-btn" id="btn-test" onclick="switchTab('test')">📝 Test (10)</button>
@@ -423,7 +587,6 @@
     <button class="tab-btn" id="btn-resultados" onclick="switchTab('resultados')">🏆 Resultados</button>
   </nav>
 
-  <!-- TAB 1: CUENTO & ODS -->
   <div id="cuento" class="tab-content active">
     <div class="ods-banner">
       <div class="ods-badge">🌍 ODS 11 y 15<br><span style="font-size:0.85rem; font-weight:normal;">Agenda 2030</span></div>
@@ -434,7 +597,18 @@
       </div>
     </div>
 
-    <div class="story-card">
+    <!-- Audio Player Bar -->
+    <div class="audio-controls">
+      <span style="font-weight: 800; color: #1B5E20; display: flex; align-items: center; gap: 6px;">
+        🔊 Escuchar Cuento (Lectura en voz alta):
+      </span>
+      <div style="display: flex; gap: 8px;">
+        <button class="audio-btn" onclick="playAudioStory()">▶️ Reproducir</button>
+        <button class="audio-btn" style="background: #E53935;" onclick="stopAudioStory()">⏹️ Detener</button>
+      </div>
+    </div>
+
+    <div class="story-card" id="story-text-container">
       <h2>📖 El misterio del árbol gris</h2>
       <p>En el corazón de Valle Hermoso, entre calles adoquinadas y el bullicio de los coches, resistía un enorme y antiguo roble al que todos llamaban Silvano. Sin embargo, de un tiempo a esta parte, el pueblo ya no hacía honor a su nombre. El humo del tráfico cubría los tejados con un manto plomizo, las papeleras desbordaban plástico por los parques y un ruido ensordecedor ahogaba el canto de las aves.</p>
       <p>Pero lo más inquietante no era el tráfico. Lo peor le estaba ocurriendo a Silvano: sus hojas, verde esmeralda durante décadas, se estaban volviendo completamente grises y duras como la piedra.</p>
@@ -453,7 +627,6 @@
     </div>
   </div>
 
-  <!-- TAB 2: TEST -->
   <div id="test" class="tab-content">
     <div class="section-title">📝 Cuestionario de Lectura</div>
     <div class="section-desc">Responde a las 10 preguntas tipo test sobre la historia del cuento.</div>
@@ -463,7 +636,6 @@
     </div>
   </div>
 
-  <!-- TAB 3: SINÓNIMOS 1 (EMPAREJAR MODIFICABLE) -->
   <div id="sinonimos" class="tab-content">
     <div class="section-title">🔗 Actividad de Sinónimos 1 (Emparejar)</div>
     <div class="section-desc">Haz clic en una palabra de la izquierda y luego en su sinónimo correspondiente a la derecha. <strong>Si quieres cambiar una respuesta, vuelve a hacer clic sobre cualquier palabra emparejada para deshacerla.</strong></div>
@@ -476,7 +648,6 @@
     </div>
   </div>
 
-  <!-- TAB 4: SINÓNIMOS 2 (DESPLEGABLE) -->
   <div id="sinonimos2" class="tab-content">
     <div class="section-title">📋 Actividad de Sinónimos 2 (Selección)</div>
     <div class="section-desc">Elige la palabra que significa lo mismo (sinónimo) en cada opción sencilla. Puedes cambiar tu elección en cualquier momento.</div>
@@ -486,12 +657,13 @@
     </div>
   </div>
 
-  <!-- TAB 5: SOPA DE LETRAS DE SINÓNIMOS -->
   <div id="sopa-sin" class="tab-content">
     <div class="section-title">🔍 Sopa de Letras: Deduce y Busca el Sinónimo</div>
-    <div class="section-desc">Piensa cuál es el <strong>sinónimo</strong> de cada palabra de la lista y encuéntralo en el tablero. Las palabras pueden estar en horizontal, vertical o diagonal. Si necesitas ayuda, pulsa el botón de 💡 <strong>Pista</strong>.</div>
+    <div class="section-desc">Piensa cuál es el <strong>sinónimo</strong> de cada palabra de la lista y encuéntralo en el tablero. Puedes hacer clic celda por celda o arrastrar el dedo/ratón. Si necesitas ayuda, pulsa el botón de 💡 <strong>Pista</strong>.</div>
     <div class="wordsearch-container">
-      <div class="ws-grid" id="ws-grid-sin"></div>
+      <div class="ws-grid-wrapper">
+        <div class="ws-grid" id="ws-grid-sin"></div>
+      </div>
       <div class="ws-words-list">
         <h4>Encuentra los sinónimos de:</h4>
         <ul id="ws-list-sin"></ul>
@@ -502,7 +674,6 @@
     </div>
   </div>
 
-  <!-- TAB 6: ANTÓNIMOS 1 (DESPLEGABLE) -->
   <div id="antonimos" class="tab-content">
     <div class="section-title">⚡ Actividad de Antónimos 1 (Selección)</div>
     <div class="section-desc">Selecciona la palabra opuesta (antónimo) correcta para cada término sencillo. Puedes cambiar de opción siempre que quieras.</div>
@@ -512,7 +683,6 @@
     </div>
   </div>
 
-  <!-- TAB 7: ANTÓNIMOS 2 (EMPAREJAR MODIFICABLE) -->
   <div id="antonimos2" class="tab-content">
     <div class="section-title">🧩 Actividad de Antónimos 2 (Emparejar)</div>
     <div class="section-desc">Empareja cada palabra con su antónimo (lo contrario). <strong>Si quieres corregir una opción, haz clic sobre cualquiera de las palabras unidas para desemparejarlas.</strong></div>
@@ -525,12 +695,13 @@
     </div>
   </div>
 
-  <!-- TAB 8: SOPA DE LETRAS DE ANTÓNIMOS -->
   <div id="sopa-ant" class="tab-content">
     <div class="section-title">🔍 Sopa de Letras: Deduce y Busca el Antónimo</div>
-    <div class="section-desc">Piensa cuál es el <strong>antónimo</strong> (palabra opuesta) de cada término y búscalo en la sopa. Las palabras pueden estar en horizontal, vertical o diagonal. Utiliza el botón 💡 <strong>Pista</strong> si lo necesitas.</div>
+    <div class="section-desc">Piensa cuál es el <strong>antónimo</strong> (palabra opuesta) de cada término y búscalo en la sopa. Haz clic celda a celda o desliza sobre el tablero. Utiliza el botón 💡 <strong>Pista</strong> si lo necesitas.</div>
     <div class="wordsearch-container">
-      <div class="ws-grid" id="ws-grid-ant"></div>
+      <div class="ws-grid-wrapper">
+        <div class="ws-grid" id="ws-grid-ant"></div>
+      </div>
       <div class="ws-words-list">
         <h4>Encuentra los opuestos de:</h4>
         <ul id="ws-list-ant"></ul>
@@ -541,18 +712,17 @@
     </div>
   </div>
 
-  <!-- TAB 9: ORDENAR ORACIÓN -->
   <div id="ordenar" class="tab-content">
     <div class="section-title">🔤 Ordena la Oración</div>
-    <div class="section-desc">Haz clic en las palabras en el orden correcto para formar oraciones sencillas del cuento.</div>
+    <div class="section-desc">Haz clic o toca en las palabras en el orden correcto para formar oraciones sencillas del cuento.</div>
     
-    <div style="text-align: center; font-weight:800; color:var(--primary-dark); margin-bottom:10px; font-size:1.1rem;">
+    <div style="text-align: center; font-weight:800; color:var(--primary-dark); margin-bottom:10px; font-size:1.05rem;">
       Oración <span id="ord-current-idx">1</span> de 5
     </div>
 
     <div class="sentence-container" id="ord-drop-zone"></div>
     <div class="words-container" id="ord-words-zone"></div>
-    <div id="ord-message" style="text-align:center; font-weight:800; min-height:30px; margin-bottom:10px; font-size:1.1rem;"></div>
+    <div id="ord-message" style="text-align:center; font-weight:800; min-height:30px; margin-bottom:10px; font-size:1.05rem;"></div>
 
     <div class="controls-ordena">
       <button class="btn-clear" onclick="clearOrdSentence()">🗑️ Limpiar</button>
@@ -565,20 +735,19 @@
     </div>
   </div>
 
-  <!-- TAB 10: MAYÚSCULAS -->
   <div id="mayusculas" class="tab-content">
     <div class="section-title">🔠 Reglas de Uso de Mayúsculas</div>
     <div class="section-desc">Recuerda: Se escribe mayúscula al inicio de un texto, después de un punto y en nombres propios. Los cargos van en minúscula.</div>
     
     <div class="caps-item">
       <p>1. Escribe correctamente la siguiente oración aplicando las mayúsculas donde corresponda:</p>
-      <p style="color:#666; font-style:italic; margin-bottom:10px;">el pasado lunes, valeria y mateo viajaron a valle hermoso.</p>
+      <p style="color:#666; font-style:italic; margin-bottom:10px; font-size:0.95rem;">el pasado lunes, valeria y mateo viajaron a valle hermoso.</p>
       <input type="text" id="cap1" placeholder="Escribe aquí la frase corregida...">
     </div>
     
     <div class="caps-item">
       <p>2. Escribe correctamente la siguiente oración:</p>
-      <p style="color:#666; font-style:italic; margin-bottom:10px;">en el mes de octubre, la asociación de vecinos protegió a silvano.</p>
+      <p style="color:#666; font-style:italic; margin-bottom:10px; font-size:0.95rem;">en el mes de octubre, la asociación de vecinos protegió a silvano.</p>
       <input type="text" id="cap2" placeholder="Escribe aquí la frase corregida...">
     </div>
     
@@ -589,7 +758,7 @@
 
     <div class="caps-item">
       <p>4. Escribe correctamente la siguiente oración:</p>
-      <p style="color:#666; font-style:italic; margin-bottom:10px;">la directora de obras escuchó a los niños.</p>
+      <p style="color:#666; font-style:italic; margin-bottom:10px; font-size:0.95rem;">el encargado de obras escuchó a los niños.</p>
       <input type="text" id="cap4" placeholder="Escribe aquí la frase corregida...">
     </div>
 
@@ -602,7 +771,6 @@
     </div>
   </div>
 
-  <!-- TAB 11: RESULTADOS -->
   <div id="resultados" class="tab-content">
     <div style="text-align: center; margin-bottom: 20px;">
       <button class="btn-submit" onclick="evaluateAll()">🏆 Finalizar y Ver Resultados</button>
@@ -616,12 +784,12 @@
       <div class="feedback-card-wrapper" id="pdf-content">
         <div class="feedback-header-box">
           <h2>🎓 Informe de Resultados: El Misterio del Árbol Gris 🎓</h2>
-          <p style="color:#555; font-size:0.95rem; font-weight:700;">Comprensión Lectora, Gramática y Concienciación ODS</p>
+          <p style="color:#555; font-size:0.9rem; font-weight:700;">Comprensión Lectora, Gramática y Concienciación ODS</p>
         </div>
 
         <div style="text-align: center;">
           <div class="score-badge" id="total-score">0 / 100 Puntos</div>
-          <p id="score-msg" style="font-size: 1.3rem; font-weight:800; color:#2E7D32;"></p>
+          <p id="score-msg" style="font-size: 1.2rem; font-weight:800; color:#2E7D32;"></p>
         </div>
 
         <div class="feedback-details" id="feedback-list"></div>
@@ -635,6 +803,61 @@
 </div>
 
 <script>
+  /* Web Audio API Sound Effects Synthesizer */
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  
+  function playAudioTone(freq, type, duration) {
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  }
+
+  function playSuccessSound() {
+    playAudioTone(523.25, 'sine', 0.15); // C5
+    setTimeout(() => playAudioTone(659.25, 'sine', 0.15), 120); // E5
+    setTimeout(() => playAudioTone(783.99, 'sine', 0.3), 240); // G5
+  }
+
+  function playClickSound() {
+    playAudioTone(400, 'triangle', 0.08);
+  }
+
+  function playErrorSound() {
+    playAudioTone(220, 'sawtooth', 0.2);
+  }
+
+  /* Web Speech API - Text to Speech for Cuento */
+  let synth = window.speechSynthesis;
+  let storyUtterance = null;
+
+  function playAudioStory() {
+    if (!synth) {
+      alert("La función de lectura en voz alta no está soportada en este navegador.");
+      return;
+    }
+    synth.cancel(); // Reset previous playback
+    const text = document.getElementById('story-text-container').innerText;
+    storyUtterance = new SpeechSynthesisUtterance(text);
+    storyUtterance.lang = 'es-ES';
+    storyUtterance.rate = 0.95; // Slightly slower for primary school children
+    synth.speak(storyUtterance);
+  }
+
+  function stopAudioStory() {
+    if (synth) synth.cancel();
+  }
+
+  /* COLOR PALETTE FOR MATCHING GAMES */
   const pairColors = [
     { bg: '#E3F2FD', border: '#1976D2', text: '#0D47A1' },
     { bg: '#FFEBEE', border: '#D32F2F', text: '#B71C1C' },
@@ -644,6 +867,7 @@
     { bg: '#FCE4EC', border: '#C2185B', text: '#880E4F' }
   ];
 
+  /* GAME DATA ARRAYS */
   const testData = [
     { q: "1. ¿Cómo llamaban los habitantes del pueblo al antiguo roble?", options: ["a) Fulano", "b) Zutano", "c) Silvano", "d) Mengano"], correct: 2 },
     { q: "2. ¿Qué problema afectaba al pueblo de Valle Hermoso al principio del cuento?", options: ["a) El humo del tráfico, la basura y el ruido ensordecedor.", "b) Había una gran sequía y los ríos se habían secado.", "c) Las fábricas habían destruido todas las casas del centro.", "d) El parque estaba cerrado por obras desde hacía años."], correct: 0 },
@@ -706,16 +930,16 @@
 
   const gridSinMatrix = [
     ['E','N','O','R','M','E','K','P','L','R','A','M'],
-    ['X','T','R','A','M','O','L','I','I','B','U','C'],
+    ['X','T','R','A','M','O','L','A','I','B','U','C'],
     ['P','M','D','E','T','E','N','E','R','O','S','F'],
-    ['C','S','R','M','V','L','O','Q','D','N','P','X'],
-    ['B','I','E','C','A','G','R','O','O','M','T','K'],
-    ['V','N','R','T','R','O','S','T','U','W','Z','H'],
-    ['S','U','I','K','I','I','P','L','M','A','B','O'],
+    ['C','S','R','M','V','D','O','Q','D','E','P','X'],
+    ['B','I','E','C','O','G','R','O','R','M','T','K'],
+    ['V','N','R','T','R','O','S','I','U','L','Z','H'],
+    ['S','U','I','K','I','I','O','L','M','I','B','O'],
     ['E','L','M','O','O','O','O','P','Q','N','C','G'],
-    ['N','P','S','F','E','L','I','Z','B','I','D','A'],
-    ['D','O','X','T','Z','G','A','M','O','C','E','R'],
-    ['A','T','A','P','O','Y','O','D','T','O','F','K'],
+    ['N','P','S','F','E','L','I','Z','B','D','D','A'],
+    ['D','O','X','T','Z','G','A','M','O','O','E','R'],
+    ['A','T','A','P','O','Y','O','D','T','Q','F','K'],
     ['L','R','M','V','W','C','D','E','R','L','A','S']
   ];
 
@@ -734,14 +958,14 @@
     ['P','S','U','C','I','O','C','F','G','H','J','K'],
     ['M','A','L','I','N','O','P','R','S','T','U','V'],
     ['T','B','Q','E','M','K','L','N','W','X','Y','Z'],
-    ['R','C','O','R','N','A','B','C','A','D','E','F'],
-    ['I','D','E','O','T','V','A','C','I','O','G','H'],
+    ['R','C','O','R','N','V','A','C','I','O','E','F'],
+    ['I','D','E','O','T','V','A','C','A','O','G','H'],
     ['S','E','F','S','A','P','O','L','M','R','I','J'],
     ['T','F','D','E','B','I','L','Q','A','T','U','K'],
     ['E','G','H','I','C','J','K','L','R','M','B','N'],
     ['L','O','P','Q','R','S','T','U','G','V','A','W'],
-    ['X','Y','Z','A','B','C','D','E','O','F','J','G'],
-    ['H','I','J','K','L','M','N','O','P','Q','O','R'],
+    ['X','E','J','A','B','C','D','E','O','F','J','G'],
+    ['H','I','J','K','L','E','N','T','O','Q','O','R'],
     ['S','T','U','V','D','I','A','W','X','Y','Z','A']
   ];
 
@@ -749,29 +973,39 @@
     { s: "Silvano era un antiguo roble grande.", words: ["Silvano", "era", "un", "antiguo", "roble", "grande."] },
     { s: "Las hojas se volvían muy grises.", words: ["Las", "hojas", "se", "volvían", "muy", "grises."] },
     { s: "Valeria y Mateo investigaron el misterio.", words: ["Valeria", "y", "Mateo", "investigaron", "el", "misterio."] },
-    { s: "El pueblo protegió el árbol verde.", words: ["El", "pueblo", "protegió", "el", "árbol", "verde."] },
+    { s: "El pueblo protegió a Silvano.", words: ["El", "pueblo", "protegió", "a", "Silvano."] },
     { s: "Nuevos brotes verdes volvieron a nacer.", words: ["Nuevos", "brotes", "verdes", "volvieron", "a", "nacer."] }
   ];
 
+  /* TAB SWITCHING HANDLER */
   function switchTab(tabId) {
+    stopAudioStory();
+    playClickSound();
+
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
     
     const activeBtn = document.getElementById('btn-' + tabId);
-    activeBtn.classList.add('active');
-    document.getElementById(tabId).classList.add('active');
+    if (activeBtn) activeBtn.classList.add('active');
+    
+    const targetTab = document.getElementById(tabId);
+    if (targetTab) targetTab.classList.add('active');
 
-    activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    if (activeBtn) {
+      activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
   }
 
+  /* RENDER TEST */
   function renderTest() {
     const container = document.getElementById('test-questions');
+    container.innerHTML = '';
     testData.forEach((q, idx) => {
       const block = document.createElement('div');
       block.className = 'question-block';
       let html = `<p class="q-text">${q.q}</p><div class="options-grid">`;
       q.options.forEach((opt, oIdx) => {
-        html += `<label class="option-label"><input type="radio" name="q${idx}" value="${oIdx}">${opt}</label>`;
+        html += `<label class="option-label" onclick="playClickSound()"><input type="radio" name="q${idx}" value="${oIdx}">${opt}</label>`;
       });
       html += `</div>`;
       block.innerHTML = html;
@@ -779,7 +1013,7 @@
     });
   }
 
-  /* SINÓNIMOS 1 */
+  /* SINÓNIMOS 1 (EMPAREJAR) */
   let syn1SelectedLeft = null;
   let syn1Matches = {}; 
   let syn1PairCount = 0;
@@ -813,6 +1047,7 @@
 
   function unpairSyn1(leftIdx) {
     if (!syn1Matches[leftIdx]) return;
+    playClickSound();
 
     const { leftBtn, rightBtn } = syn1Matches[leftIdx];
 
@@ -837,11 +1072,10 @@
   }
 
   function handleSyn1LeftClick(btn, idx) {
+    playClickSound();
     if (btn.dataset.matched === "true") {
       unpairSyn1(idx);
-      if (syn1SelectedLeft && syn1SelectedLeft.idx === idx) {
-        syn1SelectedLeft = null;
-      }
+      if (syn1SelectedLeft && syn1SelectedLeft.idx === idx) syn1SelectedLeft = null;
       return;
     }
 
@@ -859,14 +1093,13 @@
   function handleSyn1RightClick(btn, synText) {
     if (btn.dataset.matched === "true") {
       const pairedLeftIdx = btn.dataset.pairedWith;
-      if (pairedLeftIdx !== undefined) {
-        unpairSyn1(pairedLeftIdx);
-      }
+      if (pairedLeftIdx !== undefined) unpairSyn1(pairedLeftIdx);
       return;
     }
 
     if (!syn1SelectedLeft) return;
 
+    playSuccessSound();
     const leftIdx = syn1SelectedLeft.idx;
     const leftBtn = syn1SelectedLeft.btn;
 
@@ -885,12 +1118,7 @@
 
     btn.dataset.pairedWith = leftIdx;
 
-    syn1Matches[leftIdx] = {
-      syn: synText,
-      leftBtn: leftBtn,
-      rightBtn: btn
-    };
-
+    syn1Matches[leftIdx] = { syn: synText, leftBtn, rightBtn: btn };
     syn1SelectedLeft = null;
   }
 
@@ -903,7 +1131,7 @@
       div.className = 'antonym-item';
       let optionsHtml = `<option value="">-- Selecciona --</option>`;
       item.options.forEach((opt, oIdx) => { optionsHtml += `<option value="${oIdx}">${opt}</option>`; });
-      div.innerHTML = `<span>¿Sinónimo de "<strong>${item.word}</strong>"?</span><select id="syn2-${idx}">${optionsHtml}</select>`;
+      div.innerHTML = `<span>¿Sinónimo de "<strong>${item.word}</strong>"?</span><select id="syn2-${idx}" onchange="playClickSound()">${optionsHtml}</select>`;
       container.appendChild(div);
     });
   }
@@ -917,7 +1145,7 @@
       div.className = 'antonym-item';
       let optionsHtml = `<option value="">-- Selecciona --</option>`;
       item.options.forEach((opt, oIdx) => { optionsHtml += `<option value="${oIdx}">${opt}</option>`; });
-      div.innerHTML = `<span>¿Antónimo de "<strong>${item.word}</strong>"?</span><select id="ant-${idx}">${optionsHtml}</select>`;
+      div.innerHTML = `<span>¿Antónimo de "<strong>${item.word}</strong>"?</span><select id="ant-${idx}" onchange="playClickSound()">${optionsHtml}</select>`;
       container.appendChild(div);
     });
   }
@@ -956,6 +1184,7 @@
 
   function unpairAnt2(leftIdx) {
     if (!ant2Matches[leftIdx]) return;
+    playClickSound();
 
     const { leftBtn, rightBtn } = ant2Matches[leftIdx];
 
@@ -972,11 +1201,10 @@
   }
 
   function handleAnt2LeftClick(btn, idx) {
+    playClickSound();
     if (btn.dataset.matched === "true") {
       unpairAnt2(idx);
-      if (ant2SelectedLeft && ant2SelectedLeft.idx === idx) {
-        ant2SelectedLeft = null;
-      }
+      if (ant2SelectedLeft && ant2SelectedLeft.idx === idx) ant2SelectedLeft = null;
       return;
     }
 
@@ -994,14 +1222,13 @@
   function handleAnt2RightClick(btn, antText) {
     if (btn.dataset.matched === "true") {
       const pairedLeftIdx = btn.dataset.pairedWith;
-      if (pairedLeftIdx !== undefined) {
-        unpairAnt2(pairedLeftIdx);
-      }
+      if (pairedLeftIdx !== undefined) unpairAnt2(pairedLeftIdx);
       return;
     }
 
     if (!ant2SelectedLeft) return;
 
+    playSuccessSound();
     const leftIdx = ant2SelectedLeft.idx;
     const leftBtn = ant2SelectedLeft.btn;
 
@@ -1020,16 +1247,11 @@
 
     btn.dataset.pairedWith = leftIdx;
 
-    ant2Matches[leftIdx] = {
-      ant: antText,
-      leftBtn: leftBtn,
-      rightBtn: btn
-    };
-
+    ant2Matches[leftIdx] = { ant: antText, leftBtn, rightBtn: btn };
     ant2SelectedLeft = null;
   }
 
-  /* SOPA DE LETRAS */
+  /* WORD SEARCH WITH CLICK & DRAG SUPPORT */
   let foundSopaSin = [];
   let foundSopaAnt = [];
 
@@ -1063,6 +1285,46 @@
     });
 
     let selectedCells = [];
+    let isDragging = false;
+
+    const evaluateWordSearch = () => {
+      const currentWord = selectedCells.map(c => c.innerText).join('');
+      dataList.forEach((item, idx) => {
+        if (currentWord === item.target && !foundArray.includes(item.target)) {
+          foundArray.push(item.target);
+          playSuccessSound();
+          selectedCells.forEach(c => {
+            c.classList.remove('selected');
+            c.classList.add('found');
+          });
+
+          const liItem = document.getElementById(`${gridId}-item-${idx}`);
+          if (liItem) liItem.classList.add('found-item');
+
+          const hintContainer = document.getElementById(`${gridId}-hint-${idx}`);
+          if (hintContainer) hintContainer.innerHTML = `<span class="ws-target-word">${item.target}</span>`;
+
+          const btn = liItem ? liItem.querySelector('.hint-btn') : null;
+          if (btn) btn.style.display = 'none';
+
+          selectedCells = [];
+        }
+      });
+    };
+
+    const handleSelectCell = (cell) => {
+      if (cell.classList.contains('found')) return;
+
+      if (cell.classList.contains('selected')) {
+        cell.classList.remove('selected');
+        selectedCells = selectedCells.filter(c => c !== cell);
+      } else {
+        cell.classList.add('selected');
+        selectedCells.push(cell);
+        playClickSound();
+      }
+      evaluateWordSearch();
+    };
 
     matrix.forEach((row, rIdx) => {
       row.forEach((char, cIdx) => {
@@ -1072,46 +1334,26 @@
         cell.dataset.row = rIdx;
         cell.dataset.col = cIdx;
 
-        cell.onclick = () => {
-          if (cell.classList.contains('found')) return;
+        cell.onmousedown = () => { isDragging = true; handleSelectCell(cell); };
+        cell.onmouseenter = () => { if (isDragging) handleSelectCell(cell); };
+        cell.onmouseup = () => { isDragging = false; };
 
-          if (cell.classList.contains('selected')) {
-            cell.classList.remove('selected');
-            selectedCells = selectedCells.filter(c => c !== cell);
-          } else {
-            cell.classList.add('selected');
-            selectedCells.push(cell);
-          }
-
-          const currentWord = selectedCells.map(c => c.innerText).join('');
-          dataList.forEach((item, idx) => {
-            if (currentWord === item.target && !foundArray.includes(item.target)) {
-              foundArray.push(item.target);
-              selectedCells.forEach(c => {
-                c.classList.remove('selected');
-                c.classList.add('found');
-              });
-
-              const liItem = document.getElementById(`${gridId}-item-${idx}`);
-              liItem.classList.add('found-item');
-
-              const hintContainer = document.getElementById(`${gridId}-hint-${idx}`);
-              hintContainer.innerHTML = `<span class="ws-target-word">${item.target}</span>`;
-
-              const btn = liItem.querySelector('.hint-btn');
-              if (btn) btn.style.display = 'none';
-
-              selectedCells = [];
-            }
-          });
+        // Touch event support for smartphones/tablets
+        cell.ontouchstart = (e) => {
+          isDragging = true;
+          handleSelectCell(cell);
+          e.preventDefault();
         };
 
         gridEl.appendChild(cell);
       });
     });
+
+    document.addEventListener('mouseup', () => { isDragging = false; });
   }
 
   function toggleHint(gridId, idx, wordTarget, btnEl) {
+    playClickSound();
     const container = document.getElementById(`${gridId}-hint-${idx}`);
     if (btnEl.dataset.state === 'shown') {
       container.innerHTML = '';
@@ -1157,6 +1399,7 @@
 
   function selectOrdWord(word, btn) {
     if (btn.classList.contains('used')) return;
+    playClickSound();
     ordUserSentence.push(word);
     btn.classList.add('used');
 
@@ -1168,12 +1411,14 @@
   }
 
   function deselectOrdWord(word, originalBtn, span) {
+    playClickSound();
     ordUserSentence = ordUserSentence.filter(w => w !== word);
     originalBtn.classList.remove('used');
     span.remove();
   }
 
   function clearOrdSentence() {
+    playClickSound();
     initOrdLevel();
   }
 
@@ -1183,11 +1428,13 @@
     const msg = document.getElementById('ord-message');
 
     if (result === correct) {
+      playSuccessSound();
       msg.innerText = '¡Excelente! ✨ Oración correcta.';
       msg.style.color = 'var(--correct)';
       ordResults[ordIdx] = true;
       document.getElementById('btn-next-ord-sentence').disabled = false;
     } else {
+      playErrorSound();
       msg.innerText = 'Revisa el orden... ❌ Inténtalo de nuevo.';
       msg.style.color = 'var(--incorrect)';
       ordResults[ordIdx] = false;
@@ -1195,6 +1442,7 @@
   }
 
   function nextOrdSentence() {
+    playClickSound();
     ordIdx++;
     if (ordIdx < ordData.length) {
       initOrdLevel();
@@ -1204,16 +1452,9 @@
     }
   }
 
-  renderTest();
-  renderSynonyms();
-  renderSynonyms2();
-  createWordSearch('ws-grid-sin', 'ws-list-sin', gridSinMatrix, sopaSinonimosData, foundSopaSin);
-  renderAntonyms();
-  renderAntonyms2();
-  createWordSearch('ws-grid-ant', 'ws-list-ant', gridAntMatrix, sopaAntonimosData, foundSopaAnt);
-  initOrdLevel();
-
+  /* GLOBAL EVALUATION & RESULTS GENERATOR */
   function evaluateAll() {
+    playSuccessSound();
     let score = 0;
     let maxScore = 59; 
     let feedbackHtml = '';
@@ -1330,7 +1571,7 @@
       feedbackHtml += `<div class="feedback-item incorrect-txt">✗ Nombre del Pueblo: La respuesta correcta es Valle Hermoso.</div>`;
     }
 
-    if (cap4.startsWith("La") && cap4.includes("directora de obras")) {
+    if (cap4.startsWith("El") && cap4.includes("encargado de obras")) {
       score++;
       feedbackHtml += `<div class="feedback-item correct-txt">✓ Mayúsculas Frase 4: ¡Perfecto! Los cargos van en minúscula.</div>`;
     } else {
@@ -1349,7 +1590,9 @@
     switchTab('resultados');
   }
 
+  /* PDF EXPORT FUNCTION */
   function generatePDF() {
+    playClickSound();
     const element = document.getElementById('pdf-content');
 
     const opt = {
@@ -1363,6 +1606,18 @@
 
     html2pdf().set(opt).from(element).save();
   }
+
+  /* APPLICATION INITIALIZATION */
+  window.addEventListener('DOMContentLoaded', () => {
+    renderTest();
+    renderSynonyms();
+    renderSynonyms2();
+    createWordSearch('ws-grid-sin', 'ws-list-sin', gridSinMatrix, sopaSinonimosData, foundSopaSin);
+    renderAntonyms();
+    renderAntonyms2();
+    createWordSearch('ws-grid-ant', 'ws-list-ant', gridAntMatrix, sopaAntonimosData, foundSopaAnt);
+    initOrdLevel();
+  });
 </script>
 </body>
 </html>
