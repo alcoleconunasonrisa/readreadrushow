@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Calcetín Suicida - Lectura y Evaluación Libre</title>
+    <style>
+        :root {
+            --azul-principal: #3498db;
+            --azul-oscuro: #2980b9;
+            --morado: #8e44ad;
+            --naranja: #e67e22;
+            --verde: #2ecc71;
+            --verde-oscuro: #27ae60;
+            --rojo: #e74c3c;
+            --amarillo: #f1c40f;
+            --fondo: #f5f7fa;
+            --texto: #2c3e50;
+            --sombra: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--fondo);
+            color: var(--texto);
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* HEADER Y NAVEGACIÓN */
+        header {
+            background: linear-gradient(135deg, var(--azul-principal), var(--morado));
+            color: white;
+            text-align: center;
+            padding: 30px 15px;
+            border-radius: 20px;
+            box-shadow: var(--sombra);
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .tab-btn {
+            background: white;
+            color: var(--texto);
+            border: 2px solid #e2e8f0;
+            padding: 12px 18px;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--azul-principal);
+            color: var(--azul-principal);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--azul-principal);
+            color: white;
+            border-color: var(--azul-oscuro);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .tab-btn.btn-eval {
+            background: #fff8e7;
+            border-color: var(--amarillo);
+            color: #d35400;
+        }
+
+        .tab-btn.btn-eval.active {
+            background: var(--naranja);
+            color: white;
+            border-color: #d35400;
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: var(--sombra);
+            padding: clamp(20px, 4vw, 40px);
+            width: 100%;
+            max-width: 900px;
+            border-top: 10px solid var(--azul-principal);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* LECTURA / RESUMEN */
+        .resumen-card {
+            background: #f8fafc;
+            border-left: 6px solid var(--azul-principal);
+            padding: 22px;
+            border-radius: 0 15px 15px 0;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .puntos-clave {
+            list-style: none;
+            padding: 0;
+        }
+
+        .puntos-clave li {
+            background: #f8fafc;
+            margin-bottom: 15px;
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .puntos-clave strong {
+            color: var(--morado);
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        /* PREGUNTAS MODO LIBRE */
+        .q-card {
+            background: #ffffff;
+            border: 2px solid #e9ecef;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: border-color 0.2s;
+        }
+
+        .q-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--texto);
+        }
+
+        .opts-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .opt-btn {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 14px 18px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .opt-btn:hover {
+            background: #e9ecef;
+            border-color: #ced4da;
+        }
+
+        .opt-btn.selected {
+            background: #e0f2fe;
+            border-color: var(--azul-principal);
+            color: var(--azul-oscuro);
+            font-weight: 700;
+        }
+
+        /* SOPA DE LETRAS INTERACTIVA */
+        .sopa-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #sopa-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 6px;
+            max-width: 420px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .celda {
+            aspect-ratio: 1;
+            background: #ffffff;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+
+        .celda:hover {
+            border-color: var(--azul-principal);
+            background: #f0fdf4;
+        }
+
+        .celda.marcada {
+            background: var(--amarillo);
+            color: #744210;
+            border-color: #d4ac0d;
+            transform: scale(1.05);
+        }
+
+        .celda.encontrada {
+            background: var(--verde);
+            color: white;
+            border-color: var(--verde-oscuro);
+        }
+
+        .palabras-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .word-tag {
+            background: #e9ecef;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #6c757d;
+            border: 2px solid #dee2e6;
+            transition: all 0.3s;
+        }
+
+        .word-tag.found {
+            background: #d1e7dd;
+            color: #0f5132;
+            border-color: #badbcc;
+            text-decoration: line-through;
+        }
+
+        /* GRAMÁTICA VISTOSA CON SELECCIÓN DESHACIBLE */
+        .gram-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .gram-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        @media (min-width: 600px) {
+            .gram-item {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .gram-word-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--morado);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .gram-btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .gram-choice-btn {
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            background: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gram-choice-btn.selected-sustantivo {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        .gram-choice-btn.selected-verbo {
+            background: #e67e22;
+            color: white;
+            border-color: #d35400;
+        }
+
+        .gram-choice-btn.selected-adjetivo {
+            background: #9b59b6;
+            color: white;
+            border-color: #8e44ad;
+        }
+
+        /* ORDENAR ORACIONES */
+        .box-oracion {
+            min-height: 80px;
+            border: 3px dashed var(--azul-principal);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: #fafafa;
+        }
+
+        .palabras-oracion {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .chip-palabra {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #cbd5e1;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+
+        .chip-palabra:hover {
+            border-color: var(--azul-principal);
+            background: #f0f9ff;
+        }
+
+        .chip-palabra.usada {
+            opacity: 0.3;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* FORMULARIO ESCRITURA */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--azul-principal);
+        }
+
+        /* BOTONES GLOBALES */
+        .btn-action {
+            background: var(--azul-principal);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 0;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-action:hover {
+            background: var(--azul-oscuro);
+            transform: translateY(-2px);
+        }
+
+        /* EVALUACIÓN FINAL CON FEEDBACK REINTENTABLE */
+        .eval-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .eval-score {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8faf9;
+            border-radius: 14px;
+        }
+
+        .eval-score .score-val {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--verde-oscuro);
+        }
+
+        .feedback-details {
+            margin-top: 20px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .feedback-item {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-item.correct {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .feedback-item.incorrect {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .btn-retry-item {
+            background: white;
+            border: 1px solid #842029;
+            color: #842029;
+            padding: 4px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .btn-retry-item:hover {
+            background: #842029;
+            color: white;
+        }
+
+        /* IMPRESIÓN PDF */
+        @media print {
+            body { background: white; padding: 0; }
+            header, .tabs, .btn-action, .btn-retry-item { display: none !important; }
+            .container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+            .section { display: none !important; }
+            #sec-eval { display: block !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🧦 El Calcetín Suicida</h1>
+        <p>Lectura interactiva y autoevaluación libre</p>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-btn active" onclick="showTab('sec-lectura', this)">📖 Recordatorio</button>
+        <button class="tab-btn" onclick="showTab('sec-test', this)">📝 Test (15 Preguntas)</button>
+        <button class="tab-btn" onclick="showTab('sec-sopa', this)">🔍 Sopa de Letras</button>
+        <button class="tab-btn" onclick="showTab('sec-gramatica', this)">🅰️ Tipos de Palabras</button>
+        <button class="tab-btn" onclick="showTab('sec-ordenar', this)">🧩 Ordena Oraciones</button>
+        <button class="tab-btn" onclick="showTab('sec-escritura', this)">✍️ Taller de Escritura</button>
+        <button class="tab-btn btn-eval" onclick="showTab('sec-eval', this)">📊 Resultados y PDF</button>
+    </nav>
+
+    <main class="container">
+
+        <!-- LECTURA -->
+        <section id="sec-lectura" class="section active">
+            <h2>🧦 ¿Te acuerdas de la historia? ¡Refresca la memoria!</h2>
+            <br>
+            <div class="resumen-card">
+                <p><strong>Autora:</strong> Mariasun Landa</p>
+                <p>Nuestro protagonista es un calcetín que vive con su hermano en casa de su dueño Plinio y que se siente totalmente inútil, aburrido y solo. Creyendo que su vida ya no tiene sentido, toma una decisión un poco exagerada y dramática: <strong>escapar emprendiendo un viaje sin retorno</strong>.</p>
+                <p>Pero lo que empieza como una huida se convierte en la mayor aventura de su vida. Al salir al mundo exterior, nuestro valiente calcetín descubre que el universo de los humanos es gigantesco y muy loco. ¿Te acuerdas de todo lo que le pasa por el camino?</p>
+            </div>
+
+            <ul class="puntos-clave">
+                <li>
+                    <strong>🐀 Peligros en la alcantarilla:</strong>
+                    Cayó al subterráneo y allí conoció a una peculiar rata que hablaba inglés, toda una experta en la vida de la ciudad que le dio consejos para sobrevivir.
+                </li>
+                <li>
+                    <strong>⚔️ Las manos de los humanos:</strong>
+                    Pasa por las manos de la señora Clotilde y llega a ser utilizado en juegos de lo más imaginativos. Un niño lo roba para convertirlo en un gladiador. Para él, ver a los humanos tan grandes y haciendo cosas tan raras es todo un misterio, ¡por eso los llama <em>"seres extraños"</em>!
+                </li>
+                <li>
+                    <strong>👨‍🏫 El rescate del profesor:</strong>
+                    En un momento de peligro, un amable profesor lo rescató, demostrándole que no todos los "seres extraños" son iguales y que en el mundo también hay personas de gran corazón.
+                </li>
+                <li>
+                    <strong>👑 Amigos y un gran amor:</strong>
+                    Pero lo más bonito ocurre al final, se encuentra y se une a Pocacosa (a la que él llamaba cariñosamente <em>"mi Reina"</em>), descubriendo junto a ella su verdadero destino.
+                </li>
+            </ul>
+
+            <button class="btn-action" onclick="goToTab('sec-test', 1)">¡Comenzar las Actividades! 🚀</button>
+        </section>
+
+        <!-- TEST (RESPUESTAS EDITABLES) -->
+        <section id="sec-test" class="section">
+            <h2>📝 Comprensión Lectora</h2>
+            <p style="margin-bottom:20px; color:#6c757d;">Responde libremente a las 15 preguntas. Puedes cambiar de opinión cuantas veces quieras antes de evaluar.</p>
+            <div id="quiz-container"></div>
+            <button class="btn-action" onclick="goToTab('sec-sopa', 2)">Siguiente: Sopa de Letras 🔍</button>
+        </section>
+
+        <!-- SOPA DE LETRAS INTERACTIVA -->
+        <section id="sec-sopa" class="section">
+            <h2>🔍 Sopa de Letras del Cuento</h2>
+            <p style="margin-bottom:20px; color:#6c757d;">Haz clic en las letras para formar las palabras clave del cuento. Si te equivocas, vuelve a pulsar la casilla para desmarcarla:</p>
+            <div class="sopa-wrapper">
+                <div class="palabras-lista">
+                    <span class="word-tag" id="p-POCACOSA">POCACOSA</span>
+                    <span class="word-tag" id="p-PLINIO">PLINIO</span>
+                    <span class="word-tag" id="p-GLADIADOR">GLADIADOR</span>
+                    <span class="word-tag" id="p-CLOTILDE">CLOTILDE</span>
+                    <span class="word-tag" id="p-RATA">RATA</span>
+                    <span class="word-tag" id="p-DESTINO">DESTINO</span>
+                </div>
+                <div id="sopa-grid"></div>
+            </div>
+            <button class="btn-action" onclick="goToTab('sec-gramatica', 3)" style="margin-top:30px;">Siguiente: Tipos de Palabras 🅰️</button>
+        </section>
+
+        <!-- GRAMÁTICA CON SELECCIÓN LIBRE Y MODIFICABLE -->
+        <section id="sec-gramatica" class="section">
+            <h2>🅰️ Clasifica cada Palabra</h2>
+            <p style="margin-bottom:20px; color:#6c757d;">Selecciona el tipo de palabra correspondiente para cada término. Puedes rectificar tus respuestas en cualquier momento:</p>
+
+            <div class="gram-list" id="gram-container"></div>
+
+            <button class="btn-action" onclick="goToTab('sec-ordenar', 4)" style="margin-top:30px;">Siguiente: Ordena Oraciones 🧩</button>
+        </section>
+
+        <!-- ORDENAR ORACIONES REINTENTABLES -->
+        <section id="sec-ordenar" class="section">
+            <h2>🧩 Ordena la Oración</h2>
+            <p style="margin-bottom:20px; color:#6c757d;">Construye cada frase del libro pulsando en las palabras desordenadas. Utiliza el botón de borrar si deseas corregir la frase:</p>
+
+            <div style="text-align: center; font-weight:800; color:var(--azul-oscuro); margin-bottom:15px; font-size:1.1rem;">
+                Frase <span id="ord-current-idx">1</span> de 4
+            </div>
+
+            <div class="box-oracion" id="drop-oracion"></div>
+            <div class="palabras-oracion" id="words-oracion"></div>
+
+            <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+                <button class="btn-action" style="background:var(--rojo); margin:0;" onclick="clearOracion()">🗑️ Borrar y rehacer</button>
+                <button class="btn-action" style="background:var(--verde); margin:0;" id="btn-next-ord" onclick="nextOracion()">Siguiente Frase ⏭️</button>
+            </div>
+
+            <button class="btn-action" onclick="goToTab('sec-escritura', 5)" style="margin-top:30px;">Siguiente: Taller de Escritura ✍️</button>
+        </section>
+
+        <!-- ESCRITURA -->
+        <section id="sec-escritura" class="section">
+            <h2>✍️ Taller de Escritura y Opinión</h2>
+            <p style="margin-bottom:20px; color:#6c757d;">Escribe tu nombre y tu reflexión final sobre el libro:</p>
+            <div class="form-group">
+                <label for="alumno-nombre">Nombre y Apellidos del Estudiante:</label>
+                <input type="text" id="alumno-nombre" class="form-control" placeholder="Escribe tu nombre aquí...">
+            </div>
+            <div class="form-group">
+                <label for="alumno-texto">¿Qué mensaje te ha dejado la aventura o qué final alternativo imaginas?</label>
+                <textarea id="alumno-texto" class="form-control" rows="6" placeholder="Escribe tu redacción aquí..."></textarea>
+            </div>
+            <button class="btn-action" onclick="evaluarYVerResultados()" style="background:var(--naranja);">🏆 Finalizar y Ver Resultados</button>
+        </section>
+
+        <!-- EVALUACIÓN FINAL CON INFORME DETALLADO -->
+        <section id="sec-eval" class="section">
+            <div style="text-align:center; margin-bottom:20px;">
+                <button class="btn-action" onclick="evaluarYVerResultados()" style="background:var(--verde); margin:0 auto 15px auto;">🔄 Recalcular / Actualizar Evaluación</button>
+            </div>
+
+            <h2>📊 Ficha de Autoevaluación Global</h2>
+            <p style="margin-bottom:20px; color:#6c757d;">Comprueba tus aciertos y vuelve a corregir los ítems marcados en rojo si deseas subir tu nota:</p>
+            
+            <div class="eval-card" id="eval-print-area">
+                <div style="text-align:center; margin-bottom:15px;">
+                    <h3 style="color:var(--azul-oscuro);">Informe de Progreso: El Calcetín Suicida</h3>
+                    <p><strong>Estudiante:</strong> <span id="rep-nombre">(No especificado)</span></p>
+                </div>
+
+                <div class="eval-score">
+                    <div>Puntuación Total Consolidada</div>
+                    <div class="score-val"><span id="rep-nota">0.0</span> <small style="font-size:1.2rem; color:#6c757d;">/ 10</small></div>
+                </div>
+
+                <div class="feedback-details" id="feedback-container">
+                    <p style="text-align:center; color:#6c757d;">Haz clic en el botón superior para generar tu informe de corrección.</p>
+                </div>
+
+                <div style="margin-top:20px;">
+                    <strong>Redacción / Reflexión aportada:</strong>
+                    <div id="rep-redaccion" style="margin-top:8px; background:#f8faf9; padding:15px; border-radius:10px; font-style:italic; border:1px solid #e2e8f0;">(Sin redacción)</div>
+                </div>
+            </div>
+
+            <button class="btn-action" onclick="window.print();" style="background:var(--naranja);">🖨️ Descargar e Imprimir Evaluación en PDF</button>
+        </section>
+
+    </main>
+
+    <script>
+        // 1. PREGUNTAS DEL TEST
+        const preguntas = [
+            { q: "1. ¿Cuál es el tema principal de la historia?", opts: ["a) El romance", "b) La aventura", "c) La identidad y la aceptación de uno mismo", "d) La ciencia ficción"], ans: 2 },
+            { q: "2. ¿Qué decide hacer el calcetín al principio de la historia?", opts: ["a) Empezar una nueva vida", "b) Quedarse tranquilo en casa", "c) Buscar a su compañero perdido", "d) Convertirse en un calcetín volador"], ans: 0 },
+            { q: "3. ¿Cuál es el objetivo principal del viaje del calcetín?", opts: ["a) Encontrar a su familia", "b) Descubrir su verdadero destino", "c) Escalar la montaña más alta", "d) Aprender a bailar"], ans: 1 },
+            { q: "4. ¿Qué temas se exploran en la historia?", opts: ["a) Amistad y lealtad", "b) Guerra y política", "c) Historia de amor", "d) Identidad y sentido de la vida"], ans: 3 },
+            { q: "5. ¿Cómo se llama la autora vasca que escribió 'Galtzerdi suizida'?", opts: ["a) María José Landa", "b) Mariasun Landa", "c) Juan Landa", "d) Marta Landa"], ans: 1 },
+            { q: "6. ¿Cómo se llamaba el protagonista de la historia (el calcetín)?", opts: ["a) Clotilde", "b) Augusto", "c) Plinio", "d) Reina"], ans: 1 },
+            { q: "7. ¿Qué tipo de viaje emprende el calcetín?", opts: ["a) Un viaje en el tiempo", "b) Un viaje espacial", "c) Un viaje emocional", "d) Un viaje por el océano"], ans: 2 },
+            { q: "8. ¿Para qué robó un niño al calcetín?", opts: ["a) Lo robó por gusto", "b) Para convertirlo en un gladiador", "c) Para romperlo", "d) Para ponérselo porque tenía otro igual"], ans: 1 },
+            { q: "9. ¿En qué convirtió la señora Clotilde al calcetín?", opts: ["a) En un gladiador", "b) En una serpiente", "c) En un niño pequeño", "d) En una rata"], ans: 1 },
+            { q: "10. ¿A quiénes llama 'seres extraños' el calcetín?", opts: ["a) A las ratas", "b) A los niños / humanos", "c) A los extraterrestres", "d) A los duendes"], ans: 1 },
+            { q: "11. ¿A qué se dedicaba Plinio?", opts: ["a) Era dependiente en una ferretería", "b) Estaba parado y buscaba trabajo", "c) Era repartidor de Correos", "d) Trabajaba en una cafetería"], ans: 1 },
+            { q: "12. ¿Cómo cambia la perspectiva del calcetín a medida que avanza?", opts: ["a) Se vuelve más pesimista", "b) Se vuelve más valiente y autoconfiado", "c) Se vuelve más solitario", "d) Se vuelve más indeciso"], ans: 1 },
+            { q: "13. ¿Cuál es el mensaje principal que la autora quiere transmitir?", opts: ["a) La importancia del conocimiento", "b) La necesidad de aceptarse a uno mismo", "c) El valor de la venganza", "d) La búsqueda de la perfección"], ans: 1 },
+            { q: "14. Durante su viaje, ¿cómo influyen los personajes en el calcetín?", opts: ["a) Se vuelve más reservado", "b) Se vuelve más comprensivo", "c) Se vuelve más competitivo", "d) No cambia su perspectiva"], ans: 1 },
+            { q: "15. ¿Cómo termina la historia del calcetín?", opts: ["a) Encuentra su destino y vive feliz junto a Pocacosa", "b) Decide volver a su antigua vida", "c) Se une a una colección de calcetines", "d) Despierta y descubre que todo fue un sueño"], ans: 0 }
+        ];
+
+        let userAnswersTest = Array(15).fill(null);
+
+        function showTab(id, btnEl) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            if(btnEl) {
+                btnEl.classList.add('active');
+            } else {
+                const btns = document.querySelectorAll('.tab-btn');
+                const tabsMap = {'sec-lectura':0, 'sec-test':1, 'sec-sopa':2, 'sec-gramatica':3, 'sec-ordenar':4, 'sec-escritura':5, 'sec-eval':6};
+                if(tabsMap[id] !== undefined) btns[tabsMap[id]].classList.add('active');
+            }
+        }
+
+        function goToTab(id, idx) {
+            const btns = document.querySelectorAll('.tab-btn');
+            showTab(id, btns[idx]);
+        }
+
+        function renderTest() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            preguntas.forEach((p, qIdx) => {
+                const card = document.createElement('div');
+                card.className = "q-card";
+                card.innerHTML = `<div class="q-title">${p.q}</div>`;
+                
+                const optsDiv = document.createElement('div');
+                optsDiv.className = "opts-grid";
+
+                p.opts.forEach((o, oIdx) => {
+                    const btn = document.createElement('button');
+                    btn.className = `opt-btn ${userAnswersTest[qIdx] === oIdx ? 'selected' : ''}`;
+                    btn.innerText = o;
+                    btn.onclick = () => {
+                        if(userAnswersTest[qIdx] === oIdx) {
+                            userAnswersTest[qIdx] = null;
+                            btn.classList.remove('selected');
+                        } else {
+                            userAnswersTest[qIdx] = oIdx;
+                            Array.from(optsDiv.children).forEach(c => c.classList.remove('selected'));
+                            btn.classList.add('selected');
+                        }
+                    };
+                    optsDiv.appendChild(btn);
+                });
+
+                card.appendChild(optsDiv);
+                container.appendChild(card);
+            });
+        }
+
+        // 2. SOPA DE LETRAS INTERACTIVA
+        const palabrasSopa = ["POCACOSA", "PLINIO", "GLADIADOR", "CLOTILDE", "RATA", "DESTINO"];
+        const filas = 10, columnas = 10;
+        let tableroSopa = Array(filas).fill().map(() => Array(columnas).fill(''));
+        let palabrasEncontradasSopa = new Set();
+
+        function generarSopa() {
+            const posiciones = [
+                { word: "POCACOSA", r: 0, c: 0, vert: false },
+                { word: "PLINIO", r: 2, c: 1, vert: false },
+                { word: "GLADIADOR", r: 4, c: 0, vert: false },
+                { word: "CLOTILDE", r: 1, c: 9, vert: true },
+                { word: "RATA", r: 6, c: 2, vert: false },
+                { word: "DESTINO", r: 8, c: 2, vert: false }
+            ];
+
+            posiciones.forEach(p => {
+                for (let i = 0; i < p.word.length; i++) {
+                    tableroSopa[p.r + (p.vert ? i : 0)][p.c + (p.vert ? 0 : i)] = p.word[i];
+                }
+            });
+
+            const letras = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+            const sopaGrid = document.getElementById('sopa-grid');
+            sopaGrid.innerHTML = "";
+
+            for (let r = 0; r < filas; r++) {
+                for (let c = 0; c < columnas; c++) {
+                    if (tableroSopa[r][c] === '') {
+                        tableroSopa[r][c] = letras[Math.floor(Math.random() * letras.length)];
+                    }
+                    const celda = document.createElement('div');
+                    celda.className = 'celda';
+                    celda.innerText = tableroSopa[r][c];
+                    celda.onclick = function() {
+                        this.classList.toggle('marcada');
+                        chequearSopa();
+                    };
+                    sopaGrid.appendChild(celda);
+                }
+            }
+        }
+
+        function chequearSopa() {
+            const marcadas = document.querySelectorAll('.celda.marcada');
+            let texto = "";
+            marcadas.forEach(m => texto += m.innerText);
+
+            palabrasSopa.forEach(pal => {
+                if (texto.includes(pal) || texto.split('').reverse().join('').includes(pal)) {
+                    palabrasEncontradasSopa.add(pal);
+                    const tagEl = document.getElementById("p-" + pal);
+                    if(tagEl) tagEl.classList.add('found');
+                    marcadas.forEach(m => {
+                        if (pal.includes(m.innerText)) {
+                            m.classList.remove('marcada');
+                            m.classList.add('encontrada');
+                        }
+                    });
+                }
+            });
+        }
+
+        // 3. GRAMÁTICA VISTOSA CON OPCIÓN MODIFICABLE
+        const palabrasGram = [
+            { p: "Calcetín", t: "sustantivo" },
+            { p: "Escapar", t: "verbo" },
+            { p: "Valiente", t: "adjetivo" },
+            { p: "Gladiador", t: "sustantivo" },
+            { p: "Transformar", t: "verbo" },
+            { p: "Extraño", t: "adjetivo" },
+            { p: "Profesor", t: "sustantivo" },
+            { p: "Rescatar", t: "verbo" },
+            { p: "Comprensivo", t: "adjetivo" },
+            { p: "Alcantarilla", t: "sustantivo" },
+            { p: "Viajar", t: "verbo" },
+            { p: "Dramático", t: "adjetivo" }
+        ];
+
+        let userGramAnswers = Array(12).fill(null);
+
+        function renderGrammar() {
+            const container = document.getElementById('gram-container');
+            container.innerHTML = "";
+
+            palabrasGram.forEach((item, idx) => {
+                const row = document.createElement('div');
+                row.className = "gram-item";
+
+                const wordLabel = document.createElement('div');
+                wordLabel.className = "gram-word-title";
+                wordLabel.innerText = item.p;
+
+                const btnGroup = document.createElement('div');
+                btnGroup.className = "gram-btn-group";
+
+                const cats = [
+                    { id: "sustantivo", label: "SUSTANTIVO" },
+                    { id: "verbo", label: "VERBO" },
+                    { id: "adjetivo", label: "ADJETIVO" }
+                ];
+
+                cats.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = "gram-choice-btn";
+                    if (userGramAnswers[idx] === cat.id) {
+                        btn.classList.add("selected-" + cat.id);
+                    }
+                    btn.innerText = cat.label;
+                    btn.onclick = () => {
+                        if (userGramAnswers[idx] === cat.id) {
+                            userGramAnswers[idx] = null;
+                        } else {
+                            userGramAnswers[idx] = cat.id;
+                        }
+                        renderGrammar();
+                    };
+                    btnGroup.appendChild(btn);
+                });
+
+                row.appendChild(wordLabel);
+                row.appendChild(btnGroup);
+                container.appendChild(row);
+            });
+        }
+
+        // 4. ORDENAR ORACIONES REINTENTABLES (CON PALABRAS DESORDENADAS AL AZAR)
+        const datosOraciones = [
+            { s: "El calcetín decidió emprender un viaje sin retorno.", words: ["El", "calcetín", "decidió", "emprender", "un", "viaje", "sin", "retorno."] },
+            { s: "En la alcantarilla conoció a una rata que hablaba inglés.", words: ["En", "la", "alcantarilla", "conoció", "a", "una", "rata", "que", "hablaba", "inglés."] },
+            { s: "Un niño robó el calcetín para convertirlo en gladiador.", words: ["Un", "niño", "robó", "el", "calcetín", "para", "convertirlo", "en", "gladiador."] },
+            { s: "Al final se unió a su querida Pocacosa.", words: ["Al", "final", "se", "unió", "a", "su", "querida", "Pocacosa."] }
+        ];
+
+        let ordIdx = 0;
+        let ordUserWords = Array(4).fill().map(() => []);
+        // Guardamos las palabras mezcladas para cada frase para que no cambien constantemente al hacer clic, solo al reiniciar o pasar de frase
+        let ordShuffledWords = datosOraciones.map(item => [...item.words].sort(() => Math.random() - 0.5));
+
+        function loadOracion() {
+            document.getElementById('ord-current-idx').innerText = ordIdx + 1;
+            const dropZone = document.getElementById('drop-oracion');
+            const wordsZone = document.getElementById('words-oracion');
+            
+            dropZone.innerHTML = "";
+            wordsZone.innerHTML = "";
+
+            // Palabras colocadas por el usuario
+            ordUserWords[ordIdx].forEach((w, wIdx) => {
+                const chip = document.createElement('button');
+                chip.className = 'chip-palabra';
+                chip.innerText = w;
+                chip.onclick = () => deselectWord(wIdx);
+                dropZone.appendChild(chip);
+            });
+
+            // Banco de palabras desordenadas disponibles
+            ordShuffledWords[ordIdx].forEach((w) => {
+                const countInUser = ordUserWords[ordIdx].filter(item => item === w).length;
+                const countInOriginal = ordShuffledWords[ordIdx].filter(item => item === w).length;
+                
+                const chip = document.createElement('button');
+                chip.className = 'chip-palabra';
+                chip.innerText = w;
+                if(countInUser >= countInOriginal) {
+                    chip.classList.add('usada');
+                } else {
+                    chip.onclick = () => selectWord(w);
+                }
+                wordsZone.appendChild(chip);
+            });
+        }
+
+        function selectWord(w) {
+            ordUserWords[ordIdx].push(w);
+            loadOracion();
+        }
+
+        function deselectWord(wIdx) {
+            ordUserWords[ordIdx].splice(wIdx, 1);
+            loadOracion();
+        }
+
+        function clearOracion() {
+            ordUserWords[ordIdx] = [];
+            loadOracion();
+        }
+
+        function nextOracion() {
+            ordIdx = (ordIdx + 1) % datosOraciones.length;
+            loadOracion();
+        }
+
+        // 5. EVALUACIÓN Y FEEDBACK GLOBAL CON REINTENTO
+        function evaluarYVerResultados() {
+            let totalAciertosTest = 0;
+            let feedbackHtml = "";
+
+            // Test
+            preguntas.forEach((p, idx) => {
+                if (userAnswersTest[idx] === p.ans) {
+                    totalAciertosTest++;
+                    feedbackHtml += `<div class="feedback-item correct"><span>✓ Pregunta ${idx+1}: Correcta</span></div>`;
+                } else {
+                    feedbackHtml += `<div class="feedback-item incorrect">
+                        <span>✗ Pregunta ${idx+1}: Incorrecta o pendiente</span>
+                        <button class="btn-retry-item" onclick="goToTab('sec-test', 1)">Corregir en Test 📝</button>
+                    </div>`;
+                }
+            });
+
+            // Sopa de Letras
+            const totalSopa = palabrasEncontradasSopa.size;
+            if (totalSopa === 6) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Sopa de Letras: ¡6 / 6 palabras encontradas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Sopa de Letras: ${totalSopa} / 6 palabras encontradas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-sopa', 2)">Buscar más palabras 🔍</button>
+                </div>`;
+            }
+
+            // Gramática
+            let totalGram = 0;
+            palabrasGram.forEach((item, idx) => {
+                if (userGramAnswers[idx] === item.t) {
+                    totalGram++;
+                }
+            });
+
+            if (totalGram === 12) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Clasificación Gramatical: ¡12 / 12 palabras correctas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Clasificación Gramatical: ${totalGram} / 12 correctas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-gramatica', 3)">Revisar palabras 🅰️</button>
+                </div>`;
+            }
+
+            // Ordenar oraciones
+            let totalOrd = 0;
+            datosOraciones.forEach((item, idx) => {
+                const fraseUsuario = ordUserWords[idx].join(" ");
+                if (fraseUsuario === item.s) {
+                    totalOrd++;
+                }
+            });
+
+            if (totalOrd === 4) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Ordenar Oraciones: ¡4 / 4 frases correctas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Ordenar Oraciones: ${totalOrd} / 4 frases correctas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-ordenar', 4)">Reordenar frases 🧩</button>
+                </div>`;
+            }
+
+            // Ponderación de Nota final sobre 10
+            const nota = ((totalAciertosTest / 15) * 4 + (totalSopa / 6) * 2 + (totalGram / 12) * 2 + (totalOrd / 4) * 2).toFixed(1);
+            
+            document.getElementById('rep-nota').innerText = nota;
+            document.getElementById('feedback-container').innerHTML = feedbackHtml;
+
+            const nombre = document.getElementById('alumno-nombre').value.trim();
+            const texto = document.getElementById('alumno-texto').value.trim();
+            document.getElementById('rep-nombre').innerText = nombre !== "" ? nombre : "(No especificado)";
+            document.getElementById('rep-redaccion').innerText = texto !== "" ? texto : "(Sin redacción)";
+
+            goToTab('sec-eval', 6);
+        }
+
+        // INICIALIZACIÓN
+        window.onload = () => {
+            renderTest();
+            generarSopa();
+            renderGrammar();
+            loadOracion();
+        };
+    </script>
+</body>
+</html>
