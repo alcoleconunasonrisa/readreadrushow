@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Up: Una aventura de altura - Lectura y Evaluación Libre</title>
+    <style>
+        /* PALETA DE COLORES INSPIRADA EN "UP" (CIELO, GLOBOS Y SELVA) */
+        :root {
+            --azul-principal: #0ea5e9;
+            --azul-oscuro: #0284c7;
+            --morado: #8b5cf6;
+            --naranja: #f97316;
+            --verde: #22c55e;
+            --verde-oscuro: #16a34a;
+            --rojo: #ef4444;
+            --amarillo: #facc15;
+            --fondo: #e0f2fe;
+            --texto: #1e293b;
+            --sombra: 0 10px 25px rgba(2, 132, 199, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(180deg, #bae6fd 0%, #f0f9ff 100%);
+            color: var(--texto);
+            padding: 20px 10px 50px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* CABECERA ILUSTRADA */
+        header {
+            background: linear-gradient(135deg, #0284c7 0%, #38bdf8 50%, #8b5cf6 100%);
+            color: white;
+            text-align: center;
+            padding: 28px 20px;
+            border-radius: 24px;
+            box-shadow: var(--sombra);
+            width: 100%;
+            max-width: 960px;
+            margin-bottom: 22px;
+            border: 4px solid rgba(255, 255, 255, 0.45);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(1.7rem, 4vw, 2.5rem);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            font-size: 1.08rem;
+            margin-top: 6px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        /* BARRA DE PESTAÑAS */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 22px;
+            width: 100%;
+            max-width: 960px;
+        }
+
+        .tab-btn {
+            background: white;
+            color: var(--texto);
+            border: 2px solid #cbd5e1;
+            padding: 11px 15px;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--azul-principal);
+            color: var(--azul-oscuro);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--azul-principal);
+            color: white;
+            border-color: var(--azul-oscuro);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.35);
+        }
+
+        .tab-btn.btn-eval {
+            background: #fef9c3;
+            border-color: var(--amarillo);
+            color: #b45309;
+        }
+
+        .tab-btn.btn-eval.active {
+            background: var(--naranja);
+            color: white;
+            border-color: #ea580c;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+        }
+
+        /* CONTENEDOR PRINCIPAL DE CONTENIDO */
+        .container {
+            background: white;
+            border-radius: 26px;
+            box-shadow: var(--sombra);
+            padding: clamp(20px, 4vw, 38px);
+            width: 100%;
+            max-width: 960px;
+            border-top: 10px solid var(--azul-principal);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.28s ease-in-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--azul-oscuro);
+            font-size: 1.55rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle-desc {
+            margin-bottom: 20px;
+            color: #475569;
+            line-height: 1.55;
+            font-size: 1rem;
+        }
+
+        /* SECCIÓN 1: RECORDATORIO */
+        .resumen-card {
+            background: #f0f9ff;
+            border-left: 6px solid var(--azul-principal);
+            padding: 22px;
+            border-radius: 0 16px 16px 0;
+            margin-bottom: 24px;
+            line-height: 1.75;
+            font-size: 1.03rem;
+        }
+
+        .resumen-card p + p {
+            margin-top: 12px;
+        }
+
+        .puntos-clave {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        @media (min-width: 700px) {
+            .puntos-clave {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .puntos-clave li {
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            line-height: 1.55;
+        }
+
+        .puntos-clave strong {
+            color: var(--morado);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.08rem;
+        }
+
+        /* SECCIÓN 2: TEST */
+        .q-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .q-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--texto);
+        }
+
+        .opts-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .opt-btn {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            padding: 13px 16px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 0.98rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            color: var(--texto);
+        }
+
+        .opt-btn:hover {
+            background: #f0f9ff;
+            border-color: var(--azul-principal);
+        }
+
+        .opt-btn.selected {
+            background: #e0f2fe;
+            border-color: var(--azul-principal);
+            color: #0369a1;
+            font-weight: 700;
+        }
+
+        /* SECCIÓN 3: SOPA DE LETRAS */
+        .sopa-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #sopa-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            max-width: 430px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .celda {
+            aspect-ratio: 1;
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.18s;
+        }
+
+        .celda:hover {
+            border-color: var(--azul-principal);
+            background: #f0f9ff;
+        }
+
+        .celda.marcada {
+            background: var(--amarillo);
+            color: #713f12;
+            border-color: #eab308;
+            transform: scale(1.05);
+        }
+
+        .celda.encontrada {
+            background: var(--verde);
+            color: white;
+            border-color: var(--verde-oscuro);
+        }
+
+        .palabras-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .word-tag {
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: #475569;
+            border: 2px solid #cbd5e1;
+            transition: all 0.3s;
+        }
+
+        .word-tag.found {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #86efac;
+            text-decoration: line-through;
+        }
+
+        /* SECCIÓN 4: CRUCIGRAMA (12x12 SIN PALABRAS PEGADAS) */
+        .crossword-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+        }
+
+        @media (min-width: 860px) {
+            .crossword-layout {
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+        }
+
+        .cw-board-wrap {
+            width: 100%;
+            max-width: 470px;
+            margin: 0 auto;
+        }
+
+        #cw-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 3px;
+            background: #1e293b;
+            padding: 8px;
+            border-radius: 18px;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+        }
+
+        .cw-cell-empty {
+            aspect-ratio: 1;
+            background: #0f172a;
+            border-radius: 5px;
+        }
+
+        .cw-cell-box {
+            position: relative;
+            aspect-ratio: 1;
+            background: #ffffff;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+        }
+
+        .cw-num {
+            position: absolute;
+            top: 2px;
+            left: 3px;
+            font-size: 0.62rem;
+            font-weight: 900;
+            color: var(--azul-oscuro);
+            line-height: 1;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .cw-input {
+            width: 100%;
+            height: 100%;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            text-align: center;
+            font-size: clamp(0.85rem, 2.1vw, 1.12rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--texto);
+            background: transparent;
+            outline: none;
+            padding-top: 4px;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+
+        .cw-input:focus {
+            border-color: var(--azul-principal);
+            background: #bae6fd;
+        }
+
+        .cw-input.cw-active-word {
+            background: #e0f2fe;
+        }
+
+        .cw-input.cw-ok {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #22c55e;
+        }
+
+        .cw-input.cw-err {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #ef4444;
+        }
+
+        .cw-clues {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .cw-clue-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .cw-clue-card h3 {
+            font-size: 1.05rem;
+            color: var(--morado);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .cw-clue-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.94rem;
+            line-height: 1.45;
+        }
+
+        .cw-clue-list li {
+            padding: 9px 12px;
+            border-radius: 10px;
+            background: white;
+            border: 1.5px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cw-clue-list li:hover,
+        .cw-clue-list li.active-clue {
+            border-color: var(--azul-principal);
+            background: #f0f9ff;
+        }
+
+        .cw-dir-badge {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--azul-oscuro);
+            background: #e0f2fe;
+            padding: 5px 14px;
+            border-radius: 999px;
+        }
+
+        .cw-status-msg {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-align: center;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        /* SECCIÓN 5: GRAMÁTICA */
+        .gram-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .gram-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .gram-item {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .gram-word-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--morado);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .gram-btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .gram-choice-btn {
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            background: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gram-choice-btn:hover {
+            border-color: #94a3b8;
+        }
+
+        .gram-choice-btn.selected-sustantivo {
+            background: #0ea5e9;
+            color: white;
+            border-color: #0284c7;
+        }
+
+        .gram-choice-btn.selected-verbo {
+            background: #f97316;
+            color: white;
+            border-color: #ea580c;
+        }
+
+        .gram-choice-btn.selected-adjetivo {
+            background: #8b5cf6;
+            color: white;
+            border-color: #7c3aed;
+        }
+
+        /* SECCIÓN 6: ORDENAR ORACIONES */
+        .box-oracion {
+            min-height: 82px;
+            border: 3px dashed var(--azul-principal);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            background: #f0f9ff;
+        }
+
+        .palabras-oracion {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            background: #f1f5f9;
+            padding: 18px;
+            border-radius: 16px;
+        }
+
+        .chip-palabra {
+            padding: 10px 16px;
+            background: white;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #cbd5e1;
+            font-size: 1.05rem;
+            transition: all 0.18s;
+            color: var(--texto);
+        }
+
+        .chip-palabra:hover {
+            border-color: var(--azul-principal);
+            background: #e0f2fe;
+        }
+
+        .chip-palabra.usada {
+            opacity: 0.3;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* SECCIÓN 7: TALLER DE ESCRITURA */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--texto);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            line-height: 1.5;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--azul-principal);
+        }
+
+        /* BOTONES GLOBALES */
+        .btn-action {
+            background: var(--azul-principal);
+            color: white;
+            border: none;
+            padding: 15px 28px;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.22s ease;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+
+        .btn-action:hover {
+            background: var(--azul-oscuro);
+            transform: translateY(-2px);
+        }
+
+        .btn-center-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        /* SECCIÓN 8: EVALUACIÓN FINAL E INFORME */
+        .eval-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .eval-score {
+            text-align: center;
+            margin: 18px 0;
+            padding: 22px;
+            background: #f0fdf4;
+            border: 2px solid #bbf7d0;
+            border-radius: 16px;
+        }
+
+        .eval-score .score-val {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--verde-oscuro);
+        }
+
+        .feedback-details {
+            margin-top: 20px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .feedback-item {
+            padding: 11px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-item.correct {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .feedback-item.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-retry-item {
+            background: white;
+            border: 1.5px solid #991b1b;
+            color: #991b1b;
+            padding: 5px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .btn-retry-item:hover {
+            background: #991b1b;
+            color: white;
+        }
+
+        /* IMPRESIÓN / PDF */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            header, .tabs, .btn-action, .btn-retry-item, .no-print {
+                display: none !important;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            .section {
+                display: none !important;
+            }
+            #sec-eval {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🎈 Up: Una aventura de altura</h1>
+        <p>Lectura interactiva, juegos de palabras y autoevaluación libre</p>
+    </header>
+
+    <!-- NAVEGACIÓN POR PESTAÑAS -->
+    <nav class="tabs" aria-label="Actividades educativas">
+        <button class="tab-btn active" onclick="showTab('sec-lectura', this)">📖 Recordatorio</button>
+        <button class="tab-btn" onclick="showTab('sec-test', this)">📝 Test (15 Preguntas)</button>
+        <button class="tab-btn" onclick="showTab('sec-sopa', this)">🔍 Sopa de Letras</button>
+        <button class="tab-btn" onclick="showTab('sec-crucigrama', this)">✏️ Crucigrama (8 Palabras)</button>
+        <button class="tab-btn" onclick="showTab('sec-gramatica', this)">🅰️ Tipos de Palabras</button>
+        <button class="tab-btn" onclick="showTab('sec-ordenar', this)">🧩 Ordena Oraciones</button>
+        <button class="tab-btn" onclick="showTab('sec-escritura', this)">✍️ Taller de Escritura</button>
+        <button class="tab-btn btn-eval" onclick="showTab('sec-eval', this)">📊 Resultados y PDF</button>
+    </nav>
+
+    <main class="container">
+
+        <!-- 1. RECORDATORIO -->
+        <section id="sec-lectura" class="section active">
+            <h2>🎈 ¿Te acuerdas de la historia? ¡Refresca la memoria!</h2>
+            <p class="subtitle-desc">Lee este resumen antes de empezar los retos del Club de Exploradores:</p>
+
+            <div class="resumen-card">
+                <p><strong>Up: Una aventura de altura</strong> cuenta la historia de <strong>Carl Fredricksen</strong>, un anciano cascarrabias que toda su vida ha soñado con explorar Sudamérica junto a su esposa, <strong>Ellie</strong>. Tras la muerte de ella, Carl decide cumplir su promesa de una forma increíble: ata miles de globos de colores llenos de helio a su casa para volar hasta las <em>Cataratas del Paraíso</em>.</p>
+                <p>Sin embargo, justo después de despegar, descubre que no viaja solo: <strong>Russell</strong>, un optimista niño explorador de 8 años, se ha colado por accidente en el porche mientras intentaba conseguir su última insignia de ayuda a los mayores.</p>
+                <p>Durante su viaje por la selva conocen a <strong>Kevin</strong> (un ave gigante y extravagante de colores) y a <strong>Dug</strong> (un perro parlante muy cariñoso con un collar traductor). Juntos deberán proteger a Kevin del malvado <strong>Charles Muntz</strong>, un antiguo explorador obsesionado con capturar al ave para limpiar su reputación sin importarle el daño que cause.</p>
+            </div>
+
+            <ul class="puntos-clave">
+                <li>
+                    <strong>🏡 El sueño de Carl y Ellie:</strong>
+                    Desde niños guardaban en el <em>Libro de Aventuras</em> su deseo de vivir junto a las Cataratas del Paraíso. Para cumplirlo, Carl convierte su hogar en una casa voladora.
+                </li>
+                <li>
+                    <strong>🧭 Un polizón en el porche:</strong>
+                    Russell es un niño entusiasta y bondadoso que acompaña a Carl en esta aventura inesperada y le ayuda a abrir de nuevo su corazón.
+                </li>
+                <li>
+                    <strong>🦜 Amigos en la selva: Kevin y Dug:</strong>
+                    Kevin es un ave enorme y divertida, y Dug es un perro fiel cuyo collar traduce sus pensamientos en voz alta.
+                </li>
+                <li>
+                    <strong>💖 El valor de lo importante:</strong>
+                    Al final, Carl comprende que las personas y la amistad valen mucho más que los muebles y los objetos materiales de su casa.
+                </li>
+            </ul>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-test', 1)">¡Comenzar las Actividades! 🚀</button>
+            </div>
+        </section>
+
+        <!-- 2. TEST (15 PREGUNTAS) -->
+        <section id="sec-test" class="section">
+            <h2>📝 Comprensión Lectora (15 Preguntas)</h2>
+            <p class="subtitle-desc">Responde libremente a las 15 preguntas sobre la película. Puedes cambiar tu elección tantas veces como quieras antes de calcular tu nota.</p>
+            <div id="quiz-container"></div>
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-sopa', 2)">Siguiente: Sopa de Letras 🔍</button>
+            </div>
+        </section>
+
+        <!-- 3. SOPA DE LETRAS INTERACTIVA -->
+        <section id="sec-sopa" class="section">
+            <h2>🔍 Sopa de Letras de Exploradores</h2>
+            <p class="subtitle-desc">Haz clic en las letras para formar las 6 palabras clave de <em>Up</em>. Si te equivocas al marcar una casilla, vuelve a pulsarla para desmarcarla:</p>
+            <div class="sopa-wrapper">
+                <div class="palabras-lista">
+                    <span class="word-tag" id="p-RUSSELL">RUSSELL</span>
+                    <span class="word-tag" id="p-GLOBOS">GLOBOS</span>
+                    <span class="word-tag" id="p-KEVIN">KEVIN</span>
+                    <span class="word-tag" id="p-MUNTZ">MUNTZ</span>
+                    <span class="word-tag" id="p-ELLIE">ELLIE</span>
+                    <span class="word-tag" id="p-COLLAR">COLLAR</span>
+                </div>
+                <div id="sopa-grid"></div>
+            </div>
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-crucigrama', 3)">Siguiente: Crucigrama ✏️</button>
+            </div>
+        </section>
+
+        <!-- 4. CRUCIGRAMA INTERACTIVO DE 8 PALABRAS -->
+        <section id="sec-crucigrama" class="section">
+            <h2>✏️ Crucigrama de Altura (8 Palabras)</h2>
+            <p class="subtitle-desc">Escribe una letra en cada casilla siguiendo las pistas horizontales y verticales. Si haces clic dos veces en una casilla donde se cruzan dos palabras, cambiarás entre horizontal y vertical:</p>
+
+            <div class="crossword-layout">
+                <div class="cw-board-wrap">
+                    <div id="cw-grid" aria-label="Cuadrícula del crucigrama"></div>
+                    <div style="text-align: center;">
+                        <span id="cw-dir-indicator" class="cw-dir-badge">Dirección activa: ➡️ Horizontal</span>
+                    </div>
+                    <div id="cw-status" class="cw-status-msg"></div>
+                    <div class="btn-center-wrap" style="margin-top: 16px;">
+                        <button class="btn-action" style="background: var(--verde); padding: 11px 20px; font-size: 0.95rem;" onclick="comprobarCrucigrama()">✅ Comprobar Crucigrama</button>
+                        <button class="btn-action" style="background: #64748b; padding: 11px 20px; font-size: 0.95rem;" onclick="limpiarCrucigrama()">🗑️ Limpiar</button>
+                    </div>
+                </div>
+
+                <div class="cw-clues">
+                    <div class="cw-clue-card">
+                        <h3>➡️ Horizontales</h3>
+                        <ul class="cw-clue-list">
+                            <li id="clue-1-H" onclick="focusWord(1, 'H')"><strong>1.</strong> Protagonista anciano de la película que ata globos a su casa (4 letras).</li>
+                            <li id="clue-4-H" onclick="focusWord(4, 'H')"><strong>4.</strong> Miles de objetos de colores llenos de helio que elevan la casa (6 letras).</li>
+                            <li id="clue-6-H" onclick="focusWord(6, 'H')"><strong>6.</strong> Ave gigante y muy colorida que conocen en la selva (5 letras).</li>
+                            <li id="clue-7-H" onclick="focusWord(7, 'H')"><strong>7.</strong> Lugar de Sudamérica donde viven Kevin y Dug (5 letras).</li>
+                        </ul>
+                    </div>
+
+                    <div class="cw-clue-card">
+                        <h3>⬇️ Verticales</h3>
+                        <ul class="cw-clue-list">
+                            <li id="clue-2-V" onclick="focusWord(2, 'V')"><strong>2.</strong> Hogar flotante de Carl y Ellie que viaja por el cielo (4 letras).</li>
+                            <li id="clue-3-V" onclick="focusWord(3, 'V')"><strong>3.</strong> Cuaderno de aventuras de Ellie donde guarda sus recuerdos (5 letras).</li>
+                            <li id="clue-5-V" onclick="focusWord(5, 'V')"><strong>5.</strong> Esposa de Carl con quien soñaba viajar a Sudamérica (5 letras).</li>
+                            <li id="clue-8-V" onclick="focusWord(8, 'V')"><strong>8.</strong> Animal que es Dug, capaz de hablar gracias a su collar traductor (5 letras).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-gramatica', 4)">Siguiente: Tipos de Palabras 🅰️</button>
+            </div>
+        </section>
+
+        <!-- 5. GRAMÁTICA (TIPOS DE PALABRAS) -->
+        <section id="sec-gramatica" class="section">
+            <h2>🅰️ Clasifica cada Palabra</h2>
+            <p class="subtitle-desc">Selecciona si cada término extraído de la película es un <strong>Sustantivo</strong>, un <strong>Verbo</strong> o un <strong>Adjetivo</strong>. Puedes rectificar tus respuestas cuando quieras:</p>
+
+            <div class="gram-list" id="gram-container"></div>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-ordenar', 5)">Siguiente: Ordena Oraciones 🧩</button>
+            </div>
+        </section>
+
+        <!-- 6. ORDENAR ORACIONES -->
+        <section id="sec-ordenar" class="section">
+            <h2>🧩 Ordena la Oración</h2>
+            <p class="subtitle-desc">Construye cada frase sobre <em>Up</em> pulsando en las fichas desordenadas. Si te equivocas, pulsa sobre la palabra colocada o usa el botón de borrar:</p>
+
+            <div style="text-align: center; font-weight: 800; color: var(--azul-oscuro); margin-bottom: 14px; font-size: 1.1rem;">
+                Frase <span id="ord-current-idx">1</span> de 4
+            </div>
+
+            <div class="box-oracion" id="drop-oracion"></div>
+            <div class="palabras-oracion" id="words-oracion"></div>
+
+            <div class="btn-center-wrap" style="margin-top: 18px;">
+                <button class="btn-action" style="background: var(--rojo);" onclick="clearOracion()">🗑️ Borrar y rehacer</button>
+                <button class="btn-action" style="background: var(--verde);" id="btn-next-ord" onclick="nextOracion()">Siguiente Frase ⏭️</button>
+            </div>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-escritura', 6)">Siguiente: Taller de Escritura ✍️</button>
+            </div>
+        </section>
+
+        <!-- 7. TALLER DE ESCRITURA -->
+        <section id="sec-escritura" class="section">
+            <h2>✍️ Taller de Escritura y Opinión</h2>
+            <p class="subtitle-desc">Escribe tu nombre y tu reflexión personal sobre la historia de Carl y Russell:</p>
+            <div class="form-group">
+                <label for="alumno-nombre">Nombre y Apellidos del Estudiante:</label>
+                <input type="text" id="alumno-nombre" class="form-control" placeholder="Escribe tu nombre aquí...">
+            </div>
+            <div class="form-group">
+                <label for="alumno-texto">¿Qué mensaje te ha dejado la película o qué nueva aventura imaginas para Carl, Russell, Kevin y Dug?</label>
+                <textarea id="alumno-texto" class="form-control" rows="6" placeholder="Escribe tu redacción aquí..."></textarea>
+            </div>
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="evaluarYVerResultados()" style="background: var(--naranja);">🏆 Finalizar y Ver Resultados</button>
+            </div>
+        </section>
+
+        <!-- 8. RESULTADOS Y PDF -->
+        <section id="sec-eval" class="section">
+            <div class="no-print" style="text-align: center; margin-bottom: 20px;">
+                <button class="btn-action" onclick="evaluarYVerResultados()" style="background: var(--verde);">🔄 Recalcular / Actualizar Evaluación</button>
+            </div>
+
+            <h2>📊 Ficha de Autoevaluación Global</h2>
+            <p class="subtitle-desc">Comprueba tus aciertos en cada actividad y pulsa en los botones rojos si quieres volver atrás para corregir algún fallo y mejorar tu nota:</p>
+
+            <div class="eval-card" id="eval-print-area">
+                <div style="text-align: center; margin-bottom: 14px;">
+                    <h3 style="color: var(--azul-oscuro); font-size: 1.3rem;">Informe de Progreso: Up - Una aventura de altura</h3>
+                    <p style="margin-top: 6px;"><strong>Explorador/a:</strong> <span id="rep-nombre">(No especificado)</span></p>
+                </div>
+
+                <div class="eval-score">
+                    <div style="font-weight: 700; color: #166534;">Puntuación Total Consolidada</div>
+                    <div class="score-val"><span id="rep-nota">0.0</span> <small style="font-size: 1.25rem; color: #64748b;">/ 10</small></div>
+                    <div id="rep-insignia" style="margin-top: 6px; font-weight: 800; color: var(--morado);"></div>
+                </div>
+
+                <div class="feedback-details" id="feedback-container">
+                    <p style="text-align: center; color: #64748b;">Pulsa el botón superior para generar tu informe de corrección.</p>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <strong>Redacción / Reflexión aportada:</strong>
+                    <div id="rep-redaccion" style="margin-top: 8px; background: #f8fafc; padding: 15px; border-radius: 12px; font-style: italic; border: 1px solid #cbd5e1; line-height: 1.6;">(Sin redacción)</div>
+                </div>
+            </div>
+
+            <div class="btn-center-wrap no-print">
+                <button class="btn-action" onclick="window.print();" style="background: var(--naranja);">🖨️ Descargar e Imprimir Evaluación en PDF</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* =========================================================
+           NAVEGACIÓN ENTRE PESTAÑAS
+           ========================================================= */
+        function showTab(id, btnEl) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+
+            if (btnEl) {
+                btnEl.classList.add('active');
+            } else {
+                const btns = document.querySelectorAll('.tab-btn');
+                const tabsMap = {
+                    'sec-lectura': 0,
+                    'sec-test': 1,
+                    'sec-sopa': 2,
+                    'sec-crucigrama': 3,
+                    'sec-gramatica': 4,
+                    'sec-ordenar': 5,
+                    'sec-escritura': 6,
+                    'sec-eval': 7
+                };
+                if (tabsMap[id] !== undefined && btns[tabsMap[id]]) {
+                    btns[tabsMap[id]].classList.add('active');
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goToTab(id, idx) {
+            const btns = document.querySelectorAll('.tab-btn');
+            showTab(id, btns[idx]);
+        }
+
+        /* =========================================================
+           1. TEST DE COMPRENSIÓN LECTORA (15 PREGUNTAS)
+           ========================================================= */
+        const preguntas = [
+            { q: "1. ¿Cómo se llama el protagonista anciano de la película Up?", opts: ["a) Charles Muntz", "b) Russell", "c) Carl Fredricksen", "d) Kevin"], ans: 2 },
+            { q: "2. ¿Qué sueño compartían Carl y su esposa Ellie desde que eran niños?", opts: ["a) Abrir una tienda de globos", "b) Viajar a las Cataratas del Paraíso en Sudamérica", "c) Construir una gran casa en el campo", "d) Convertirse en exploradores famosos"], ans: 1 },
+            { q: "3. ¿Cómo consigue Carl que su casa salga volando?", opts: ["a) Con un motor secreto en el tejado", "b) Con la ayuda de muchos aviones pequeños", "c) Atando miles de globos de colores llenos de helio", "d) Mediante un hechizo mágico"], ans: 2 },
+            { q: "4. ¿Quién es Russell y por qué está en el porche de Carl?", opts: ["a) Un vecino que venía a pedir sal", "b) Un niño explorador que busca conseguir su última insignia de ayuda", "c) El repartidor del periódico", "d) Un niño que pasaba por allí jugando al escondite"], ans: 1 },
+            { q: "5. ¿Cómo se llama el ave gigante y de colores que conocen en la selva?", opts: ["a) Dug", "b) Alpha", "c) Kevin", "d) Ellie"], ans: 2 },
+            { q: "6. ¿Qué característica especial tiene el collar del perro Dug?", opts: ["a) Le da súper velocidad para correr", "b) Traduce sus pensamientos en palabras humanas", "c) Emite luz en la oscuridad", "d) Le permite volar como un pájaro"], ans: 1 },
+            { q: "7. ¿Quién resulta ser el villano principal de la película?", opts: ["a) Charles Muntz, el ídolo de la infancia de Carl", "b) El jefe de la residencia de ancianos", "c) Un cazador furtivo desconocido", "d) El padre de Russell"], ans: 0 },
+            { q: "8. ¿Qué objeto guarda los recuerdos más preciados de la historia de amor entre Carl y Ellie?", opts: ["a) Una caja de zapatos escondida en el desván", "b) Un álbum de fotos familiar", "c) El libro de aventuras de Ellie", "d) Una vieja postal arrugada"], ans: 2 },
+            { q: "9. ¿Por qué quiere Charles Muntz capturar al ave Kevin?", opts: ["a) Para venderla a un zoológico y hacerse millonario", "b) Para demostrar ante el mundo científico que el ave realmente existe y limpiar su reputación", "c) Porque quiere tenerla como mascota en su casa", "d) Porque el ave destruyó su campamento"], ans: 1 },
+            { q: "10. ¿Qué decide hacer Carl con los muebles de su casa al final de la película para poder salvar a sus amigos?", opts: ["a) Los quema para hacer una hoguera", "b) Los regala a los perros malvados", "c) Los tira por la ventana para aligerar peso y volar más rápido", "d) Los esconde en una cueva secreta"], ans: 2 },
+            { q: "11. ¿Qué ocurre finalmente con la casa flotante al final de la aventura?", opts: ["a) Se destruye por completo en una tormenta", "b) Se posa sobre las Cataratas del Paraíso cumpliendo el sueño de Ellie", "c) Se queda atrapada para siempre en el dirigible del villano", "d) Vuelve sola a la ciudad de origen"], ans: 1 },
+            { q: "12. ¿Por qué se muestra a Carl tan enfadado y gruñón al principio de la película?", opts: ["a) Porque odia a todos los niños del vecindario", "b) Porque siente un profundo dolor y soledad tras la pérdida de su esposa Ellie", "c) Porque la música alta de la calle le molesta", "d) Porque no le gusta vivir en la ciudad"], ans: 1 },
+            { q: "13. ¿Por qué Charles Muntz es un ejemplo de lo que no se debe hacer con los sueños?", opts: ["a) Porque sus sueños eran demasiado pequeños", "b) Porque abandonó sus sueños demasiado pronto", "c) Porque su obsesión egoísta hizo que perdiera la empatía y dañara a los demás", "d) Porque no compartió sus descubrimientos con nadie"], ans: 2 },
+            { q: "14. ¿Qué simboliza el desprendimiento de los muebles y objetos de la casa por parte de Carl?", opts: ["a) Que ya no le importaba limpiar la casa", "b) Que las personas y los afectos importan mucho más que los objetos materiales", "c) Que quería construir una casa nueva más moderna", "d) Que tenía demasiadas cosas acumuladas"], ans: 1 },
+            { q: "15. ¿Por qué Dug es rechazado por los demás perros al principio de la historia?", opts: ["a) Porque no sabe ladrar correctamente", "b) Porque es un perro muy agresivo", "c) Porque lo consideran un perro torpe e inferior debido a su bondad", "d) Porque tiene un color de pelo diferente"], ans: 2 }
+        ];
+
+        let userAnswersTest = Array(15).fill(null);
+
+        function renderTest() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            preguntas.forEach((p, qIdx) => {
+                const card = document.createElement('div');
+                card.className = "q-card";
+                card.innerHTML = `<div class="q-title">${p.q}</div>`;
+
+                const optsDiv = document.createElement('div');
+                optsDiv.className = "opts-grid";
+
+                p.opts.forEach((o, oIdx) => {
+                    const btn = document.createElement('button');
+                    btn.className = `opt-btn ${userAnswersTest[qIdx] === oIdx ? 'selected' : ''}`;
+                    btn.innerText = o;
+                    btn.onclick = () => {
+                        if (userAnswersTest[qIdx] === oIdx) {
+                            userAnswersTest[qIdx] = null;
+                            btn.classList.remove('selected');
+                        } else {
+                            userAnswersTest[qIdx] = oIdx;
+                            Array.from(optsDiv.children).forEach(c => c.classList.remove('selected'));
+                            btn.classList.add('selected');
+                        }
+                    };
+                    optsDiv.appendChild(btn);
+                });
+
+                card.appendChild(optsDiv);
+                container.appendChild(card);
+            });
+        }
+
+        /* =========================================================
+           2. SOPA DE LETRAS INTERACTIVA (6 PALABRAS)
+           ========================================================= */
+        const palabrasSopa = ["RUSSELL", "GLOBOS", "KEVIN", "MUNTZ", "ELLIE", "COLLAR"];
+        const filasSopa = 10, colsSopa = 10;
+        let tableroSopa = Array(filasSopa).fill().map(() => Array(colsSopa).fill(''));
+        let coordenadasPalabras = {};
+        let palabrasEncontradasSopa = new Set();
+
+        function generarSopa() {
+            const posiciones = [
+                { word: "RUSSELL", r: 0, c: 1, vert: false },
+                { word: "GLOBOS",  r: 2, c: 0, vert: false },
+                { word: "KEVIN",   r: 4, c: 2, vert: false },
+                { word: "ELLIE",   r: 1, c: 9, vert: true },
+                { word: "MUNTZ",   r: 6, c: 1, vert: false },
+                { word: "COLLAR",  r: 8, c: 3, vert: false }
+            ];
+
+            posiciones.forEach(p => {
+                coordenadasPalabras[p.word] = [];
+                for (let i = 0; i < p.word.length; i++) {
+                    const rr = p.r + (p.vert ? i : 0);
+                    const cc = p.c + (p.vert ? 0 : i);
+                    tableroSopa[rr][cc] = p.word[i];
+                    coordenadasPalabras[p.word].push(`${rr}-${cc}`);
+                }
+            });
+
+            const letras = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+            const sopaGrid = document.getElementById('sopa-grid');
+            sopaGrid.innerHTML = "";
+
+            for (let r = 0; r < filasSopa; r++) {
+                for (let c = 0; c < colsSopa; c++) {
+                    if (tableroSopa[r][c] === '') {
+                        tableroSopa[r][c] = letras[Math.floor(Math.random() * letras.length)];
+                    }
+                    const celda = document.createElement('div');
+                    celda.className = 'celda';
+                    celda.dataset.coord = `${r}-${c}`;
+                    celda.innerText = tableroSopa[r][c];
+                    celda.onclick = function () {
+                        if (this.classList.contains('encontrada')) return;
+                        this.classList.toggle('marcada');
+                        chequearSopa();
+                    };
+                    sopaGrid.appendChild(celda);
+                }
+            }
+        }
+
+        function chequearSopa() {
+            const marcadasSet = new Set();
+            document.querySelectorAll('.celda.marcada').forEach(m => {
+                marcadasSet.add(m.dataset.coord);
+            });
+
+            palabrasSopa.forEach(pal => {
+                if (palabrasEncontradasSopa.has(pal)) return;
+                const coords = coordenadasPalabras[pal];
+                const todasMarcadas = coords.every(coord => marcadasSet.has(coord));
+                if (todasMarcadas) {
+                    palabrasEncontradasSopa.add(pal);
+                    const tagEl = document.getElementById("p-" + pal);
+                    if (tagEl) tagEl.classList.add('found');
+
+                    coords.forEach(coord => {
+                        const cellEl = document.querySelector(`.celda[data-coord="${coord}"]`);
+                        if (cellEl) {
+                            cellEl.classList.remove('marcada');
+                            cellEl.classList.add('encontrada');
+                        }
+                    });
+                }
+            });
+        }
+
+        /* =========================================================
+           3. CRUCIGRAMA INTERACTIVO DE 8 PALABRAS (12x12)
+           Coordenadas exactas verificadas sin adyacencias indebidas:
+           - 1 HORIZONTAL (f1, c1..4):  CARL   -> C(1,1) A(1,2) R(1,3) L(1,4)
+           - 2 VERTICAL   (f0..3, c2):  CASA   -> C(0,2) A(1,2)[cruce CARL] S(2,2) A(3,2)
+           - 3 VERTICAL   (f1..5, c4):  LIBRO  -> L(1,4)[cruce CARL] I(2,4) B(3,4) R(4,4) O(5,4)
+           - 4 HORIZONTAL (f5, c0..5):  GLOBOS -> G(5,0) L(5,1) O(5,2) B(5,3) O(5,4)[cruce LIBRO] S(5,5)
+           - 5 VERTICAL   (f4..8, c1):  ELLIE  -> E(4,1) L(5,1)[cruce GLOBOS] L(6,1) I(7,1) E(8,1)
+           - 6 HORIZONTAL (f8, c0..4):  KEVIN  -> K(8,0) E(8,1)[cruce ELLIE] V(8,2) I(8,3) N(8,4)
+           - 7 HORIZONTAL (f3, c6..10): SELVA  -> S(3,6) E(3,7) L(3,8) V(3,9) A(3,10)
+           - 8 VERTICAL   (f2..6, c7):  PERRO  -> P(2,7) E(3,7)[cruce SELVA] R(4,7) R(5,7) O(6,7)
+           ========================================================= */
+        const crosswordWords = [
+            { num: 1, dir: 'H', word: 'CARL',   r: 1, c: 1 },
+            { num: 2, dir: 'V', word: 'CASA',   r: 0, c: 2 },
+            { num: 3, dir: 'V', word: 'LIBRO',  r: 1, c: 4 },
+            { num: 4, dir: 'H', word: 'GLOBOS', r: 5, c: 0 },
+            { num: 5, dir: 'V', word: 'ELLIE',  r: 4, c: 1 },
+            { num: 6, dir: 'H', word: 'KEVIN',  r: 8, c: 0 },
+            { num: 7, dir: 'H', word: 'SELVA',  r: 3, c: 6 },
+            { num: 8, dir: 'V', word: 'PERRO',  r: 2, c: 7 }
+        ];
+
+        const cwRows = 12;
+        const cwCols = 12;
+        let cwSolutionMap = {}; // "r-c" -> { letter, nums: [], words: [] }
+        let cwCurrentDir = 'H';
+        let cwLastClickedKey = null;
+
+        function updateCwDirectionUI(r, c) {
+            const indicator = document.getElementById('cw-dir-indicator');
+            if (indicator) {
+                indicator.textContent = cwCurrentDir === 'H'
+                    ? 'Dirección activa: ➡️ Horizontal'
+                    : 'Dirección activa: ⬇️ Vertical';
+            }
+
+            document.querySelectorAll('.cw-input').forEach(el => el.classList.remove('cw-active-word'));
+            document.querySelectorAll('.cw-clue-list li').forEach(li => li.classList.remove('active-clue'));
+
+            const cellData = cwSolutionMap[`${r}-${c}`];
+            if (!cellData) return;
+
+            const activeWordObj = cellData.words.find(w => w.dir === cwCurrentDir) || cellData.words[0];
+            if (!activeWordObj) return;
+
+            const clueEl = document.getElementById(`clue-${activeWordObj.num}-${activeWordObj.dir}`);
+            if (clueEl) clueEl.classList.add('active-clue');
+
+            for (let i = 0; i < activeWordObj.word.length; i++) {
+                const rr = activeWordObj.r + (activeWordObj.dir === 'V' ? i : 0);
+                const cc = activeWordObj.c + (activeWordObj.dir === 'H' ? i : 0);
+                const inp = document.querySelector(`.cw-input[data-r="${rr}"][data-c="${cc}"]`);
+                if (inp) inp.classList.add('cw-active-word');
+            }
+        }
+
+        function buildCrossword() {
+            cwSolutionMap = {};
+
+            crosswordWords.forEach(item => {
+                for (let i = 0; i < item.word.length; i++) {
+                    const rr = item.r + (item.dir === 'V' ? i : 0);
+                    const cc = item.c + (item.dir === 'H' ? i : 0);
+                    const key = `${rr}-${cc}`;
+                    if (!cwSolutionMap[key]) {
+                        cwSolutionMap[key] = { letter: item.word[i], nums: [], words: [] };
+                    }
+                    cwSolutionMap[key].words.push(item);
+                    if (i === 0 && !cwSolutionMap[key].nums.includes(item.num)) {
+                        cwSolutionMap[key].nums.push(item.num);
+                    }
+                }
+            });
+
+            const gridEl = document.getElementById('cw-grid');
+            gridEl.innerHTML = '';
+
+            for (let r = 0; r < cwRows; r++) {
+                for (let c = 0; c < cwCols; c++) {
+                    const key = `${r}-${c}`;
+                    const cellData = cwSolutionMap[key];
+
+                    if (!cellData) {
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.className = 'cw-cell-empty';
+                        gridEl.appendChild(emptyDiv);
+                    } else {
+                        const box = document.createElement('div');
+                        box.className = 'cw-cell-box';
+
+                        if (cellData.nums.length > 0) {
+                            const numSpan = document.createElement('span');
+                            numSpan.className = 'cw-num';
+                            numSpan.textContent = cellData.nums.join('/');
+                            box.appendChild(numSpan);
+                        }
+
+                        const inp = document.createElement('input');
+                        inp.type = 'text';
+                        inp.maxLength = 1;
+                        inp.className = 'cw-input';
+                        inp.dataset.r = r;
+                        inp.dataset.c = c;
+                        inp.setAttribute('aria-label', `Fila ${r + 1}, Columna ${c + 1}`);
+
+                        inp.addEventListener('click', () => {
+                            const hasH = cellData.words.some(w => w.dir === 'H');
+                            const hasV = cellData.words.some(w => w.dir === 'V');
+                            if (cwLastClickedKey === key && hasH && hasV) {
+                                cwCurrentDir = cwCurrentDir === 'H' ? 'V' : 'H';
+                            } else if (hasH && !hasV) {
+                                cwCurrentDir = 'H';
+                            } else if (hasV && !hasH) {
+                                cwCurrentDir = 'V';
+                            }
+                            cwLastClickedKey = key;
+                            updateCwDirectionUI(r, c);
+                        });
+
+                        inp.addEventListener('focus', () => {
+                            const hasH = cellData.words.some(w => w.dir === 'H');
+                            const hasV = cellData.words.some(w => w.dir === 'V');
+                            if (hasH && !hasV) cwCurrentDir = 'H';
+                            else if (hasV && !hasH) cwCurrentDir = 'V';
+                            updateCwDirectionUI(r, c);
+                        });
+
+                        inp.addEventListener('input', (e) => {
+                            inp.classList.remove('cw-ok', 'cw-err');
+                            document.getElementById('cw-status').style.display = 'none';
+                            const val = e.target.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ]/g, '').toUpperCase();
+                            e.target.value = val.slice(-1);
+
+                            if (e.target.value) {
+                                moveFocusCw(r, c, 1);
+                            }
+                        });
+
+                        inp.addEventListener('keydown', (e) => {
+                            if (e.key === 'Backspace' && !inp.value) {
+                                e.preventDefault();
+                                moveFocusCw(r, c, -1);
+                            } else if (e.key === 'ArrowRight') {
+                                e.preventDefault();
+                                cwCurrentDir = 'H';
+                                focusCell(r, c + 1);
+                            } else if (e.key === 'ArrowLeft') {
+                                e.preventDefault();
+                                cwCurrentDir = 'H';
+                                focusCell(r, c - 1);
+                            } else if (e.key === 'ArrowDown') {
+                                e.preventDefault();
+                                cwCurrentDir = 'V';
+                                focusCell(r + 1, c);
+                            } else if (e.key === 'ArrowUp') {
+                                e.preventDefault();
+                                cwCurrentDir = 'V';
+                                focusCell(r - 1, c);
+                            }
+                        });
+
+                        box.appendChild(inp);
+                        gridEl.appendChild(box);
+                    }
+                }
+            }
+        }
+
+        function focusCell(r, c) {
+            const target = document.querySelector(`.cw-input[data-r="${r}"][data-c="${c}"]`);
+            if (target) target.focus();
+        }
+
+        function moveFocusCw(r, c, step) {
+            const nr = r + (cwCurrentDir === 'V' ? step : 0);
+            const nc = c + (cwCurrentDir === 'H' ? step : 0);
+            focusCell(nr, nc);
+        }
+
+        function focusWord(num, dir) {
+            const item = crosswordWords.find(w => w.num === num && (!dir || w.dir === dir));
+            if (!item) return;
+            cwCurrentDir = item.dir;
+            cwLastClickedKey = `${item.r}-${item.c}`;
+            focusCell(item.r, item.c);
+            updateCwDirectionUI(item.r, item.c);
+        }
+
+        function normalizeLetter(ch) {
+            return (ch || '')
+                .toUpperCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+        }
+
+        function contarPalabrasCrucigramaCorrectas() {
+            let correctas = 0;
+            crosswordWords.forEach(item => {
+                let palabraUsuario = '';
+                for (let i = 0; i < item.word.length; i++) {
+                    const rr = item.r + (item.dir === 'V' ? i : 0);
+                    const cc = item.c + (item.dir === 'H' ? i : 0);
+                    const inp = document.querySelector(`.cw-input[data-r="${rr}"][data-c="${cc}"]`);
+                    palabraUsuario += normalizeLetter(inp ? inp.value : '');
+                }
+                if (palabraUsuario === item.word) {
+                    correctas++;
+                }
+            });
+            return correctas;
+        }
+
+        function comprobarCrucigrama() {
+            Object.keys(cwSolutionMap).forEach(key => {
+                const [r, c] = key.split('-');
+                const inp = document.querySelector(`.cw-input[data-r="${r}"][data-c="${c}"]`);
+                if (!inp) return;
+                const val = normalizeLetter(inp.value);
+                inp.classList.remove('cw-ok', 'cw-err');
+                if (val === cwSolutionMap[key].letter) {
+                    inp.classList.add('cw-ok');
+                } else if (val !== '') {
+                    inp.classList.add('cw-err');
+                }
+            });
+
+            const aciertos = contarPalabrasCrucigramaCorrectas();
+            const statusEl = document.getElementById('cw-status');
+            statusEl.style.display = 'block';
+            if (aciertos === 8) {
+                statusEl.style.background = '#dcfce7';
+                statusEl.style.color = '#166534';
+                statusEl.textContent = '🎉 ¡Fantástico! Has completado las 8 palabras del crucigrama correctamente.';
+            } else {
+                statusEl.style.background = '#fef9c3';
+                statusEl.style.color = '#854d0e';
+                statusEl.textContent = `🧭 Llevas ${aciertos} de 8 palabras completas. ¡Sigue completando las casillas!`;
+            }
+        }
+
+        function limpiarCrucigrama() {
+            document.querySelectorAll('.cw-input').forEach(inp => {
+                inp.value = '';
+                inp.classList.remove('cw-ok', 'cw-err');
+            });
+            document.getElementById('cw-status').style.display = 'none';
+        }
+
+        /* =========================================================
+           4. GRAMÁTICA: TIPOS DE PALABRAS (12 PALABRAS)
+           ========================================================= */
+        const palabrasGram = [
+            { p: "Carl",         t: "sustantivo" },
+            { p: "Volar",        t: "verbo" },
+            { p: "Valiente",     t: "adjetivo" },
+            { p: "Globo",        t: "sustantivo" },
+            { p: "Explorar",     t: "verbo" },
+            { p: "Cascarrabias", t: "adjetivo" },
+            { p: "Selva",        t: "sustantivo" },
+            { p: "Rescatar",     t: "verbo" },
+            { p: "Gigante",      t: "adjetivo" },
+            { p: "Dirigible",    t: "sustantivo" },
+            { p: "Aterrizar",    t: "verbo" },
+            { p: "Amable",       t: "adjetivo" }
+        ];
+
+        let userGramAnswers = Array(12).fill(null);
+
+        function renderGrammar() {
+            const container = document.getElementById('gram-container');
+            container.innerHTML = "";
+
+            palabrasGram.forEach((item, idx) => {
+                const row = document.createElement('div');
+                row.className = "gram-item";
+
+                const wordLabel = document.createElement('div');
+                wordLabel.className = "gram-word-title";
+                wordLabel.innerText = item.p;
+
+                const btnGroup = document.createElement('div');
+                btnGroup.className = "gram-btn-group";
+
+                const cats = [
+                    { id: "sustantivo", label: "SUSTANTIVO" },
+                    { id: "verbo",      label: "VERBO" },
+                    { id: "adjetivo",   label: "ADJETIVO" }
+                ];
+
+                cats.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = "gram-choice-btn";
+                    if (userGramAnswers[idx] === cat.id) {
+                        btn.classList.add("selected-" + cat.id);
+                    }
+                    btn.innerText = cat.label;
+                    btn.onclick = () => {
+                        if (userGramAnswers[idx] === cat.id) {
+                            userGramAnswers[idx] = null;
+                        } else {
+                            userGramAnswers[idx] = cat.id;
+                        }
+                        renderGrammar();
+                    };
+                    btnGroup.appendChild(btn);
+                });
+
+                row.appendChild(wordLabel);
+                row.appendChild(btnGroup);
+                container.appendChild(row);
+            });
+        }
+
+        /* =========================================================
+           5. ORDENAR ORACIONES (4 FRASES)
+           ========================================================= */
+        const datosOraciones = [
+            {
+                s: "Carl ató miles de globos a su casa.",
+                words: ["Carl", "ató", "miles", "de", "globos", "a", "su", "casa."]
+            },
+            {
+                s: "Russell buscaba conseguir su última insignia de explorador.",
+                words: ["Russell", "buscaba", "conseguir", "su", "última", "insignia", "de", "explorador."]
+            },
+            {
+                s: "El collar de Dug traducía sus pensamientos en palabras.",
+                words: ["El", "collar", "de", "Dug", "traducía", "sus", "pensamientos", "en", "palabras."]
+            },
+            {
+                s: "Las personas importan mucho más que los objetos.",
+                words: ["Las", "personas", "importan", "mucho", "más", "que", "los", "objetos."]
+            }
+        ];
+
+        let ordIdx = 0;
+        let ordUserWords = Array(4).fill().map(() => []);
+        let ordShuffledWords = datosOraciones.map(item => [...item.words].sort(() => Math.random() - 0.5));
+
+        function loadOracion() {
+            document.getElementById('ord-current-idx').innerText = ordIdx + 1;
+            const dropZone = document.getElementById('drop-oracion');
+            const wordsZone = document.getElementById('words-oracion');
+
+            dropZone.innerHTML = "";
+            wordsZone.innerHTML = "";
+
+            ordUserWords[ordIdx].forEach((w, wIdx) => {
+                const chip = document.createElement('button');
+                chip.className = 'chip-palabra';
+                chip.innerText = w;
+                chip.onclick = () => deselectWord(wIdx);
+                dropZone.appendChild(chip);
+            });
+
+            ordShuffledWords[ordIdx].forEach((w) => {
+                const countInUser = ordUserWords[ordIdx].filter(item => item === w).length;
+                const countInOriginal = ordShuffledWords[ordIdx].filter(item => item === w).length;
+
+                const chip = document.createElement('button');
+                chip.className = 'chip-palabra';
+                chip.innerText = w;
+                if (countInUser >= countInOriginal) {
+                    chip.classList.add('usada');
+                } else {
+                    chip.onclick = () => selectWord(w);
+                }
+                wordsZone.appendChild(chip);
+            });
+        }
+
+        function selectWord(w) {
+            ordUserWords[ordIdx].push(w);
+            loadOracion();
+        }
+
+        function deselectWord(wIdx) {
+            ordUserWords[ordIdx].splice(wIdx, 1);
+            loadOracion();
+        }
+
+        function clearOracion() {
+            ordUserWords[ordIdx] = [];
+            loadOracion();
+        }
+
+        function nextOracion() {
+            ordIdx = (ordIdx + 1) % datosOraciones.length;
+            loadOracion();
+        }
+
+        /* =========================================================
+           6. EVALUACIÓN GLOBAL E INFORME DETALLADO CON REINTENTO
+           ========================================================= */
+        function evaluarYVerResultados() {
+            let totalAciertosTest = 0;
+            let feedbackHtml = "";
+
+            // 1. Test (15 preguntas -> 4.0 puntos)
+            preguntas.forEach((p, idx) => {
+                if (userAnswersTest[idx] === p.ans) {
+                    totalAciertosTest++;
+                    feedbackHtml += `<div class="feedback-item correct"><span>✓ Test - Pregunta ${idx + 1}: Correcta</span></div>`;
+                } else {
+                    feedbackHtml += `<div class="feedback-item incorrect">
+                        <span>✗ Test - Pregunta ${idx + 1}: Incorrecta o sin responder</span>
+                        <button class="btn-retry-item" onclick="goToTab('sec-test', 1)">Corregir en Test 📝</button>
+                    </div>`;
+                }
+            });
+
+            // 2. Sopa de Letras (6 palabras -> 1.5 puntos)
+            const totalSopa = palabrasEncontradasSopa.size;
+            if (totalSopa === 6) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Sopa de Letras: ¡6 / 6 palabras encontradas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Sopa de Letras: ${totalSopa} / 6 palabras encontradas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-sopa', 2)">Buscar palabras 🔍</button>
+                </div>`;
+            }
+
+            // 3. Crucigrama (8 palabras -> 1.5 puntos)
+            const totalCrucigrama = contarPalabrasCrucigramaCorrectas();
+            if (totalCrucigrama === 8) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Crucigrama: ¡8 / 8 palabras completadas correctamente!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Crucigrama: ${totalCrucigrama} / 8 palabras correctas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-crucigrama', 3)">Completar crucigrama ✏️</button>
+                </div>`;
+            }
+
+            // 4. Clasificación Gramatical (12 palabras -> 1.5 puntos)
+            let totalGram = 0;
+            palabrasGram.forEach((item, idx) => {
+                if (userGramAnswers[idx] === item.t) {
+                    totalGram++;
+                }
+            });
+
+            if (totalGram === 12) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Tipos de Palabras: ¡12 / 12 palabras clasificadas correctamente!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Tipos de Palabras: ${totalGram} / 12 correctas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-gramatica', 4)">Revisar palabras 🅰️</button>
+                </div>`;
+            }
+
+            // 5. Ordenar Oraciones (4 frases -> 1.5 puntos)
+            let totalOrd = 0;
+            datosOraciones.forEach((item, idx) => {
+                const fraseUsuario = ordUserWords[idx].join(" ");
+                if (fraseUsuario === item.s) {
+                    totalOrd++;
+                }
+            });
+
+            if (totalOrd === 4) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Ordenar Oraciones: ¡4 / 4 frases ordenadas correctamente!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Ordenar Oraciones: ${totalOrd} / 4 frases correctas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-ordenar', 5)">Reordenar frases 🧩</button>
+                </div>`;
+            }
+
+            // Ponderación sobre 10 puntos:
+            // Test (4.0) + Sopa (1.5) + Crucigrama (1.5) + Gramática (1.5) + Ordenar Oraciones (1.5) = 10.0
+            const notaNum = (
+                (totalAciertosTest / 15) * 4.0 +
+                (totalSopa / 6) * 1.5 +
+                (totalCrucigrama / 8) * 1.5 +
+                (totalGram / 12) * 1.5 +
+                (totalOrd / 4) * 1.5
+            );
+            const nota = notaNum.toFixed(1);
+
+            document.getElementById('rep-nota').innerText = nota;
+            document.getElementById('feedback-container').innerHTML = feedbackHtml;
+
+            const insigniaEl = document.getElementById('rep-insignia');
+            if (notaNum >= 8.5) {
+                insigniaEl.innerText = "🏆 ¡Insignia de Explorador Maestro de las Cataratas del Paraíso!";
+            } else if (notaNum >= 6.0) {
+                insigniaEl.innerText = "🎖️ ¡Insignia de Explorador Aventurero! ¡Buen trabajo!";
+            } else {
+                insigniaEl.innerText = "🧭 ¡Insignia de Aprendiz de Explorador! Revisa los fallos en rojo para subir tu nota.";
+            }
+
+            const nombre = document.getElementById('alumno-nombre').value.trim();
+            const texto = document.getElementById('alumno-texto').value.trim();
+            document.getElementById('rep-nombre').innerText = nombre !== "" ? nombre : "(No especificado)";
+            document.getElementById('rep-redaccion').innerText = texto !== "" ? texto : "(Sin redacción)";
+
+            goToTab('sec-eval', 7);
+        }
+
+        /* =========================================================
+           INICIALIZACIÓN AL CARGAR LA PÁGINA
+           ========================================================= */
+        window.onload = () => {
+            renderTest();
+            generarSopa();
+            buildCrossword();
+            renderGrammar();
+            loadOracion();
+        };
+    </script>
+</body>
+</html>
