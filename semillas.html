@@ -983,16 +983,30 @@
 
         <!-- 7. TALLER DE ESCRITURA -->
         <section id="sec-escritura" class="section">
-            <h2>✍️ Taller de Escritura y Reflexión</h2>
-            <p class="subtitle-desc">Escribe tu nombre y tu opinión sobre la historia:</p>
+            <h2>✍️ Taller de Escritura y Reflexión (ODS 1 y ODS 2)</h2>
+            <p class="subtitle-desc">Completa tus datos y responde de forma clara y razonada a las dos partes de este taller de escritura:</p>
+
             <div class="form-group">
-                <label for="alumno-nombre">Nombre y Apellidos:</label>
-                <input type="text" id="alumno-nombre" class="form-control" placeholder="Escribe tu nombre aquí...">
+                <label for="alumno-nombre">👤 Nombre y Apellidos:</label>
+                <input type="text" id="alumno-nombre" class="form-control" placeholder="Escribe tu nombre y apellidos aquí...">
             </div>
+
             <div class="form-group">
-                <label for="alumno-texto">¿Qué te ha enseñado esta historia o qué harías tú para ayudar a los demás?</label>
-                <textarea id="alumno-texto" class="form-control" rows="6" placeholder="Escribe tu redacción aquí..."></textarea>
+                <label for="alumno-texto-historia">📖 1. Reflexión sobre la historia «El secreto del banco de las semillas»:</label>
+                <p style="font-size: 0.92rem; color: #475569; margin-bottom: 8px; line-height: 1.45;">
+                    Explica qué es lo que más te ha llamado la atención del cuento, cómo colaboraron los vecinos de Valleverde y qué enseñanza nos deja sobre compartir sin hacer sentir mal a nadie.
+                </p>
+                <textarea id="alumno-texto-historia" class="form-control" rows="5" placeholder="Escribe aquí tu reflexión sobre la historia..."></textarea>
             </div>
+
+            <div class="form-group">
+                <label for="alumno-texto-ods">🌍 2. Mis acciones para ayudar al ODS 1 (Fin de la pobreza) y al ODS 2 (Hambre cero):</label>
+                <p style="font-size: 0.92rem; color: #475569; margin-bottom: 8px; line-height: 1.45;">
+                    Escribe qué acciones concretas podrías realizar tú en tu casa, en tu colegio o en tu barrio para evitar el desperdicio de alimentos y apoyar a las personas que más lo necesitan.
+                </p>
+                <textarea id="alumno-texto-ods" class="form-control" rows="5" placeholder="Escribe aquí tus ideas y compromisos para ayudar a los ODS 1 y 2..."></textarea>
+            </div>
+
             <div class="btn-center-wrap">
                 <button class="btn-action" onclick="evaluarYVerResultados()" style="background: var(--naranja);">🏆 Finalizar y Ver Resultados</button>
             </div>
@@ -1024,8 +1038,11 @@
                 </div>
 
                 <div style="margin-top: 20px;">
-                    <strong>Redacción / Reflexión aportada:</strong>
-                    <div id="rep-redaccion" style="margin-top: 8px; background: #f8fafc; padding: 15px; border-radius: 12px; font-style: italic; border: 1px solid #cbd5e1; line-height: 1.6;">(Sin redacción)</div>
+                    <strong>📖 1. Reflexión sobre la historia:</strong>
+                    <div id="rep-redaccion-historia" style="margin-top: 8px; margin-bottom: 16px; background: #f8fafc; padding: 15px; border-radius: 12px; font-style: italic; border: 1px solid #cbd5e1; line-height: 1.6;">(Sin respuesta)</div>
+
+                    <strong>🌍 2. Propuestas para ayudar al ODS 1 y ODS 2:</strong>
+                    <div id="rep-redaccion-ods" style="margin-top: 8px; background: #f8fafc; padding: 15px; border-radius: 12px; font-style: italic; border: 1px solid #cbd5e1; line-height: 1.6;">(Sin respuesta)</div>
                 </div>
             </div>
 
@@ -1075,20 +1092,160 @@
            1. TEST DE COMPRENSIÓN LECTORA (14 PREGUNTAS)
            ========================================================= */
         const preguntas = [
-            { cat: "Comprensión literal", cls: "", q: "1. ¿Cómo se llamaba el pueblo de la historia?", opts: ["a) Vallehermoso", "b) Valleverde", "c) Pradoazul", "d) Monteverde"], ans: 1 },
-            { cat: "Comprensión literal", cls: "", q: "2. ¿Qué problemas principales tenían las familias?", opts: ["a) Faltaban parques", "b) Sequía y precios altos", "c) Mucha comida sobrante", "d) Ruina en el molino"], ans: 1 },
-            { cat: "Comprensión literal", cls: "", q: "3. ¿Qué dos ODS escribió la profesora en la pizarra?", opts: ["a) ODS 3 y ODS 4", "b) ODS 13 y ODS 15", "c) ODS 1 y ODS 2", "d) ODS 6 y ODS 7"], ans: 2 },
-            { cat: "Comprensión literal", cls: "", q: "4. ¿Qué propusieron hacer los amigos en el terreno abandonado?", opts: ["a) Un campo de fútbol", "b) Una tienda de juguetes", "c) Un huerto con verduras", "d) Un parque de atracciones"], ans: 2 },
-            { cat: "Comprensión literal", cls: "", q: "5. ¿Qué era el banco de las semillas?", opts: ["a) Un banco de dinero", "b) Un espacio de plantas", "c) Un asiento escolar", "d) Una tienda de ropa"], ans: 1 },
-            { cat: "Comprensión inferencial", cls: "inf", q: "6. ¿Por qué algunas familias pasaban dificultades para conseguir comida?", opts: ["a) No querían verduras", "b) Tiendas cerradas", "c) Falta de recursos", "d) Esperaban verano"], ans: 2 },
-            { cat: "Comprensión inferencial", cls: "inf", q: "7. ¿Por qué la profesora dijo que nadie debía avergonzarse por pedir ayuda?", opts: ["a) Todos podemos necesitar ayuda", "b) No tenía tiempo libre", "c) Se repartía en secreto", "d) Solo entraban niños"], ans: 0 },
-            { cat: "Comprensión inferencial", cls: "inf", q: "8. ¿Para qué servía guardar las semillas de las cosechas?", opts: ["a) Decorar la clase", "b) Plantarlas el año próximo", "c) Atraer más lluvia", "d) Evitar regar"], ans: 1 },
-            { cat: "Comprensión inferencial", cls: "inf", q: "9. ¿Por qué el huerto no solucionó todo el problema de golpe?", opts: ["a) No dio frutos", "b) Vecinos sin verduras", "c) El hambre es un reto complejo", "d) Terreno muy chico"], ans: 2 },
-            { cat: "Comprensión inferencial", cls: "inf", q: "10. ¿Qué significa que las semillas representan la esperanza?", opts: ["a) Crecen árboles mágicos", "b) El trabajo en equipo mejora la vida", "c) Los agricultores mandan", "d) Los deseos se cumplen"], ans: 1 },
-            { cat: "Reflexionamos", cls: "ref", q: "11. ¿Tienen todas las personas las mismas oportunidades de alimentación?", opts: ["a) Sí, en todos lados", "b) No, la pobreza limita el acceso", "c) Sí, todos tienen huerto", "d) No, solo en capitales"], ans: 1 },
-            { cat: "Reflexionamos", cls: "ref", q: "12. ¿Qué harías si alguien de tu entorno necesita ayuda con alimentos?", opts: ["a) Contarlo a todos", "b) Ignorar el problema", "c) Apoyar con respeto", "d) Juzgar la situación"], ans: 2 },
-            { cat: "Reflexionamos", cls: "ref", q: "13. ¿Por qué es importante no desperdiciar comida?", opts: ["a) Malgasta recursos valiosos", "b) Pesa menos la basura", "c) La comida es semilla", "d) Da igual tirar comida"], ans: 0 },
-            { cat: "Reflexionamos", cls: "ref", q: "14. ¿Qué otra iniciativa positiva pondrías en marcha en tu colegio?", opts: ["a) Vender caro", "b) Campañas solidarias", "c) Cerrar el patio", "d) Quitar plantas"], ans: 1 }
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "1. ¿Cómo se llamaba el pueblo donde ocurre la historia?",
+                opts: [
+                    "a) Se llamaba Vallehermoso, un lugar turístico junto a la montaña.",
+                    "b) Se llamaba Valleverde, un pueblo rodeado de campos y huertos.",
+                    "c) Se llamaba Pradoazul, una aldea famosa por sus grandes ríos.",
+                    "d) Se llamaba Monteverde, una ciudad muy grande y con fábricas."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "2. ¿Qué problemas principales sufrían las familias del pueblo?",
+                opts: [
+                    "a) Faltaban parques infantiles y zonas deportivas para jugar.",
+                    "b) Había llovido poco, se perdieron cosechas y subieron los precios.",
+                    "c) Sobraba demasiada comida y no sabían dónde guardarla.",
+                    "d) El antiguo molino se había derrumbado sobre las casas."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "3. ¿Qué dos Objetivos de Desarrollo Sostenible escribió Clara en la pizarra?",
+                opts: [
+                    "a) El ODS 3 (Salud y bienestar) y el ODS 4 (Educación de calidad).",
+                    "b) El ODS 13 (Acción por el clima) y el ODS 15 (Vida terrestre).",
+                    "c) El ODS 1 (Fin de la pobreza) y el ODS 2 (Hambre cero).",
+                    "d) El ODS 6 (Agua limpia) y el ODS 7 (Energía no contaminante)."
+                ],
+                ans: 2
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "4. ¿Qué propusieron hacer los amigos en el terreno abandonado junto al molino?",
+                opts: [
+                    "a) Construir un campo de fútbol para entrenar después de clase.",
+                    "b) Montar un mercadillo de juguetes usados para todo el barrio.",
+                    "c) Crear un huerto comunitario para plantar tomates, lechugas y zanahorias.",
+                    "d) Instalar un parque con columpios y toboganes nuevos."
+                ],
+                ans: 2
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "5. ¿Qué era exactamente el banco de las semillas que crearon?",
+                opts: [
+                    "a) Una oficina bancaria donde guardar los ahorros de las familias.",
+                    "b) Un espacio para guardar, cuidar y compartir semillas de distintas plantas.",
+                    "c) Un banco de madera pintado en el patio del colegio para descansar.",
+                    "d) Una tienda del pueblo dedicada a vender herramientas de jardín."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "6. ¿Por qué algunas familias pasaban dificultades aunque existieran alimentos?",
+                opts: [
+                    "a) Porque a los niños del pueblo no les gustaba comer fruta ni verdura.",
+                    "b) Porque las tiendas del pueblo cerraban durante todo el invierno.",
+                    "c) Porque no tenían suficiente dinero para comprarlos ni medios para cultivarlos.",
+                    "d) Porque preferían esperar a que llegara el verano para ir a comprar."
+                ],
+                ans: 2
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "7. ¿Por qué la profesora Clara dijo que nadie debía avergonzarse al pedir ayuda?",
+                opts: [
+                    "a) Porque cualquiera puede atravesar un mal momento y necesitar apoyo.",
+                    "b) Porque en la despensa no había tiempo para hacer preguntas a nadie.",
+                    "c) Porque los alimentos se repartían de noche y completamente a escondidas.",
+                    "d) Porque solo los alumnos del colegio tenían permiso para entrar allí."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "8. ¿Para qué servía guardar algunas semillas de las primeras cosechas?",
+                opts: [
+                    "a) Para hacer collares y manualidades decorativas en la clase de plástica.",
+                    "b) Para poder volver a plantarlas al año siguiente sin depender de compras.",
+                    "c) Para atraer más nubes de lluvia durante los meses secos de verano.",
+                    "d) Para evitar tener que regar y cuidar las plantas del huerto."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "9. ¿Por qué el huerto del pueblo no solucionó el hambre en todo el mundo de golpe?",
+                opts: [
+                    "a) Porque las plantas del huerto se secaron y apenas dieron frutos.",
+                    "b) Porque los vecinos del pueblo se negaron a compartir sus verduras.",
+                    "c) Porque el hambre mundial es un problema muy grande que requiere esfuerzo global.",
+                    "d) Porque el terreno junto al molino era demasiado pequeño para plantar."
+                ],
+                ans: 2
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "10. ¿Qué simbolizan las semillas al final de esta historia?",
+                opts: [
+                    "a) Que existen plantas mágicas capaces de crecer sin agua ni cuidados.",
+                    "b) La esperanza y la fuerza de colaborar juntos para mejorar la vida.",
+                    "c) Que solo los agricultores expertos pueden resolver los problemas.",
+                    "d) Que basta con pedir un deseo en primavera para que todo cambie."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "11. ¿Tienen todas las personas del mundo las mismas oportunidades de alimentación?",
+                opts: [
+                    "a) Sí, en todos los países la gente tiene acceso fácil a comida sana.",
+                    "b) No, la pobreza y la falta de recursos dificultan que muchas familias coman bien.",
+                    "c) Sí, porque todas las familias disponen de un huerto propio en su casa.",
+                    "d) No, únicamente las personas que viven en grandes capitales tienen comida."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "12. ¿Qué actitud sería la más adecuada si alguien cercano necesita ayuda con alimentos?",
+                opts: [
+                    "a) Contárselo a todo el colegio para que sepan lo que le ocurre.",
+                    "b) Mirar hacia otro lado y hacer como si no pasara absolutamente nada.",
+                    "c) Ofrecer ayuda con discreción, empatía y respeto para que no se sienta mal.",
+                    "d) Criticar su situación y decirle que debería esforzarse mucho más."
+                ],
+                ans: 2
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "13. ¿Por qué es tan importante evitar el desperdicio de comida en casa y en el colegio?",
+                opts: [
+                    "a) Porque tirar comida malgasta agua, trabajo y alimentos que otros necesitan.",
+                    "b) Porque así las bolsas de basura pesan menos al sacarlas a la calle.",
+                    "c) Porque todos los alimentos sobrantes se convierten automáticamente en semillas.",
+                    "d) En realidad da igual tirar comida porque siempre se produce de sobra."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "14. ¿Qué iniciativa solidaria podrías impulsar en tu colegio para apoyar los ODS 1 y 2?",
+                opts: [
+                    "a) Vender los bocadillos del recreo a un precio mucho más caro.",
+                    "b) Organizar un huerto escolar y campañas de recogida solidaria de alimentos.",
+                    "c) Cerrar el patio del colegio para que nadie pueda pisar las plantas.",
+                    "d) Prohibir que los alumnos compartan su almuerzo con los compañeros."
+                ],
+                ans: 1
+            }
         ];
 
         let userAnswersTest = Array(14).fill(null);
@@ -1700,9 +1857,11 @@
             }
 
             const nombre = document.getElementById('alumno-nombre').value.trim();
-            const texto = document.getElementById('alumno-texto').value.trim();
+            const textoHistoria = document.getElementById('alumno-texto-historia').value.trim();
+            const textoOds = document.getElementById('alumno-texto-ods').value.trim();
             document.getElementById('rep-nombre').innerText = nombre !== "" ? nombre : "(No especificado)";
-            document.getElementById('rep-redaccion').innerText = texto !== "" ? texto : "(Sin redacción)";
+            document.getElementById('rep-redaccion-historia').innerText = textoHistoria !== "" ? textoHistoria : "(Sin respuesta)";
+            document.getElementById('rep-redaccion-ods').innerText = textoOds !== "" ? textoOds : "(Sin respuesta)";
 
             goToTab('sec-eval', 7);
         }
