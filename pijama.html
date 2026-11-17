@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El pijama de estrellas y la nueva familia - Lectura y Evaluación Libre</title>
+    <style>
+        /* PALETA DE COLORES INSPIRADA EN EL CUENTO (NOCHE, ESTRELLAS, CALIDEZ Y HOGAR) */
+        :root {
+            --azul-principal: #3b82f6;
+            --azul-oscuro: #1d4ed8;
+            --morado: #6366f1;
+            --naranja: #f59e0b;
+            --verde: #10b981;
+            --verde-oscuro: #059669;
+            --rojo: #ef4444;
+            --amarillo: #facc15;
+            --fondo: #1e1b4b;
+            --texto: #1e293b;
+            --sombra: 0 10px 25px rgba(59, 130, 246, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(180deg, #1e1b4b 0%, #312e81 50%, #e0f2fe 100%);
+            color: var(--texto);
+            padding: 20px 10px 50px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* CABECERA ILUSTRADA */
+        header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #3b82f6 50%, #6366f1 100%);
+            color: white;
+            text-align: center;
+            padding: 28px 20px;
+            border-radius: 24px;
+            box-shadow: var(--sombra);
+            width: 100%;
+            max-width: 960px;
+            margin-bottom: 22px;
+            border: 4px solid rgba(250, 204, 21, 0.5);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(1.7rem, 4vw, 2.5rem);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            font-size: 1.08rem;
+            margin-top: 6px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        /* BARRA DE PESTAÑAS */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 22px;
+            width: 100%;
+            max-width: 960px;
+        }
+
+        .tab-btn {
+            background: white;
+            color: var(--texto);
+            border: 2px solid #cbd5e1;
+            padding: 11px 15px;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--azul-principal);
+            color: var(--azul-oscuro);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--azul-principal);
+            color: white;
+            border-color: var(--azul-oscuro);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+        }
+
+        .tab-btn.btn-eval {
+            background: #fef9c3;
+            border-color: var(--amarillo);
+            color: #b45309;
+        }
+
+        .tab-btn.btn-eval.active {
+            background: var(--naranja);
+            color: white;
+            border-color: #d97706;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .container {
+            background: white;
+            border-radius: 26px;
+            box-shadow: var(--sombra);
+            padding: clamp(20px, 4vw, 38px);
+            width: 100%;
+            max-width: 960px;
+            border-top: 10px solid var(--azul-principal);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.28s ease-in-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--azul-oscuro);
+            font-size: 1.55rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle-desc {
+            margin-bottom: 20px;
+            color: #475569;
+            line-height: 1.55;
+            font-size: 1rem;
+        }
+
+        /* SECCIÓN 1: LECTURA Y RECORDATORIO */
+        .resumen-card {
+            background: #eff6ff;
+            border-left: 6px solid var(--azul-principal);
+            padding: 22px;
+            border-radius: 0 16px 16px 0;
+            margin-bottom: 24px;
+            line-height: 1.75;
+            font-size: 1.03rem;
+        }
+
+        .resumen-card h3 {
+            color: var(--azul-oscuro);
+            margin-top: 16px;
+            margin-bottom: 6px;
+            font-size: 1.15rem;
+        }
+
+        .resumen-card p + p {
+            margin-top: 12px;
+        }
+
+        .puntos-clave {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        @media (min-width: 700px) {
+            .puntos-clave {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .puntos-clave li {
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            line-height: 1.55;
+        }
+
+        .puntos-clave strong {
+            color: var(--morado);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.08rem;
+        }
+
+        /* SECCIÓN 2: TEST */
+        .cat-badge {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin-bottom: 8px;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .cat-badge.inf {
+            background: #eef2ff;
+            color: #4338ca;
+        }
+
+        .cat-badge.ref {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .q-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .q-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--texto);
+        }
+
+        .opts-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .opt-btn {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            padding: 13px 16px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 0.98rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            color: var(--texto);
+        }
+
+        .opt-btn:hover {
+            background: #eff6ff;
+            border-color: var(--azul-principal);
+        }
+
+        .opt-btn.selected {
+            background: #eff6ff;
+            border-color: var(--azul-principal);
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        /* SECCIÓN 3: SOPA DE LETRAS */
+        .sopa-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #sopa-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            max-width: 430px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .celda {
+            aspect-ratio: 1;
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.18s;
+        }
+
+        .celda:hover {
+            border-color: var(--azul-principal);
+            background: #eff6ff;
+        }
+
+        .celda.marcada {
+            background: var(--amarillo);
+            color: #713f12;
+            border-color: #eab308;
+            transform: scale(1.05);
+        }
+
+        .celda.encontrada {
+            background: var(--verde);
+            color: white;
+            border-color: var(--verde-oscuro);
+        }
+
+        .palabras-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .word-tag {
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: #475569;
+            border: 2px solid #cbd5e1;
+            transition: all 0.3s;
+        }
+
+        .word-tag.found {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #86efac;
+            text-decoration: line-through;
+        }
+
+        /* SECCIÓN 4: CRUCIGRAMA (12x12 TOTALMENTE CONECTADO Y NUMERADO EN ORDEN) */
+        .crossword-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+        }
+
+        @media (min-width: 860px) {
+            .crossword-layout {
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+        }
+
+        .cw-board-wrap {
+            width: 100%;
+            max-width: 470px;
+            margin: 0 auto;
+        }
+
+        #cw-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 3px;
+            background: #1e293b;
+            padding: 8px;
+            border-radius: 18px;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+        }
+
+        .cw-cell-empty {
+            aspect-ratio: 1;
+            background: #0f172a;
+            border-radius: 5px;
+        }
+
+        .cw-cell-box {
+            position: relative;
+            aspect-ratio: 1;
+            background: #ffffff;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+        }
+
+        .cw-num {
+            position: absolute;
+            top: 2px;
+            left: 3px;
+            font-size: 0.62rem;
+            font-weight: 900;
+            color: var(--azul-oscuro);
+            line-height: 1;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .cw-input {
+            width: 100%;
+            height: 100%;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            text-align: center;
+            font-size: clamp(0.85rem, 2.1vw, 1.12rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--texto);
+            background: transparent;
+            outline: none;
+            padding-top: 4px;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+
+        .cw-input:focus {
+            border-color: var(--azul-principal);
+            background: #eff6ff;
+        }
+
+        .cw-input.cw-active-word {
+            background: #dbeafe;
+        }
+
+        .cw-input.cw-ok {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #22c55e;
+        }
+
+        .cw-input.cw-err {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #ef4444;
+        }
+
+        .cw-clues {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .cw-clue-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .cw-clue-card h3 {
+            font-size: 1.05rem;
+            color: var(--morado);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .cw-clue-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.94rem;
+            line-height: 1.45;
+        }
+
+        .cw-clue-list li {
+            padding: 9px 12px;
+            border-radius: 10px;
+            background: white;
+            border: 1.5px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cw-clue-list li:hover,
+        .cw-clue-list li.active-clue {
+            border-color: var(--azul-principal);
+            background: #eff6ff;
+        }
+
+        .cw-dir-badge {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--azul-oscuro);
+            background: #eff6ff;
+            padding: 5px 14px;
+            border-radius: 999px;
+        }
+
+        .cw-status-msg {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-align: center;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        /* SECCIÓN 5: GRAMÁTICA */
+        .gram-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .gram-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .gram-item {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .gram-word-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--morado);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .gram-btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .gram-choice-btn {
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            background: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gram-choice-btn:hover {
+            border-color: #94a3b8;
+        }
+
+        .gram-choice-btn.selected-sustantivo {
+            background: #3b82f6;
+            color: white;
+            border-color: #1d4ed8;
+        }
+
+        .gram-choice-btn.selected-verbo {
+            background: #f59e0b;
+            color: white;
+            border-color: #d97706;
+        }
+
+        .gram-choice-btn.selected-adjetivo {
+            background: #6366f1;
+            color: white;
+            border-color: #4f46e5;
+        }
+
+        /* SECCIÓN 6: ORDENAR ORACIONES */
+        .box-oracion {
+            min-height: 82px;
+            border: 3px dashed var(--azul-principal);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            background: #eff6ff;
+        }
+
+        .palabras-oracion {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            background: #f1f5f9;
+            padding: 18px;
+            border-radius: 16px;
+        }
+
+        .chip-palabra {
+            padding: 10px 16px;
+            background: white;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #cbd5e1;
+            font-size: 1.05rem;
+            transition: all 0.18s;
+            color: var(--texto);
+        }
+
+        .chip-palabra:hover {
+            border-color: var(--azul-principal);
+            background: #eff6ff;
+        }
+
+        .chip-palabra.usada {
+            opacity: 0.3;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* SECCIÓN 7: TALLER DE ESCRITURA */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--texto);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            line-height: 1.5;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--azul-principal);
+        }
+
+        /* BOTONES GLOBALES */
+        .btn-action {
+            background: var(--azul-principal);
+            color: white;
+            border: none;
+            padding: 15px 28px;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.22s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-action:hover {
+            background: var(--azul-oscuro);
+            transform: translateY(-2px);
+        }
+
+        .btn-center-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        /* SECCIÓN 8: RESULTADOS Y PDF */
+        .eval-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .eval-score {
+            text-align: center;
+            margin: 18px 0;
+            padding: 22px;
+            background: #f0fdf4;
+            border: 2px solid #bbf7d0;
+            border-radius: 16px;
+        }
+
+        .eval-score .score-val {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--verde-oscuro);
+        }
+
+        .feedback-details {
+            margin-top: 20px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .feedback-item {
+            padding: 11px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-item.correct {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .feedback-item.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-retry-item {
+            background: white;
+            border: 1.5px solid #991b1b;
+            color: #991b1b;
+            padding: 5px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .btn-retry-item:hover {
+            background: #991b1b;
+            color: white;
+        }
+
+        /* IMPRESIÓN / PDF */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            header, .tabs, .btn-action, .btn-retry-item, .no-print {
+                display: none !important;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            .section {
+                display: none !important;
+            }
+            #sec-eval {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>⭐ El pijama de estrellas y la nueva familia</h1>
+        <p>Lectura interactiva, juegos de palabras y autoevaluación basada en el cuento</p>
+    </header>
+
+    <!-- NAVEGACIÓN POR PESTAÑAS -->
+    <nav class="tabs" aria-label="Actividades educativas">
+        <button class="tab-btn active" onclick="showTab('sec-lectura', this)">📖 Lectura</button>
+        <button class="tab-btn" onclick="showTab('sec-test', this)">📝 Test (14 Preguntas)</button>
+        <button class="tab-btn" onclick="showTab('sec-sopa', this)">🔍 Sopa de Letras</button>
+        <button class="tab-btn" onclick="showTab('sec-crucigrama', this)">✏️ Crucigrama (8 Palabras)</button>
+        <button class="tab-btn" onclick="showTab('sec-gramatica', this)">🅰️ Tipos de Palabras</button>
+        <button class="tab-btn" onclick="showTab('sec-ordenar', this)">🧩 Ordena Oraciones</button>
+        <button class="tab-btn" onclick="showTab('sec-escritura', this)">✍️ Taller de Escritura</button>
+        <button class="tab-btn btn-eval" onclick="showTab('sec-eval', this)">📊 Resultados y PDF</button>
+    </nav>
+
+    <main class="container">
+
+        <!-- 1. LECTURA -->
+        <section id="sec-lectura" class="section active">
+            <h2>⭐ El pijama de estrellas y la nueva familia</h2>
+            <p class="subtitle-desc">Una historia sobre la acogida, el cariño incondicional y la seguridad de tener un hogar. Lee el cuento con atención antes de empezar los retos:</p>
+
+            <div class="resumen-card">
+                <p>En las afueras de la ciudad se encontraba <strong>La Casa de Chocolate</strong>, un centro de acogida donde vivían treinta niños y niñas que esperaban encontrar una familia. De todos ellos cuidaba <strong>Clara</strong>, una mujer de gran corazón que siempre llevaba chocolatinas en los bolsillos para consolar a quien lo necesitara.</p>
+                <p>Entre los niños estaban <strong>Leo</strong>, un chico muy activo al que le encantaban las aventuras, y su mejor amiga <strong>Sara</strong>, una niña de ocho años muy avispada.</p>
+                <p>Aunque en La Casa de Chocolate celebraban cumpleaños y jugaban mucho, cuando llegaba la noche todos compartían un mismo deseo: <strong>encontrar una familia de verdad</strong>. Alguien que te quisiera tal y como eres, que te abrazara cuando estuvieras triste y te hiciera sentir seguro todos los días.</p>
+                <p>Se acercaba el 20 de noviembre, el <strong>Día del Pijama</strong>, y decidieron celebrarlo por todo lo alto. Todos acudieron con sus pijamas favoritos. Leo apareció con un pijama azul oscuro cubierto de pequeñas estrellas amarillas.</p>
+                <p>—¡Mirad! ¡Hoy llevo el cielo puesto! —gritó dando vueltas.<br>
+                —Pues pide un deseo a alguna estrella —le dijo Sara.<br>
+                —¡Ya sé qué voy a pedir! ¡Encontrar una familia que me quiera!</p>
+                <p>Clara les recordó que el pijama representaba el calor de un hogar y la tranquilidad de saber que alguien te espera al final del día, porque todos los niños merecen crecer seguros y queridos.</p>
+
+                <h3>La llegada de Carmen</h3>
+                <p>Unos días después llegó <strong>Carmen</strong>, una señora con una sonrisa amable que deseaba adoptar y formar una familia. Desde el primer momento conectó con Leo. Jugaron, merendaron y descubrieron que se llevaban genial. Carmen supo enseguida que quería que Leo formara parte de su vida. ¡Su sueño estaba a punto de cumplirse!</p>
+                <p>Sin embargo, la noche antes de marcharse, Leo sintió miedo. Se metió en la cama con su pijama de estrellas y pensó:<br>
+                <em>«¿Y si Carmen descubre que a veces me porto mal o si me pongo pesado? ¿Y si deja de quererme?»</em></p>
+                <p>Una lágrima resbaló por su mejilla. Clara se sentó a su lado y le acarició el pelo:<br>
+                —Escúchame, Leo. <strong>No tienes que ser perfecto para que alguien te quiera.</strong> Las familias no están hechas de personas perfectas, sino de personas que se cuidan y se apoyan. Habrá días buenos y otros no tanto, pero eso no significa que vayan a dejar de quererte.</p>
+                <p>Leo sonrió, se tranquilizó y se quedó dormido.</p>
+
+                <h3>Un nuevo comienzo</h3>
+                <p>A la mañana siguiente, Carmen lo esperaba junto al coche con una sorpresa: un perrito que movía la cola sin parar al que Leo decidió llamar <strong>Caramelo</strong>.</p>
+                <p>Antes de irse, Leo corrió a despedirse de su amiga Sara. Se abrazaron con fuerza y prometieron escribirse y contarse todo. Clara, con los ojos brillantes, le dio una gran noticia a Sara: alguien llamado <strong>Mateo</strong>, al que le encantaba escribir historias, estaba deseando conocerla. Quizá su propia aventura también iba a comenzar muy pronto.</p>
+                <p>Leo subió al coche junto a Carmen y Caramelo. Desde la ventanilla agitó la mano mientras Clara y Sara se despedían. En su mochila, guardado con cuidado, viajaba su pijama de estrellas.</p>
+                <p>Y en ese momento lo comprendió: <strong>no tenía que ser perfecto para merecer aquel cariño. Bastaba con ser él mismo.</strong></p>
+                <p>Porque todos los niños y niñas merecen un hogar donde sentirse seguros. Un lugar donde ponerse el pijama cada noche, cerrar los ojos y saber que alguien estará allí por la mañana esperándote. Un lugar al que llamar casa.</p>
+            </div>
+
+            <ul class="puntos-clave">
+                <li>
+                    <strong>🍫 La Casa de Chocolate:</strong>
+                    Un centro de acogida lleno de cariño donde Clara cuidaba de treinta niños y niñas.
+                </li>
+                <li>
+                    <strong>⭐ El Día del Pijama:</strong>
+                    Celebrado el 20 de noviembre para representar el calor de un hogar y la seguridad que todo niño merece.
+                </li>
+                <li>
+                    <strong>🐶 La nueva familia:</strong>
+                    Carmen adoptó a Leo, quien llegó acompañado de su nuevo perrito Caramelo.
+                </li>
+                <li>
+                    <strong>💡 El gran mensaje:</strong>
+                    No hace falta ser perfecto para que te quieran; basta con ser uno mismo y sentirse seguro.
+                </li>
+            </ul>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-test', 1)">¡Comenzar las Actividades! 🚀</button>
+            </div>
+        </section>
+
+        <!-- 2. TEST (14 PREGUNTAS CON OPCIONES EXTENSAS Y COMPLETAS) -->
+        <section id="sec-test" class="section">
+            <h2>📝 Comprensión Lectora y Reflexión (14 Preguntas)</h2>
+            <p class="subtitle-desc">Elige la respuesta correcta para cada pregunta. Lee con atención todas las opciones antes de decidir:</p>
+            <div id="quiz-container"></div>
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-sopa', 2)">Siguiente: Sopa de Letras 🔍</button>
+            </div>
+        </section>
+
+        <!-- 3. SOPA DE LETRAS INTERACTIVA -->
+        <section id="sec-sopa" class="section">
+            <h2>🔍 Sopa de Letras del Cuento</h2>
+            <p class="subtitle-desc">Haz clic en las letras para encontrar las 6 palabras clave del cuento. Si te equivocas, vuelve a pulsar la casilla para desmarcarla:</p>
+            <div class="sopa-wrapper">
+                <div class="palabras-lista">
+                    <span class="word-tag" id="p-PIJAMA">PIJAMA</span>
+                    <span class="word-tag" id="p-CHOCOLATE">CHOCOLATE</span>
+                    <span class="word-tag" id="p-ESTRELLAS">ESTRELLAS</span>
+                    <span class="word-tag" id="p-CARAMELO">CARAMELO</span>
+                    <span class="word-tag" id="p-FAMILIA">FAMILIA</span>
+                    <span class="word-tag" id="p-MOCHILA">MOCHILA</span>
+                </div>
+                <div id="sopa-grid"></div>
+            </div>
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-crucigrama', 3)">Siguiente: Crucigrama ✏️</button>
+            </div>
+        </section>
+
+        <!-- 4. CRUCIGRAMA INTERACTIVO (12x12) - PALABRAS DEL CUENTO (EXCLUYENDO NOMBRES) -->
+        <section id="sec-crucigrama" class="section">
+            <h2>✏️ Crucigrama del Cuento (8 Palabras)</h2>
+            <p class="subtitle-desc">Escribe una letra en cada casilla siguiendo las pistas. Todas las palabras están cruzadas entre sí y corresponden a elementos del cuento (sin nombres propios). Si haces clic dos veces en una casilla de cruce, cambiarás entre horizontal y vertical:</p>
+
+            <div class="crossword-layout">
+                <div class="cw-board-wrap">
+                    <div id="cw-grid" aria-label="Cuadrícula del crucigrama"></div>
+                    <div style="text-align: center;">
+                        <span id="cw-dir-indicator" class="cw-dir-badge">Dirección activa: ➡️ Horizontal</span>
+                    </div>
+                    <div id="cw-status" class="cw-status-msg"></div>
+                    <div class="btn-center-wrap" style="margin-top: 16px;">
+                        <button class="btn-action" style="background: var(--verde); padding: 11px 20px; font-size: 0.95rem;" onclick="comprobarCrucigrama()">✅ Comprobar Crucigrama</button>
+                        <button class="btn-action" style="background: #64748b; padding: 11px 20px; font-size: 0.95rem;" onclick="limpiarCrucigrama()">🗑️ Limpiar</button>
+                    </div>
+                </div>
+
+                <div class="cw-clues">
+                    <div class="cw-clue-card">
+                        <h3>➡️ Horizontales</h3>
+                        <ul class="cw-clue-list">
+                            <li id="clue-1-H" onclick="focusWord(1, 'H')"><strong>1.</strong> Sentimiento que tuvo Leo la noche antes de irse por pensar que dejarían de quererlo (5 letras).</li>
+                            <li id="clue-3-H" onclick="focusWord(3, 'H')"><strong>3.</strong> Lugar seguro al que llamar casa donde alguien te espera al despertar (5 letras).</li>
+                            <li id="clue-4-H" onclick="focusWord(4, 'H')"><strong>4.</strong> Dulce nombre que recibió el perrito que movía la cola sin parar (8 letras).</li>
+                            <li id="clue-6-H" onclick="focusWord(6, 'H')"><strong>6.</strong> Pequeños astros amarillos que cubrían el pijama azul oscuro (9 letras).</li>
+                            <li id="clue-7-H" onclick="focusWord(7, 'H')"><strong>7.</strong> Prenda cómoda de dormir protagonista de la celebración del 20 de noviembre (6 letras).</li>
+                        </ul>
+                    </div>
+
+                    <div class="cw-clue-card">
+                        <h3>⬇️ Verticales</h3>
+                        <ul class="cw-clue-list">
+                            <li id="clue-1-V" onclick="focusWord(1, 'V')"><strong>1.</strong> Objeto donde Leo guardó con cuidado su pijama antes de marcharse (7 letras).</li>
+                            <li id="clue-2-V" onclick="focusWord(2, 'V')"><strong>2.</strong> Dulces que Clara llevaba siempre en los bolsillos para consolar a los niños (9 letras).</li>
+                            <li id="clue-5-V" onclick="focusWord(5, 'V')"><strong>5.</strong> Personas que se quieren, se cuidan y se apoyan formando un hogar (7 letras).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-gramatica', 4)">Siguiente: Tipos de Palabras 🅰️</button>
+            </div>
+        </section>
+
+        <!-- 5. GRAMÁTICA (SIN SECUENCIA REPETITIVA) -->
+        <section id="sec-gramatica" class="section">
+            <h2>🅰️ Clasifica cada Palabra</h2>
+            <p class="subtitle-desc">Selecciona si cada término del cuento es un <strong>Sustantivo</strong>, un <strong>Verbo</strong> o un <strong>Adjetivo</strong>:</p>
+
+            <div class="gram-list" id="gram-container"></div>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-ordenar', 5)">Siguiente: Ordena Oraciones 🧩</button>
+            </div>
+        </section>
+
+        <!-- 6. ORDENAR ORACIONES -->
+        <section id="sec-ordenar" class="section">
+            <h2>🧩 Ordena la Oración</h2>
+            <p class="subtitle-desc">Construye frases clave del cuento pulsando sobre las fichas desordenadas en orden correcto:</p>
+
+            <div style="text-align: center; font-weight: 800; color: var(--azul-oscuro); margin-bottom: 14px; font-size: 1.1rem;">
+                Frase <span id="ord-current-idx">1</span> de 4
+            </div>
+
+            <div class="box-oracion" id="drop-oracion"></div>
+            <div class="palabras-oracion" id="words-oracion"></div>
+
+            <div class="btn-center-wrap" style="margin-top: 18px;">
+                <button class="btn-action" style="background: var(--rojo);" onclick="clearOracion()">🗑️ Borrar y rehacer</button>
+                <button class="btn-action" style="background: var(--verde);" id="btn-next-ord" onclick="nextOracion()">Siguiente Frase ⏭️</button>
+            </div>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-escritura', 6)">Siguiente: Taller de Escritura ✍️</button>
+            </div>
+        </section>
+
+        <!-- 7. TALLER DE ESCRITURA -->
+        <section id="sec-escritura" class="section">
+            <h2>✍️ Taller de Escritura y Reflexión</h2>
+            <p class="subtitle-desc">Completa tus datos y responde a las dos partes de este taller de escritura basado en el cuento:</p>
+
+            <div class="form-group">
+                <label for="alumno-nombre">👤 Nombre y Apellidos:</label>
+                <input type="text" id="alumno-nombre" class="form-control" placeholder="Escribe tu nombre y apellidos aquí...">
+            </div>
+
+            <div class="form-group">
+                <label for="alumno-texto-historia">📖 1. Reflexión sobre la historia «El pijama de estrellas y la nueva familia»:</label>
+                <p style="font-size: 0.92rem; color: #475569; margin-bottom: 8px; line-height: 1.45;">
+                    Explica qué es lo que más te ha emocionado del cuento, cómo se sentía Leo antes de marchar y qué le enseñó Clara sobre el amor en las familias.
+                </p>
+                <textarea id="alumno-texto-historia" class="form-control" rows="5" placeholder="Escribe aquí tu reflexión sobre la historia..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="alumno-texto-ods">🏡 2. Mis ideas sobre el derecho a un hogar seguro y el apoyo a los demás:</label>
+                <p style="font-size: 0.92rem; color: #475569; margin-bottom: 8px; line-height: 1.45;">
+                    Escribe qué crees que podemos hacer en nuestro entorno para que todos los niños y niñas se sientan queridos, seguros y acompañados.
+                </p>
+                <textarea id="alumno-texto-ods" class="form-control" rows="5" placeholder="Escribe aquí tus ideas y compromisos..."></textarea>
+            </div>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="evaluarYVerResultados()" style="background: var(--naranja);">🏆 Finalizar y Ver Resultados</button>
+            </div>
+        </section>
+
+        <!-- 8. RESULTADOS Y PDF -->
+        <section id="sec-eval" class="section">
+            <div class="no-print" style="text-align: center; margin-bottom: 20px;">
+                <button class="btn-action" onclick="evaluarYVerResultados()" style="background: var(--verde);">🔄 Actualizar Evaluación</button>
+            </div>
+
+            <h2>📊 Ficha de Autoevaluación Global</h2>
+            <p class="subtitle-desc">Comprueba tus aciertos y usa los botones rojos si necesitas volver atrás para corregir:</p>
+
+            <div class="eval-card" id="eval-print-area">
+                <div style="text-align: center; margin-bottom: 14px;">
+                    <h3 style="color: var(--azul-oscuro); font-size: 1.3rem;">Informe de Progreso: El pijama de estrellas y la nueva familia</h3>
+                    <p style="margin-top: 6px;"><strong>Estudiante:</strong> <span id="rep-nombre">(No especificado)</span></p>
+                </div>
+
+                <div class="eval-score">
+                    <div style="font-weight: 700; color: #166534;">Puntuación Total Consolidada</div>
+                    <div class="score-val"><span id="rep-nota">0.0</span> <small style="font-size: 1.25rem; color: #64748b;">/ 10</small></div>
+                    <div id="rep-insignia" style="margin-top: 6px; font-weight: 800; color: var(--morado);"></div>
+                </div>
+
+                <div class="feedback-details" id="feedback-container">
+                    <p style="text-align: center; color: #64748b;">Pulsa el botón superior para generar tu informe de corrección.</p>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <strong>📖 1. Reflexión sobre la historia:</strong>
+                    <div id="rep-redaccion-historia" style="margin-top: 8px; margin-bottom: 16px; background: #f8fafc; padding: 15px; border-radius: 12px; font-style: italic; border: 1px solid #cbd5e1; line-height: 1.6;">(Sin respuesta)</div>
+
+                    <strong>🏡 2. Propuestas sobre el hogar y la acogida:</strong>
+                    <div id="rep-redaccion-ods" style="margin-top: 8px; background: #f8fafc; padding: 15px; border-radius: 12px; font-style: italic; border: 1px solid #cbd5e1; line-height: 1.6;">(Sin respuesta)</div>
+                </div>
+            </div>
+
+            <div class="btn-center-wrap no-print">
+                <button class="btn-action" onclick="window.print();" style="background: var(--naranja);">🖨️ Descargar e Imprimir Evaluación en PDF</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* =========================================================
+           NAVEGACIÓN ENTRE PESTAÑAS
+           ========================================================= */
+        function showTab(id, btnEl) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+
+            if (btnEl) {
+                btnEl.classList.add('active');
+            } else {
+                const btns = document.querySelectorAll('.tab-btn');
+                const tabsMap = {
+                    'sec-lectura': 0,
+                    'sec-test': 1,
+                    'sec-sopa': 2,
+                    'sec-crucigrama': 3,
+                    'sec-gramatica': 4,
+                    'sec-ordenar': 5,
+                    'sec-escritura': 6,
+                    'sec-eval': 7
+                };
+                if (tabsMap[id] !== undefined && btns[tabsMap[id]]) {
+                    btns[tabsMap[id]].classList.add('active');
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goToTab(id, idx) {
+            const btns = document.querySelectorAll('.tab-btn');
+            showTab(id, btns[idx]);
+        }
+
+        /* =========================================================
+           1. TEST DE COMPRENSIÓN LECTORA (14 PREGUNTAS EXTENSAS)
+           ========================================================= */
+        const preguntas = [
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "1. ¿Cómo se llamaba el centro de acogida donde vivían los treinta niños y niñas?",
+                opts: [
+                    "a) Se llamaba La Casa de Chocolate, un lugar situado en las afueras de la ciudad.",
+                    "b) Se llamaba El Hogar de las Estrellas, una residencia situada junto a la montaña.",
+                    "c) Se llamaba La Colina de los Dulces, un colegio internado en el centro del pueblo.",
+                    "d) Se llamaba El Refugio del Pijama, una casa de vacaciones cerca de la playa."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "2. ¿Qué llevaba siempre Clara en los bolsillos para consolar a quien lo necesitara?",
+                opts: [
+                    "a) Llevaba pequeñas estrellas brillantes recortadas en cartulina amarilla.",
+                    "b) Llevaba siempre chocolatinas para animar y consolar a los niños.",
+                    "c) Llevaba caramelos de menta y galletas caseras recién horneadas.",
+                    "d) Llevaba cuentos ilustrados en miniatura para leer antes de dormir."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "3. ¿Qué fecha importante se acercaba y qué evento celebraron por todo lo alto?",
+                opts: [
+                    "a) Se acercaba el 31 de octubre y celebraron una fiesta de disfraces de otoño.",
+                    "b) Se acercaba el 25 de diciembre y celebraron la llegada de la Navidad.",
+                    "c) Se acercaba el 20 de noviembre y celebraron el Día del Pijama.",
+                    "d) Se acercaba el 1 de junio y celebraron el comienzo de las vacaciones de verano."
+                ],
+                ans: 2
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "4. ¿Cómo era el pijama favorito con el que apareció Leo aquel día especial?",
+                opts: [
+                    "a) Era un pijama rojo de cuadros blancos con botones muy grandes.",
+                    "b) Era un pijama azul oscuro cubierto de pequeñas estrellas amarillas.",
+                    "c) Era un pijama verde claro con dibujos de perritos juguetones.",
+                    "d) Era un pijama amarillo brillante decorado con lunas plateadas."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "5. ¿Cómo se llamaba la señora de sonrisa amable que acudió a adoptar a Leo?",
+                opts: [
+                    "a) Se llamaba Clara, la cuidadora que trabajaba en el centro de acogida.",
+                    "b) Se llamaba Sara, la mejor amiga de ocho años con la que jugaba Leo.",
+                    "c) Se llamaba Carmen, una mujer que deseaba adoptar y formar una familia.",
+                    "d) Se llamaba Mateo, una persona a la que le encantaba escribir historias."
+                ],
+                ans: 2
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "6. ¿Qué simbolizaba el pijama según lo que Clara les recordó a todos los niños?",
+                opts: [
+                    "a) Representaba la obligación de acostarse muy temprano todas las noches.",
+                    "b) Representaba el calor de un hogar y la tranquilidad de saber que alguien te espera.",
+                    "c) Representaba la llegada del frío del invierno y la necesidad de abrigarse.",
+                    "d) Representaba una norma de uniformidad para todos los residentes del centro."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "7. ¿Por qué sintió miedo Leo y lloró la noche antes de marcharse con Carmen?",
+                opts: [
+                    "a) Porque tenía miedo de dormir solo en una habitación desconocida y oscura.",
+                    "b) Porque temía que si a veces se portaba mal o se ponía pesado dejaran de quererlo.",
+                    "c) Porque no quería separarse del perrito que había conocido esa misma tarde.",
+                    "d) Porque prefería quedarse a vivir para siempre en La Casa de Chocolate con Sara."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "8. ¿Qué enseñanza fundamental le transmitió Clara a Leo para calmar su temor?",
+                opts: [
+                    "a) Que las familias no están hechas de personas perfectas, sino de personas que se cuidan y se apoyan.",
+                    "b) Que si se esforzaba mucho lograría portarse bien todos los días sin equivocarse.",
+                    "c) Que las familias adoptivas nunca tienen días difíciles ni problemas cotidianos.",
+                    "d) Que debía ocultar sus emociones para que Carmen estuviera siempre contenta."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "9. ¿Qué sorpresa encontró Leo junto al coche a la mañana siguiente al salir del centro?",
+                opts: [
+                    "a) Una maleta llena de juguetes nuevos y cajas de chocolatinas de colores.",
+                    "b) Un perrito que movía la cola sin parar al que Leo decidió llamar Caramelo.",
+                    "c) Una fiesta sorpresa organizada por sus compañeros en el jardín de la entrada.",
+                    "d) Una bicicleta azul con estrellas amarillas pintadas en el manillar."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "10. ¿Qué ilusionante noticia le dio Clara a Sara mientras despedían a Leo?",
+                opts: [
+                    "a) Que Carmen iba a regresar la semana siguiente para adoptarla a ella también.",
+                    "b) Que alguien llamado Mateo, aficionado a escribir historias, estaba deseando conocerla.",
+                    "c) Que iban a organizar una excursión en tren para visitar a Leo en su nueva casa.",
+                    "d) Que pronto celebrarían otra fiesta de pijamas con todos los niños del barrio."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "11. ¿Por qué es fundamental que todos los niños y niñas puedan crecer en una familia segura?",
+                opts: [
+                    "a) Porque así pueden recibir muchos regalos y juguetes durante todo el año.",
+                    "b) Porque todo niño merece sentirse querido, protegido y acompañado cada día.",
+                    "c) Porque de ese modo no tienen que cumplir horarios ni responsabilidades diarias.",
+                    "d) Porque vivir en una casa grande es lo único que garantiza ser feliz."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "12. ¿Qué nos enseña la frase «No tienes que ser perfecto para que alguien te quiera»?",
+                opts: [
+                    "a) Que no importa cómo tratemos a las personas que conviven con nosotros.",
+                    "b) Que el cariño auténtico acepta a cada persona tal y como es, con sus aciertos y errores.",
+                    "c) Que las personas que cometen errores nunca necesitan pedir disculpas.",
+                    "d) Que es imposible mejorar nuestra forma de actuar cuando nos equivocamos."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "13. ¿Cuál es la mejor forma de apoyar a un amigo o compañero que tiene miedo o está triste?",
+                opts: [
+                    "a) Dejarlo solo sin decirle nada para que resuelva sus preocupaciones por su cuenta.",
+                    "b) Escucharlo con cariño, acompañarlo y recordarle que puede contar con nuestro apoyo.",
+                    "c) Hacer bromas sobre lo que le preocupa para intentar que se olvide del tema.",
+                    "d) Decirle que no tiene motivos para llorar y que debe mostrarse siempre fuerte."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "14. ¿Qué significado especial tiene que Leo guardara con cuidado su pijama de estrellas en la mochila?",
+                opts: [
+                    "a) Representa el recuerdo de su deseo cumplido y la seguridad de tener por fin un hogar al que llamar casa.",
+                    "b) Significa que no tenía otra ropa limpia para ponerse durante el viaje en coche.",
+                    "c) Demuestra que pensaba regalarle el pijama a su nuevo perrito Caramelo al llegar.",
+                    "d) Indica que echaba de menos las chocolatinas que Clara guardaba en sus bolsillos."
+                ],
+                ans: 0
+            }
+        ];
+
+        let userAnswersTest = Array(14).fill(null);
+
+        function renderTest() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            preguntas.forEach((p, qIdx) => {
+                const card = document.createElement('div');
+                card.className = "q-card";
+                card.innerHTML = `
+                    <span class="cat-badge ${p.cls}">${p.cat}</span>
+                    <div class="q-title">${p.q}</div>
+                `;
+
+                const optsDiv = document.createElement('div');
+                optsDiv.className = "opts-grid";
+
+                p.opts.forEach((o, oIdx) => {
+                    const btn = document.createElement('button');
+                    btn.className = `opt-btn ${userAnswersTest[qIdx] === oIdx ? 'selected' : ''}`;
+                    btn.innerText = o;
+                    btn.onclick = () => {
+                        if (userAnswersTest[qIdx] === oIdx) {
+                            userAnswersTest[qIdx] = null;
+                            btn.classList.remove('selected');
+                        } else {
+                            userAnswersTest[qIdx] = oIdx;
+                            Array.from(optsDiv.children).forEach(c => c.classList.remove('selected'));
+                            btn.classList.add('selected');
+                        }
+                    };
+                    optsDiv.appendChild(btn);
+                });
+
+                card.appendChild(optsDiv);
+                container.appendChild(card);
+            });
+        }
+
+        /* =========================================================
+           2. SOPA DE LETRAS INTERACTIVA (SIN COLISIONES ENTRE PALABRAS)
+           ========================================================= */
+        const palabrasSopa = ["PIJAMA", "CHOCOLATE", "ESTRELLAS", "CARAMELO", "FAMILIA", "MOCHILA"];
+        const filasSopa = 10, colsSopa = 10;
+        let tableroSopa = Array(filasSopa).fill().map(() => Array(colsSopa).fill(''));
+        let coordenadasPalabras = {};
+        let palabrasEncontradasSopa = new Set();
+
+        function generarSopa() {
+            const posiciones = [
+                { word: "PIJAMA",    r: 0, c: 2, vert: false },
+                { word: "CHOCOLATE", r: 1, c: 0, vert: false },
+                { word: "ESTRELLAS", r: 3, c: 0, vert: false },
+                { word: "CARAMELO",  r: 1, c: 9, vert: true  },
+                { word: "FAMILIA",   r: 5, c: 1, vert: false },
+                { word: "MOCHILA",   r: 8, c: 1, vert: false }
+            ];
+
+            posiciones.forEach(p => {
+                coordenadasPalabras[p.word] = [];
+                for (let i = 0; i < p.word.length; i++) {
+                    const rr = p.r + (p.vert ? i : 0);
+                    const cc = p.c + (p.vert ? 0 : i);
+                    tableroSopa[rr][cc] = p.word[i];
+                    coordenadasPalabras[p.word].push(`${rr}-${cc}`);
+                }
+            });
+
+            const letras = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+            const sopaGrid = document.getElementById('sopa-grid');
+            sopaGrid.innerHTML = "";
+
+            for (let r = 0; r < filasSopa; r++) {
+                for (let c = 0; c < colsSopa; c++) {
+                    if (tableroSopa[r][c] === '') {
+                        tableroSopa[r][c] = letras[Math.floor(Math.random() * letras.length)];
+                    }
+                    const celda = document.createElement('div');
+                    celda.className = 'celda';
+                    celda.dataset.coord = `${r}-${c}`;
+                    celda.innerText = tableroSopa[r][c];
+                    celda.onclick = function () {
+                        if (this.classList.contains('encontrada')) return;
+                        this.classList.toggle('marcada');
+                        chequearSopa();
+                    };
+                    sopaGrid.appendChild(celda);
+                }
+            }
+        }
+
+        function chequearSopa() {
+            const marcadasSet = new Set();
+            document.querySelectorAll('.celda.marcada').forEach(m => {
+                marcadasSet.add(m.dataset.coord);
+            });
+
+            palabrasSopa.forEach(pal => {
+                if (palabrasEncontradasSopa.has(pal)) return;
+                const coords = coordenadasPalabras[pal];
+                const todasMarcadas = coords.every(coord => marcadasSet.has(coord));
+                if (todasMarcadas) {
+                    palabrasEncontradasSopa.add(pal);
+                    const tagEl = document.getElementById("p-" + pal);
+                    if (tagEl) tagEl.classList.add('found');
+
+                    coords.forEach(coord => {
+                        const cellEl = document.querySelector(`.celda[data-coord="${coord}"]`);
+                        if (cellEl) {
+                            cellEl.classList.remove('marcada');
+                            cellEl.classList.add('encontrada');
+                        }
+                    });
+                }
+            });
+        }
+
+        /* =========================================================
+           3. CRUCIGRAMA INTERACTIVO (12x12) - 100% CONECTADO Y VERIFICADO
+           ========================================================= */
+        const crosswordWords = [
+            { num: 1, dir: 'H', word: 'MIEDO',     r: 0,  c: 0 },
+            { num: 1, dir: 'V', word: 'MOCHILA',   r: 0,  c: 0 },
+            { num: 2, dir: 'V', word: 'CHOCOLATE', r: 0,  c: 7 },
+            { num: 3, dir: 'H', word: 'HOGAR',     r: 1,  c: 7 },
+            { num: 4, dir: 'H', word: 'CARAMELO',  r: 2,  c: 0 },
+            { num: 5, dir: 'V', word: 'FAMILIA',   r: 4,  c: 9 },
+            { num: 6, dir: 'H', word: 'ESTRELLAS', r: 5,  c: 2 },
+            { num: 7, dir: 'H', word: 'PIJAMA',    r: 10, c: 4 }
+        ];
+
+        const cwRows = 12;
+        const cwCols = 12;
+        let cwSolutionMap = {};
+        let cwCurrentDir = 'H';
+        let cwLastClickedKey = null;
+
+        function updateCwDirectionUI(r, c) {
+            const indicator = document.getElementById('cw-dir-indicator');
+            if (indicator) {
+                indicator.textContent = cwCurrentDir === 'H'
+                    ? 'Dirección activa: ➡️ Horizontal'
+                    : 'Dirección activa: ⬇️ Vertical';
+            }
+
+            document.querySelectorAll('.cw-input').forEach(el => el.classList.remove('cw-active-word'));
+            document.querySelectorAll('.cw-clue-list li').forEach(li => li.classList.remove('active-clue'));
+
+            const cellData = cwSolutionMap[`${r}-${c}`];
+            if (!cellData) return;
+
+            const activeWordObj = cellData.words.find(w => w.dir === cwCurrentDir) || cellData.words[0];
+            if (!activeWordObj) return;
+
+            const clueEl = document.getElementById(`clue-${activeWordObj.num}-${activeWordObj.dir}`);
+            if (clueEl) clueEl.classList.add('active-clue');
+
+            for (let i = 0; i < activeWordObj.word.length; i++) {
+                const rr = activeWordObj.r + (activeWordObj.dir === 'V' ? i : 0);
+                const cc = activeWordObj.c + (activeWordObj.dir === 'H' ? i : 0);
+                const inp = document.querySelector(`.cw-input[data-r="${rr}"][data-c="${cc}"]`);
+                if (inp) inp.classList.add('cw-active-word');
+            }
+        }
+
+        function buildCrossword() {
+            cwSolutionMap = {};
+
+            crosswordWords.forEach(item => {
+                for (let i = 0; i < item.word.length; i++) {
+                    const rr = item.r + (item.dir === 'V' ? i : 0);
+                    const cc = item.c + (item.dir === 'H' ? i : 0);
+                    const key = `${rr}-${cc}`;
+                    if (!cwSolutionMap[key]) {
+                        cwSolutionMap[key] = { letter: item.word[i], nums: [], words: [] };
+                    }
+                    cwSolutionMap[key].words.push(item);
+                    if (i === 0 && !cwSolutionMap[key].nums.includes(item.num)) {
+                        cwSolutionMap[key].nums.push(item.num);
+                    }
+                }
+            });
+
+            const gridEl = document.getElementById('cw-grid');
+            gridEl.innerHTML = '';
+
+            for (let r = 0; r < cwRows; r++) {
+                for (let c = 0; c < cwCols; c++) {
+                    const key = `${r}-${c}`;
+                    const cellData = cwSolutionMap[key];
+
+                    if (!cellData) {
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.className = 'cw-cell-empty';
+                        gridEl.appendChild(emptyDiv);
+                    } else {
+                        const box = document.createElement('div');
+                        box.className = 'cw-cell-box';
+
+                        if (cellData.nums.length > 0) {
+                            const numSpan = document.createElement('span');
+                            numSpan.className = 'cw-num';
+                            numSpan.textContent = cellData.nums.join('/');
+                            box.appendChild(numSpan);
+                        }
+
+                        const inp = document.createElement('input');
+                        inp.type = 'text';
+                        inp.maxLength = 1;
+                        inp.className = 'cw-input';
+                        inp.dataset.r = r;
+                        inp.dataset.c = c;
+                        inp.setAttribute('aria-label', `Fila ${r + 1}, Columna ${c + 1}`);
+
+                        inp.addEventListener('click', () => {
+                            const hasH = cellData.words.some(w => w.dir === 'H');
+                            const hasV = cellData.words.some(w => w.dir === 'V');
+                            if (cwLastClickedKey === key && hasH && hasV) {
+                                cwCurrentDir = cwCurrentDir === 'H' ? 'V' : 'H';
+                            } else if (hasH && !hasV) {
+                                cwCurrentDir = 'H';
+                            } else if (hasV && !hasH) {
+                                cwCurrentDir = 'V';
+                            }
+                            cwLastClickedKey = key;
+                            updateCwDirectionUI(r, c);
+                        });
+
+                        inp.addEventListener('focus', () => {
+                            const hasH = cellData.words.some(w => w.dir === 'H');
+                            const hasV = cellData.words.some(w => w.dir === 'V');
+                            if (hasH && !hasV) cwCurrentDir = 'H';
+                            else if (hasV && !hasH) cwCurrentDir = 'V';
+                            updateCwDirectionUI(r, c);
+                        });
+
+                        inp.addEventListener('input', (e) => {
+                            inp.classList.remove('cw-ok', 'cw-err');
+                            document.getElementById('cw-status').style.display = 'none';
+                            const val = e.target.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ]/g, '').toUpperCase();
+                            e.target.value = val.slice(-1);
+
+                            if (e.target.value) {
+                                moveFocusCw(r, c, 1);
+                            }
+                        });
+
+                        inp.addEventListener('keydown', (e) => {
+                            if (e.key === 'Backspace' && !inp.value) {
+                                e.preventDefault();
+                                moveFocusCw(r, c, -1);
+                            } else if (e.key === 'ArrowRight') {
+                                e.preventDefault();
+                                cwCurrentDir = 'H';
+                                focusCell(r, c + 1);
+                            } else if (e.key === 'ArrowLeft') {
+                                e.preventDefault();
+                                cwCurrentDir = 'H';
+                                focusCell(r, c - 1);
+                            } else if (e.key === 'ArrowDown') {
+                                e.preventDefault();
+                                cwCurrentDir = 'V';
+                                focusCell(r + 1, c);
+                            } else if (e.key === 'ArrowUp') {
+                                e.preventDefault();
+                                cwCurrentDir = 'V';
+                                focusCell(r - 1, c);
+                            }
+                        });
+
+                        box.appendChild(inp);
+                        gridEl.appendChild(box);
+                    }
+                }
+            }
+        }
+
+        function focusCell(r, c) {
+            const target = document.querySelector(`.cw-input[data-r="${r}"][data-c="${c}"]`);
+            if (target) target.focus();
+        }
+
+        function moveFocusCw(r, c, step) {
+            const nr = r + (cwCurrentDir === 'V' ? step : 0);
+            const nc = c + (cwCurrentDir === 'H' ? step : 0);
+            focusCell(nr, nc);
+        }
+
+        function focusWord(num, dir) {
+            const item = crosswordWords.find(w => w.num === num && (!dir || w.dir === dir));
+            if (!item) return;
+            cwCurrentDir = item.dir;
+            cwLastClickedKey = `${item.r}-${item.c}`;
+            focusCell(item.r, item.c);
+            updateCwDirectionUI(item.r, item.c);
+        }
+
+        function normalizeLetter(ch) {
+            return (ch || '')
+                .toUpperCase()
+                .normalize("NFD")
+                .replace(/[̀-ͯ]/g, "");
+        }
+
+        function contarPalabrasCrucigramaCorrectas() {
+            let correctas = 0;
+            crosswordWords.forEach(item => {
+                let palabraUsuario = '';
+                for (let i = 0; i < item.word.length; i++) {
+                    const rr = item.r + (item.dir === 'V' ? i : 0);
+                    const cc = item.c + (item.dir === 'H' ? i : 0);
+                    const inp = document.querySelector(`.cw-input[data-r="${rr}"][data-c="${cc}"]`);
+                    palabraUsuario += normalizeLetter(inp ? inp.value : '');
+                }
+                if (palabraUsuario === item.word) {
+                    correctas++;
+                }
+            });
+            return correctas;
+        }
+
+        function comprobarCrucigrama() {
+            Object.keys(cwSolutionMap).forEach(key => {
+                const [r, c] = key.split('-');
+                const inp = document.querySelector(`.cw-input[data-r="${r}"][data-c="${c}"]`);
+                if (!inp) return;
+                const val = normalizeLetter(inp.value);
+                inp.classList.remove('cw-ok', 'cw-err');
+                if (val === cwSolutionMap[key].letter) {
+                    inp.classList.add('cw-ok');
+                } else if (val !== '') {
+                    inp.classList.add('cw-err');
+                }
+            });
+
+            const aciertos = contarPalabrasCrucigramaCorrectas();
+            const statusEl = document.getElementById('cw-status');
+            statusEl.style.display = 'block';
+            if (aciertos === 8) {
+                statusEl.style.background = '#dcfce7';
+                statusEl.style.color = '#166534';
+                statusEl.textContent = '🎉 ¡Fantástico! Has completado las 8 palabras del crucigrama correctamente.';
+            } else {
+                statusEl.style.background = '#fef9c3';
+                statusEl.style.color = '#854d0e';
+                statusEl.textContent = `⭐ Llevas ${aciertos} de 8 palabras correctas. ¡Sigue completando!`;
+            }
+        }
+
+        function limpiarCrucigrama() {
+            document.querySelectorAll('.cw-input').forEach(inp => {
+                inp.value = '';
+                inp.classList.remove('cw-ok', 'cw-err');
+            });
+            document.getElementById('cw-status').style.display = 'none';
+        }
+
+        /* =========================================================
+           4. GRAMÁTICA (ORDEN VARIADO SIN SECUENCIA REPETITIVA)
+           ========================================================= */
+        const palabrasGram = [
+            { p: "Abrazar",      t: "verbo" },
+            { p: "Pijama",       t: "sustantivo" },
+            { p: "Perfecto",     t: "adjetivo" },
+            { p: "Amable",       t: "adjetivo" },
+            { p: "Adoptar",      t: "verbo" },
+            { p: "Estrella",     t: "sustantivo" },
+            { p: "Familia",      t: "sustantivo" },
+            { p: "Seguro",       t: "adjetivo" },
+            { p: "Sonreír",      t: "verbo" },
+            { p: "Mochila",      t: "sustantivo" },
+            { p: "Comprender",   t: "verbo" },
+            { p: "Chocolate",    t: "sustantivo" }
+        ];
+
+        let userGramAnswers = Array(12).fill(null);
+
+        function renderGrammar() {
+            const container = document.getElementById('gram-container');
+            container.innerHTML = "";
+
+            palabrasGram.forEach((item, idx) => {
+                const row = document.createElement('div');
+                row.className = "gram-item";
+
+                const wordLabel = document.createElement('div');
+                wordLabel.className = "gram-word-title";
+                wordLabel.innerText = item.p;
+
+                const btnGroup = document.createElement('div');
+                btnGroup.className = "gram-btn-group";
+
+                const cats = [
+                    { id: "sustantivo", label: "SUSTANTIVO" },
+                    { id: "verbo",      label: "VERBO" },
+                    { id: "adjetivo",   label: "ADJETIVO" }
+                ];
+
+                cats.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = "gram-choice-btn";
+                    if (userGramAnswers[idx] === cat.id) {
+                        btn.classList.add("selected-" + cat.id);
+                    }
+                    btn.innerText = cat.label;
+                    btn.onclick = () => {
+                        if (userGramAnswers[idx] === cat.id) {
+                            userGramAnswers[idx] = null;
+                        } else {
+                            userGramAnswers[idx] = cat.id;
+                        }
+                        renderGrammar();
+                    };
+                    btnGroup.appendChild(btn);
+                });
+
+                row.appendChild(wordLabel);
+                row.appendChild(btnGroup);
+                container.appendChild(row);
+            });
+        }
+
+        /* =========================================================
+           5. ORDENAR ORACIONES
+           ========================================================= */
+        const datosOraciones = [
+            {
+                s: "No tienes que ser perfecto para que alguien te quiera.",
+                words: ["No", "tienes", "que", "ser", "perfecto", "para", "que", "alguien", "te", "quiera."]
+            },
+            {
+                s: "El pijama representa el calor de un hogar seguro.",
+                words: ["El", "pijama", "representa", "el", "calor", "de", "un", "hogar", "seguro."]
+            },
+            {
+                s: "Las familias están hechas de personas que se apoyan.",
+                words: ["Las", "familias", "están", "hechas", "de", "personas", "que", "se", "apoyan."]
+            },
+            {
+                s: "Todos los niños merecen un lugar al que llamar casa.",
+                words: ["Todos", "los", "niños", "merecen", "un", "lugar", "al", "que", "llamar", "casa."]
+            }
+        ];
+
+        let ordIdx = 0;
+        let ordUserWords = Array(4).fill().map(() => []);
+        let ordShuffledWords = datosOraciones.map(item => [...item.words].sort(() => Math.random() - 0.5));
+
+        function loadOracion() {
+            document.getElementById('ord-current-idx').innerText = ordIdx + 1;
+            const dropZone = document.getElementById('drop-oracion');
+            const wordsZone = document.getElementById('words-oracion');
+
+            dropZone.innerHTML = "";
+            wordsZone.innerHTML = "";
+
+            ordUserWords[ordIdx].forEach((w, wIdx) => {
+                const chip = document.createElement('button');
+                chip.className = 'chip-palabra';
+                chip.innerText = w;
+                chip.onclick = () => deselectWord(wIdx);
+                dropZone.appendChild(chip);
+            });
+
+            ordShuffledWords[ordIdx].forEach((w) => {
+                const countInUser = ordUserWords[ordIdx].filter(item => item === w).length;
+                const countInOriginal = ordShuffledWords[ordIdx].filter(item => item === w).length;
+
+                const chip = document.createElement('button');
+                chip.className = 'chip-palabra';
+                chip.innerText = w;
+                if (countInUser >= countInOriginal) {
+                    chip.classList.add('usada');
+                } else {
+                    chip.onclick = () => selectWord(w);
+                }
+                wordsZone.appendChild(chip);
+            });
+        }
+
+        function selectWord(w) {
+            ordUserWords[ordIdx].push(w);
+            loadOracion();
+        }
+
+        function deselectWord(wIdx) {
+            ordUserWords[ordIdx].splice(wIdx, 1);
+            loadOracion();
+        }
+
+        function clearOracion() {
+            ordUserWords[ordIdx] = [];
+            loadOracion();
+        }
+
+        function nextOracion() {
+            ordIdx = (ordIdx + 1) % datosOraciones.length;
+            loadOracion();
+        }
+
+        /* =========================================================
+           6. EVALUACIÓN GLOBAL E INFORME DETALLADO
+           ========================================================= */
+        function evaluarYVerResultados() {
+            let totalAciertosTest = 0;
+            let feedbackHtml = "";
+
+            preguntas.forEach((p, idx) => {
+                if (userAnswersTest[idx] === p.ans) {
+                    totalAciertosTest++;
+                    feedbackHtml += `<div class="feedback-item correct"><span>✓ Test - Pregunta ${idx + 1}: Correcta</span></div>`;
+                } else {
+                    feedbackHtml += `<div class="feedback-item incorrect">
+                        <span>✗ Test - Pregunta ${idx + 1}: Incorrecta o sin responder</span>
+                        <button class="btn-retry-item" onclick="goToTab('sec-test', 1)">Corregir en Test 📝</button>
+                    </div>`;
+                }
+            });
+
+            const totalSopa = palabrasEncontradasSopa.size;
+            if (totalSopa === 6) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Sopa de Letras: ¡6 / 6 palabras encontradas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Sopa de Letras: ${totalSopa} / 6 palabras encontradas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-sopa', 2)">Buscar palabras 🔍</button>
+                </div>`;
+            }
+
+            const totalCrucigrama = contarPalabrasCrucigramaCorrectas();
+            if (totalCrucigrama === 8) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Crucigrama: ¡8 / 8 palabras completadas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Crucigrama: ${totalCrucigrama} / 8 palabras correctas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-crucigrama', 3)">Completar crucigrama ✏️</button>
+                </div>`;
+            }
+
+            let totalGram = 0;
+            palabrasGram.forEach((item, idx) => {
+                if (userGramAnswers[idx] === item.t) totalGram++;
+            });
+
+            if (totalGram === 12) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Tipos de Palabras: ¡12 / 12 correctas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Tipos de Palabras: ${totalGram} / 12 correctas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-gramatica', 4)">Revisar palabras 🅰️</button>
+                </div>`;
+            }
+
+            let totalOrd = 0;
+            datosOraciones.forEach((item, idx) => {
+                if (ordUserWords[idx].join(" ") === item.s) totalOrd++;
+            });
+
+            if (totalOrd === 4) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Ordenar Oraciones: ¡4 / 4 frases correctas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Ordenar Oraciones: ${totalOrd} / 4 frases correctas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-ordenar', 5)">Reordenar frases 🧩</button>
+                </div>`;
+            }
+
+            const notaNum = (
+                (totalAciertosTest / 14) * 4.0 +
+                (totalSopa / 6) * 1.5 +
+                (totalCrucigrama / 8) * 1.5 +
+                (totalGram / 12) * 1.5 +
+                (totalOrd / 4) * 1.5
+            );
+            const nota = notaNum.toFixed(1);
+
+            document.getElementById('rep-nota').innerText = nota;
+            document.getElementById('feedback-container').innerHTML = feedbackHtml;
+
+            const insigniaEl = document.getElementById('rep-insignia');
+            if (notaNum >= 8.5) {
+                insigniaEl.innerText = "🏆 ¡Insignia de Lector Estrella del Cuento!";
+            } else if (notaNum >= 6.0) {
+                insigniaEl.innerText = "🎖️ ¡Insignia de Amigo de la Familia! ¡Muy bien!";
+            } else {
+                insigniaEl.innerText = "⭐ ¡Insignia de Explorador del Hogar! Revisa los fallos para mejorar.";
+            }
+
+            const nombre = document.getElementById('alumno-nombre').value.trim();
+            const textoHistoria = document.getElementById('alumno-texto-historia').value.trim();
+            const textoOds = document.getElementById('alumno-texto-ods').value.trim();
+            document.getElementById('rep-nombre').innerText = nombre !== "" ? nombre : "(No especificado)";
+            document.getElementById('rep-redaccion-historia').innerText = textoHistoria !== "" ? textoHistoria : "(Sin respuesta)";
+            document.getElementById('rep-redaccion-ods').innerText = textoOds !== "" ? textoOds : "(Sin respuesta)";
+
+            goToTab('sec-eval', 7);
+        }
+
+        /* =========================================================
+           INICIALIZACIÓN
+           ========================================================= */
+        window.onload = () => {
+            renderTest();
+            generarSopa();
+            buildCrossword();
+            renderGrammar();
+            loadOracion();
+        };
+    </script>
+</body>
+</html>
