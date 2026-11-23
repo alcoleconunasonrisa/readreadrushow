@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El lado que no se publica - Lectura y Evaluación Libre</title>
+    <style>
+        /* PALETA DE COLORES INSPIRADA EN EL CÓMIC (LILA, MORADO, AMARILLO Y BRILLO) */
+        :root {
+            --morado-principal: #7e22ce;
+            --morado-oscuro: #581c87;
+            --lila: #a855f7;
+            --naranja: #f59e0b;
+            --verde: #10b981;
+            --verde-oscuro: #059669;
+            --rojo: #ef4444;
+            --amarillo: #facc15;
+            --fondo: #3b0764;
+            --texto: #1e293b;
+            --sombra: 0 10px 25px rgba(126, 34, 206, 0.16);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(180deg, #3b0764 0%, #6b21a8 50%, #faf5ff 100%);
+            color: var(--texto);
+            padding: 20px 10px 50px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* CABECERA ILUSTRADA */
+        header {
+            background: linear-gradient(135deg, #4c1d95 0%, #7e22ce 50%, #a855f7 100%);
+            color: white;
+            text-align: center;
+            padding: 28px 20px;
+            border-radius: 24px;
+            box-shadow: var(--sombra);
+            width: 100%;
+            max-width: 960px;
+            margin-bottom: 22px;
+            border: 4px solid rgba(250, 204, 21, 0.65);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(1.7rem, 4vw, 2.5rem);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.35);
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            font-size: 1.08rem;
+            margin-top: 6px;
+            opacity: 0.96;
+            font-weight: 500;
+        }
+
+        /* BARRA DE PESTAÑAS */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 22px;
+            width: 100%;
+            max-width: 960px;
+        }
+
+        .tab-btn {
+            background: white;
+            color: var(--texto);
+            border: 2px solid #cbd5e1;
+            padding: 11px 15px;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--morado-principal);
+            color: var(--morado-oscuro);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--morado-principal);
+            color: white;
+            border-color: var(--morado-oscuro);
+            box-shadow: 0 4px 12px rgba(126, 34, 206, 0.35);
+        }
+
+        .tab-btn.btn-eval {
+            background: #fef9c3;
+            border-color: var(--amarillo);
+            color: #b45309;
+        }
+
+        .tab-btn.btn-eval.active {
+            background: var(--naranja);
+            color: white;
+            border-color: #d97706;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .container {
+            background: white;
+            border-radius: 26px;
+            box-shadow: var(--sombra);
+            padding: clamp(20px, 4vw, 38px);
+            width: 100%;
+            max-width: 960px;
+            border-top: 10px solid var(--morado-principal);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.28s ease-in-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--morado-oscuro);
+            font-size: 1.55rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle-desc {
+            margin-bottom: 20px;
+            color: #475569;
+            line-height: 1.55;
+            font-size: 1rem;
+        }
+
+        /* SECCIÓN 1: LECTURA Y RECORDATORIO */
+        .comic-banner {
+            background: #faf5ff;
+            border: 3px solid #d8b4fe;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 22px;
+            text-align: center;
+        }
+
+        .comic-banner img {
+            width: 100%;
+            max-width: 820px;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(88, 28, 135, 0.15);
+        }
+
+        .comic-caption {
+            margin-top: 10px;
+            font-size: 0.92rem;
+            color: #6b21a8;
+            font-weight: 600;
+        }
+
+        .resumen-card {
+            background: #faf5ff;
+            border-left: 6px solid var(--morado-principal);
+            padding: 22px;
+            border-radius: 0 16px 16px 0;
+            margin-bottom: 24px;
+            line-height: 1.75;
+            font-size: 1.03rem;
+        }
+
+        .resumen-card h3 {
+            color: var(--morado-oscuro);
+            margin-top: 16px;
+            margin-bottom: 6px;
+            font-size: 1.15rem;
+        }
+
+        .resumen-card p + p {
+            margin-top: 12px;
+        }
+
+        .puntos-clave {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        @media (min-width: 700px) {
+            .puntos-clave {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .puntos-clave li {
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            line-height: 1.55;
+        }
+
+        .puntos-clave strong {
+            color: var(--morado-principal);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.08rem;
+        }
+
+        /* SECCIÓN 2: TEST */
+        .cat-badge {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin-bottom: 8px;
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
+
+        .cat-badge.inf {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .cat-badge.ref {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .q-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .q-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--texto);
+        }
+
+        .opts-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .opt-btn {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            padding: 13px 16px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 0.98rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            color: var(--texto);
+        }
+
+        .opt-btn:hover {
+            background: #faf5ff;
+            border-color: var(--morado-principal);
+        }
+
+        .opt-btn.selected {
+            background: #f3e8ff;
+            border-color: var(--morado-principal);
+            color: #581c87;
+            font-weight: 700;
+        }
+
+        /* SECCIÓN 3: SOPA DE LETRAS */
+        .sopa-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #sopa-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            max-width: 430px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .celda {
+            aspect-ratio: 1;
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.18s;
+        }
+
+        .celda:hover {
+            border-color: var(--morado-principal);
+            background: #faf5ff;
+        }
+
+        .celda.marcada {
+            background: var(--amarillo);
+            color: #713f12;
+            border-color: #eab308;
+            transform: scale(1.05);
+        }
+
+        .celda.encontrada {
+            background: var(--verde);
+            color: white;
+            border-color: var(--verde-oscuro);
+        }
+
+        .palabras-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .word-tag {
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: #475569;
+            border: 2px solid #cbd5e1;
+            transition: all 0.3s;
+        }
+
+        .word-tag.found {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #86efac;
+            text-decoration: line-through;
+        }
+
+        /* SECCIÓN 4: CRUCIGRAMA (12x12 TOTALMENTE CONECTADO Y NUMERADO EN ORDEN) */
+        .crossword-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+        }
+
+        @media (min-width: 860px) {
+            .crossword-layout {
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+        }
+
+        .cw-board-wrap {
+            width: 100%;
+            max-width: 470px;
+            margin: 0 auto;
+        }
+
+        #cw-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 3px;
+            background: #1e293b;
+            padding: 8px;
+            border-radius: 18px;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+        }
+
+        .cw-cell-empty {
+            aspect-ratio: 1;
+            background: #0f172a;
+            border-radius: 5px;
+        }
+
+        .cw-cell-box {
+            position: relative;
+            aspect-ratio: 1;
+            background: #ffffff;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+        }
+
+        .cw-num {
+            position: absolute;
+            top: 2px;
+            left: 3px;
+            font-size: 0.62rem;
+            font-weight: 900;
+            color: var(--morado-oscuro);
+            line-height: 1;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .cw-input {
+            width: 100%;
+            height: 100%;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            text-align: center;
+            font-size: clamp(0.85rem, 2.1vw, 1.12rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--texto);
+            background: transparent;
+            outline: none;
+            padding-top: 4px;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+
+        .cw-input:focus {
+            border-color: var(--morado-principal);
+            background: #faf5ff;
+        }
+
+        .cw-input.cw-active-word {
+            background: #f3e8ff;
+        }
+
+        .cw-input.cw-ok {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #22c55e;
+        }
+
+        .cw-input.cw-err {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #ef4444;
+        }
+
+        .cw-clues {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .cw-clue-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .cw-clue-card h3 {
+            font-size: 1.05rem;
+            color: var(--morado-principal);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .cw-clue-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.94rem;
+            line-height: 1.45;
+        }
+
+        .cw-clue-list li {
+            padding: 9px 12px;
+            border-radius: 10px;
+            background: white;
+            border: 1.5px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cw-clue-list li:hover,
+        .cw-clue-list li.active-clue {
+            border-color: var(--morado-principal);
+            background: #faf5ff;
+        }
+
+        .cw-dir-badge {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--morado-oscuro);
+            background: #f3e8ff;
+            padding: 5px 14px;
+            border-radius: 999px;
+        }
+
+        .cw-status-msg {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-align: center;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        /* SECCIÓN 5: GRAMÁTICA */
+        .gram-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .gram-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .gram-item {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .gram-word-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--morado-principal);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .gram-btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .gram-choice-btn {
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            background: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gram-choice-btn:hover {
+            border-color: #94a3b8;
+        }
+
+        .gram-choice-btn.selected-sustantivo {
+            background: #7e22ce;
+            color: white;
+            border-color: #581c87;
+        }
+
+        .gram-choice-btn.selected-verbo {
+            background: #f59e0b;
+            color: white;
+            border-color: #d97706;
+        }
+
+        .gram-choice-btn.selected-adjetivo {
+            background: #0ea5e9;
+            color: white;
+            border-color: #0284c7;
+        }
+
+        /* SECCIÓN 6: ORDENAR ORACIONES */
+        .box-oracion {
+            min-height: 82px;
+            border: 3px dashed var(--morado-principal);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            background: #faf5ff;
+        }
+
+        .palabras-oracion {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            background: #f1f5f9;
+            padding: 18px;
+            border-radius: 16px;
+        }
+
+        .chip-palabra {
+            padding: 10px 16px;
+            background: white;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #cbd5e1;
+            font-size: 1.05rem;
+            transition: all 0.18s;
+            color: var(--texto);
+        }
+
+        .chip-palabra:hover {
+            border-color: var(--morado-principal);
+            background: #faf5ff;
+        }
+
+        .chip-palabra.usada {
+            opacity: 0.3;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* SECCIÓN 7: TALLER DE ESCRITURA */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--texto);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            line-height: 1.5;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--morado-principal);
+        }
+
+        /* BOTONES GLOBALES */
+        .btn-action {
+            background: var(--morado-principal);
+            color: white;
+            border: none;
+            padding: 15px 28px;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.22s ease;
+            box-shadow: 0 4px 12px rgba(126, 34, 206, 0.3);
+        }
+
+        .btn-action:hover {
+            background: var(--morado-oscuro);
+            transform: translateY(-2px);
+        }
+
+        .btn-center-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        /* SECCIÓN 8: RESULTADOS Y PDF */
+        .eval-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .eval-score {
+            text-align: center;
+            margin: 18px 0;
+            padding: 22px;
+            background: #f0fdf4;
+            border: 2px solid #bbf7d0;
+            border-radius: 16px;
+        }
+
+        .eval-score .score-val {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--verde-oscuro);
+        }
+
+        .feedback-details {
+            margin-top: 20px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .feedback-item {
+            padding: 11px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-item.correct {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .feedback-item.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-retry-item {
+            background: white;
+            border: 1.5px solid #991b1b;
+            color: #991b1b;
+            padding: 5px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .btn-retry-item:hover {
+            background: #991b1b;
+            color: white;
+        }
+
+        /* IMPRESIÓN / PDF */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            header, .tabs, .btn-action, .btn-retry-item, .no-print {
+                display: none !important;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            .section {
+                display: none !important;
+            }
+            #sec-eval {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>📸 El lado que no se publica</h1>
+        <p>Lectura interactiva, juegos de palabras y autoevaluación sobre el respeto y la convivencia en redes</p>
+    </header>
+
+    <!-- NAVEGACIÓN POR PESTAÑAS -->
+    <nav class="tabs" aria-label="Actividades educativas">
+        <button class="tab-btn active" onclick="showTab('sec-lectura', this)">📖 Lectura</button>
+        <button class="tab-btn" onclick="showTab('sec-test', this)">📝 Test (15 Preguntas)</button>
+        <button class="tab-btn" onclick="showTab('sec-sopa', this)">🔍 Sopa de Letras</button>
+        <button class="tab-btn" onclick="showTab('sec-crucigrama', this)">✏️ Crucigrama (8 Palabras)</button>
+        <button class="tab-btn" onclick="showTab('sec-gramatica', this)">🅰️ Tipos de Palabras</button>
+        <button class="tab-btn" onclick="showTab('sec-ordenar', this)">🧩 Ordena Oraciones</button>
+        <button class="tab-btn" onclick="showTab('sec-escritura', this)">✍️ Taller de Escritura</button>
+        <button class="tab-btn btn-eval" onclick="showTab('sec-eval', this)">📊 Resultados y PDF</button>
+    </nav>
+
+    <main class="container">
+
+        <!-- 1. LECTURA -->
+        <section id="sec-lectura" class="section active">
+            <h2>📸 El lado que no se publica</h2>
+            <p class="subtitle-desc">Una historia sobre cómo las bromas o comentarios hirientes en el grupo de clase afectan a los demás, y sobre el valor de pedir ayuda y ser uno mismo sin miedo.</p>
+
+            <div class="comic-banner">
+                <img src="gener.png" alt="Cómic El lado que no se publica: historia de Claudia, Sara y Marcos">
+                <div class="comic-caption">Viñetas de la historia: «El lado que no se publica»</div>
+            </div>
+
+            <div class="resumen-card">
+                <p>A <strong>Claudia</strong> le gustaba hacerse fotos. Le encantaba probar peinados, combinar ropa y compartir con sus amigas las fotos que hacía los fines de semana.</p>
+                <p>Pero desde hacía unas semanas, cada vez que publicaba una foto, aparecía algún comentario en el grupo de clase: <em>«¡Qué presumida!»</em>, <em>«¿Otra foto más? ¡Qué necesidad de llamar la atención!»</em> o <em>«Se cree una influencer...»</em>.</p>
+                <p>Al principio, Claudia contestaba con algún emoticono o se reía para quitarle importancia. Después empezó a borrar las fotos antes de que alguien pudiera comentarlas.</p>
+                <p>En clase también estaba más callada. Ya no proponía ideas, evitaba salir a la pizarra y, cuando alguien le hacía una foto, pedía que la borrara.</p>
+
+                <h3>Una captura y una broma que hace daño</h3>
+                <p>Una mañana, <strong>Marcos</strong> enseñó al grupo una captura de una foto antigua de Claudia. Había añadido un comentario que provocó las risas de varios compañeros. <em>«Tampoco es para tanto —dijo Marcos—. Si siempre está poniendo fotos...»</em></p>
+                <p>Claudia lo vio. No dijo nada. Simplemente guardó el móvil y se marchó. Pero <strong>Sara</strong>, que había visto lo ocurrido, no se rio. Le preguntó a Marcos: <em>«¿Y si dejaras de hacerlo? Pues a ella no le ha hecho gracia»</em>, mientras él respondía: <em>«¡Era una broma!»</em>.</p>
+
+                <h3>Hablar a tiempo y volver a brillar</h3>
+                <p>Aquella tarde, Sara escribió a Claudia para preguntarle cómo estaba. Claudia le contestó: <em>«Estoy cansada de pensar cada cosa que hago antes de hacerla, por si alguien se ríe»</em>. Al día siguiente, Sara decidió hablar con la tutora. No quería que aquello siguiera pasando.</p>
+                <p>La profesora dedicó unos minutos a hablar con la clase. No señaló a nadie, pero escribió en la pizarra: <strong>«QUE NADIE CORTE TUS ALAS»</strong>. Explicó que a veces pensamos que controlar, ridiculizar o juzgar lo que hace otra persona no tiene importancia, pero cuando alguien empieza a cambiar su forma de ser por miedo a nuestras reacciones, deberíamos preguntarnos qué está pasando.</p>
+                <p>Marcos permaneció callado. Por primera vez, se preguntó si aquello que él llamaba una broma no sería una forma de hacer daño. Claudia no volvió a publicar una foto al día siguiente. Tampoco tenía por qué hacerlo. Pero poco a poco dejó de esconderse y volvió a ser ella misma.</p>
+                <p>Porque no se trata de tener que demostrar nada a nadie. Ni de pedir permiso para ser como eres. <strong>Se trata de poder vivir sin miedo a que otros decidan cuánto puedes brillar.</strong></p>
+            </div>
+
+            <ul class="puntos-clave">
+                <li>
+                    <strong>📱 Comentarios que apagan:</strong>
+                    Las burlas repetidas en el grupo hicieron que Claudia borrara sus fotos y se sintiera juzgada.
+                </li>
+                <li>
+                    <strong>🏫 Cambios en el aula:</strong>
+                    Claudia dejó de participar, evitó salir a la pizarra y vivió pendiente de qué dirían los demás.
+                </li>
+                <li>
+                    <strong>🤝 Apoyo y valentía:</strong>
+                    Sara escuchó a Claudia y habló con la tutora para detener una situación que hacía daño.
+                </li>
+                <li>
+                    <strong>✨ Brillar sin miedo:</strong>
+                    La profesora recordó que nadie debe cortar las alas de los demás ni decidir cuánto puede brillar cada persona.
+                </li>
+            </ul>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-test', 1)">¡Comenzar las Actividades! 🚀</button>
+            </div>
+        </section>
+
+        <!-- 2. TEST (14 PREGUNTAS CON OPCIONES EXTENSAS Y COMPLETAS) -->
+        <section id="sec-test" class="section">
+            <h2>📝 Comprensión Lectora y Reflexión (15 Preguntas)</h2>
+            <p class="subtitle-desc">Elige la respuesta correcta para cada pregunta. Lee con atención todas las opciones antes de decidir:</p>
+            <div id="quiz-container"></div>
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-sopa', 2)">Siguiente: Sopa de Letras 🔍</button>
+            </div>
+        </section>
+
+        <!-- 3. SOPA DE LETRAS INTERACTIVA -->
+        <section id="sec-sopa" class="section">
+            <h2>🔍 Sopa de Letras de la Historia</h2>
+            <p class="subtitle-desc">Haz clic en las letras para encontrar las 6 palabras clave de la historia. Si te equivocas, vuelve a pulsar la casilla para desmarcarla:</p>
+            <div class="sopa-wrapper">
+                <div class="palabras-lista">
+                    <span class="word-tag" id="p-CLASE">CLASE</span>
+                    <span class="word-tag" id="p-BROMA">BROMA</span>
+                    <span class="word-tag" id="p-RISAS">RISAS</span>
+                    <span class="word-tag" id="p-MIEDO">MIEDO</span>
+                    <span class="word-tag" id="p-PIZARRA">PIZARRA</span>
+                    <span class="word-tag" id="p-BRILLAR">BRILLAR</span>
+                </div>
+                <div id="sopa-grid"></div>
+            </div>
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-crucigrama', 3)">Siguiente: Crucigrama ✏️</button>
+            </div>
+        </section>
+
+        <!-- 4. CRUCIGRAMA INTERACTIVO (12x12) - PALABRAS DE LA HISTORIA (EXCLUYENDO NOMBRES) -->
+        <section id="sec-crucigrama" class="section">
+            <h2>✏️ Crucigrama de la Historia (8 Palabras)</h2>
+            <p class="subtitle-desc">Escribe una letra en cada casilla siguiendo las pistas. Todas las palabras están cruzadas entre sí y corresponden a elementos de la historia (sin nombres propios). Si haces clic dos veces en una casilla de cruce, cambiarás entre horizontal y vertical:</p>
+
+            <div class="crossword-layout">
+                <div class="cw-board-wrap">
+                    <div id="cw-grid" aria-label="Cuadrícula del crucigrama"></div>
+                    <div style="text-align: center;">
+                        <span id="cw-dir-indicator" class="cw-dir-badge">Dirección activa: ➡️ Horizontal</span>
+                    </div>
+                    <div id="cw-status" class="cw-status-msg"></div>
+                    <div class="btn-center-wrap" style="margin-top: 16px;">
+                        <button class="btn-action" style="background: var(--verde); padding: 11px 20px; font-size: 0.95rem;" onclick="comprobarCrucigrama()">✅ Comprobar Crucigrama</button>
+                        <button class="btn-action" style="background: #64748b; padding: 11px 20px; font-size: 0.95rem;" onclick="limpiarCrucigrama()">🗑️ Limpiar</button>
+                    </div>
+                </div>
+
+                <div class="cw-clues">
+                    <div class="cw-clue-card">
+                        <h3>➡️ Horizontales</h3>
+                        <ul class="cw-clue-list">
+                            <li id="clue-2-H" onclick="focusWord(2, 'H')"><strong>2.</strong> Reacción de varios compañeros cuando Marcos enseñó la captura con un comentario (5 letras).</li>
+                            <li id="clue-4-H" onclick="focusWord(4, 'H')"><strong>4.</strong> Verbo del final del cuento que significa destacar y ser uno mismo sin miedo (7 letras).</li>
+                            <li id="clue-5-H" onclick="focusWord(5, 'H')"><strong>5.</strong> Superficie donde la profesora escribió «Que nadie corte tus alas» (7 letras).</li>
+                            <li id="clue-6-H" onclick="focusWord(6, 'H')"><strong>6.</strong> Excusa que dio Marcos cuando Sara le dijo que a Claudia no le hacía gracia (5 letras).</li>
+                            <li id="clue-8-H" onclick="focusWord(8, 'H')"><strong>8.</strong> Sensación que llevaba a Claudia a pensar cada paso por si alguien se reía (5 letras).</li>
+                        </ul>
+                    </div>
+
+                    <div class="cw-clue-card">
+                        <h3>⬇️ Verticales</h3>
+                        <ul class="cw-clue-list">
+                            <li id="clue-1-V" onclick="focusWord(1, 'V')"><strong>1.</strong> Conjunto de compañeros y compañeras con quienes se comparte el aula o el chat (5 letras).</li>
+                            <li id="clue-3-V" onclick="focusWord(3, 'V')"><strong>3.</strong> Lugar donde Claudia se volvió más callada y evitaba salir a la pizarra (5 letras).</li>
+                            <li id="clue-7-V" onclick="focusWord(7, 'V')"><strong>7.</strong> Teléfono que Claudia guardó y se marchó tras ver la captura (5 letras).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-gramatica', 4)">Siguiente: Tipos de Palabras 🅰️</button>
+            </div>
+        </section>
+
+        <!-- 5. GRAMÁTICA (SIN SECUENCIA REPETITIVA) -->
+        <section id="sec-gramatica" class="section">
+            <h2>🅰️ Clasifica cada Palabra</h2>
+            <p class="subtitle-desc">Selecciona si cada palabra relacionada con la historia es un <strong>Sustantivo</strong>, un <strong>Verbo</strong> o un <strong>Adjetivo</strong>:</p>
+
+            <div class="gram-list" id="gram-container"></div>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-ordenar', 5)">Siguiente: Ordena Oraciones 🧩</button>
+            </div>
+        </section>
+
+        <!-- 6. ORDENAR ORACIONES -->
+        <section id="sec-ordenar" class="section">
+            <h2>🧩 Ordena la Oración</h2>
+            <p class="subtitle-desc">Construye frases clave de la historia pulsando sobre las fichas desordenadas en orden correcto:</p>
+
+            <div style="text-align: center; font-weight: 800; color: var(--morado-oscuro); margin-bottom: 14px; font-size: 1.1rem;">
+                Frase <span id="ord-current-idx">1</span> de 6
+            </div>
+
+            <div class="box-oracion" id="drop-oracion"></div>
+            <div class="palabras-oracion" id="words-oracion"></div>
+
+            <div class="btn-center-wrap" style="margin-top: 18px;">
+                <button class="btn-action" style="background: var(--rojo);" onclick="clearOracion()">🗑️ Borrar y rehacer</button>
+                <button class="btn-action" style="background: var(--verde);" id="btn-next-ord" onclick="nextOracion()">Siguiente Frase ⏭️</button>
+            </div>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="goToTab('sec-escritura', 6)">Siguiente: Taller de Escritura ✍️</button>
+            </div>
+        </section>
+
+        <!-- 7. TALLER DE ESCRITURA -->
+        <section id="sec-escritura" class="section">
+            <h2>✍️ Taller de Escritura y Reflexión</h2>
+            <p class="subtitle-desc">Completa tus datos y responde a las dos partes de este taller de escritura basado en la historia:</p>
+
+            <div class="form-group">
+                <label for="alumno-nombre">👤 Nombre y Apellidos:</label>
+                <input type="text" id="alumno-nombre" class="form-control" placeholder="Escribe tu nombre y apellidos aquí...">
+            </div>
+
+            <div class="form-group">
+                <label for="alumno-texto-historia">📖 1. Reflexión sobre «El lado que no se publica»:</label>
+                <p style="font-size: 0.92rem; color: #475569; margin-bottom: 8px; line-height: 1.45;">
+                    Explica cómo cambió Claudia tras los comentarios en el grupo, por qué decir «era una broma» no basta cuando alguien sufre y qué te pareció la actitud de Sara y de la profesora.
+                </p>
+                <textarea id="alumno-texto-historia" class="form-control" rows="5" placeholder="Escribe aquí tu reflexión sobre la historia..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="alumno-texto-ods">🌟 2. Mis ideas para un grupo de clase respetuoso y seguro:</label>
+                <p style="font-size: 0.92rem; color: #475569; margin-bottom: 8px; line-height: 1.45;">
+                    Escribe qué podemos hacer en clase y en los chats o redes para que nadie tenga miedo de mostrarse tal y como es ni de brillar a su manera.
+                </p>
+                <textarea id="alumno-texto-ods" class="form-control" rows="5" placeholder="Escribe aquí tus ideas y compromisos..."></textarea>
+            </div>
+
+            <div class="btn-center-wrap">
+                <button class="btn-action" onclick="evaluarYVerResultados()" style="background: var(--naranja);">🏆 Finalizar y Ver Resultados</button>
+            </div>
+        </section>
+
+        <!-- 8. RESULTADOS Y PDF -->
+        <section id="sec-eval" class="section">
+            <div class="no-print" style="text-align: center; margin-bottom: 20px;">
+                <button class="btn-action" onclick="evaluarYVerResultados()" style="background: var(--verde);">🔄 Actualizar Evaluación</button>
+            </div>
+
+            <h2>📊 Ficha de Autoevaluación Global</h2>
+            <p class="subtitle-desc">Comprueba tus aciertos y usa los botones rojos si necesitas volver atrás para corregir:</p>
+
+            <div class="eval-card" id="eval-print-area">
+                <div style="text-align: center; margin-bottom: 14px;">
+                    <h3 style="color: var(--morado-oscuro); font-size: 1.3rem;">Informe de Progreso: El lado que no se publica</h3>
+                    <p style="margin-top: 6px;"><strong>Estudiante:</strong> <span id="rep-nombre">(No especificado)</span></p>
+                </div>
+
+                <div class="eval-score">
+                    <div style="font-weight: 700; color: #166534;">Puntuación Total Consolidada</div>
+                    <div class="score-val"><span id="rep-nota">0.0</span> <small style="font-size: 1.25rem; color: #64748b;">/ 10</small></div>
+                    <div id="rep-insignia" style="margin-top: 6px; font-weight: 800; color: var(--morado-principal);"></div>
+                </div>
+
+                <div class="feedback-details" id="feedback-container">
+                    <p style="text-align: center; color: #64748b;">Pulsa el botón superior para generar tu informe de corrección.</p>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <strong>📖 1. Reflexión sobre la historia:</strong>
+                    <div id="rep-redaccion-historia" style="margin-top: 8px; margin-bottom: 16px; background: #f8fafc; padding: 15px; border-radius: 12px; font-style: italic; border: 1px solid #cbd5e1; line-height: 1.6;">(Sin respuesta)</div>
+
+                    <strong>🌟 2. Propuestas para un grupo respetuoso:</strong>
+                    <div id="rep-redaccion-ods" style="margin-top: 8px; background: #f8fafc; padding: 15px; border-radius: 12px; font-style: italic; border: 1px solid #cbd5e1; line-height: 1.6;">(Sin respuesta)</div>
+                </div>
+            </div>
+
+            <div class="btn-center-wrap no-print">
+                <button class="btn-action" onclick="window.print();" style="background: var(--naranja);">🖨️ Descargar e Imprimir Evaluación en PDF</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* =========================================================
+           NAVEGACIÓN ENTRE PESTAÑAS
+           ========================================================= */
+        function showTab(id, btnEl) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+
+            if (btnEl) {
+                btnEl.classList.add('active');
+            } else {
+                const btns = document.querySelectorAll('.tab-btn');
+                const tabsMap = {
+                    'sec-lectura': 0,
+                    'sec-test': 1,
+                    'sec-sopa': 2,
+                    'sec-crucigrama': 3,
+                    'sec-gramatica': 4,
+                    'sec-ordenar': 5,
+                    'sec-escritura': 6,
+                    'sec-eval': 7
+                };
+                if (tabsMap[id] !== undefined && btns[tabsMap[id]]) {
+                    btns[tabsMap[id]].classList.add('active');
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goToTab(id, idx) {
+            const btns = document.querySelectorAll('.tab-btn');
+            showTab(id, btns[idx]);
+        }
+
+        /* =========================================================
+           1. TEST DE COMPRENSIÓN LECTORA (14 PREGUNTAS EXTENSAS)
+           ========================================================= */
+        const preguntas = [
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "1. ¿Qué le gustaba hacer a Claudia al principio de la historia los fines de semana?",
+                opts: [
+                    "a) Le encantaba hacerse fotos, probar peinados, combinar ropa y compartirlas con sus amigas.",
+                    "b) Prefería quedarse en casa leyendo enciclopedias sin usar el móvil ni hablar con nadie.",
+                    "c) Salía a entrenar con el equipo de fútbol del barrio durante toda la mañana.",
+                    "d) Dibujaba cómics sobre superhéroes en su cuaderno sin enseñárselos a nadie."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "2. ¿Qué tipo de comentarios empezaron a aparecer en el grupo de clase cuando Claudia publicaba fotos?",
+                opts: [
+                    "a) Felicitaciones por su esfuerzo en los exámenes y ánimos para las competiciones deportivas.",
+                    "b) Comentarios como «¡Qué presumida!», «¿Qué necesidad de llamar la atención?» o «Se cree una influencer...».",
+                    "c) Preguntas sobre dónde había comprado sus libros de aventuras y novelas gráficas.",
+                    "d) Mensajes de agradecimiento por organizar las excursiones del fin de semana."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "3. ¿Qué hizo Claudia después de contestar al principio con emoticonos o reírse para quitarle importancia?",
+                opts: [
+                    "a) Empezó a borrar las fotos antes de que alguien pudiera comentarlas.",
+                    "b) Creó un canal público para responder a cada comentario con vídeos largos.",
+                    "c) Dejó de ir al colegio durante dos semanas sin avisar a su familia.",
+                    "d) Cambió su nombre por el de otro compañero en todas sus cuentas."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "4. ¿Cómo cambió la actitud de Claudia dentro de clase?",
+                opts: [
+                    "a) Se volvió más ruidosa y pedía salir a la pizarra a cada momento.",
+                    "b) Estaba más callada, ya no proponía ideas, evitaba salir a la pizarra y pedía borrar las fotos que le hacían.",
+                    "c) Empezó a dirigir todos los trabajos en grupo y a dar órdenes a sus compañeros.",
+                    "d) Decidió no volver a hablar con Sara ni con su profesora."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "5. ¿Qué enseñó Marcos una mañana al grupo y cuál fue su reacción cuando Sara le llamó la atención?",
+                opts: [
+                    "a) Enseñó una foto de su mascota y pidió perdón de inmediato a toda la clase.",
+                    "b) Enseñó una captura de una foto antigua de Claudia con un comentario que provocó risas y dijo «¡Era una broma!».",
+                    "c) Enseñó los apuntes de clase para ayudar a Claudia y a Sara a repasar.",
+                    "d) Enseñó un dibujo de la pizarra y propuso borrar el grupo de clase."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "6. ¿Por qué Sara no se rio cuando los demás se rieron con la captura que mostró Marcos?",
+                opts: [
+                    "a) Porque no había entendido el chiste ni había mirado la pantalla del móvil.",
+                    "b) Porque se dio cuenta de que a Claudia no le había hecho gracia y que aquello le estaba haciendo daño.",
+                    "c) Porque tenía prisa por llegar a su casa y no quiso detenerse a escuchar.",
+                    "d) Porque prefería hacer otra broma distinta más tarde en el patio."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "7. ¿Qué le contó Claudia a Sara por mensaje aquella tarde sobre cómo se sentía?",
+                opts: [
+                    "a) Que estaba cansada de pensar cada cosa que hacía antes de hacerla, por si alguien se reía.",
+                    "b) Que estaba encantada con los comentarios y que quería publicar diez fotos cada hora.",
+                    "c) Que iba a cambiarse de ciudad al día siguiente para no volver a ver a nadie.",
+                    "d) Que no le importaba lo que opinaran los demás compañeros de clase."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "8. ¿Por qué decidió Sara hablar con la tutora al día siguiente?",
+                opts: [
+                    "a) Porque quería que castigaran a toda la clase sin dar explicaciones.",
+                    "b) Porque no quería que aquello siguiera pasando y buscaba ayuda para resolverlo bien.",
+                    "c) Porque necesitaba pedir permiso para faltar a la clase de la tarde.",
+                    "d) Porque quería cambiar de sitio en el aula para sentarse sola."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "9. ¿Qué frase escribió la profesora en la pizarra y cómo habló con la clase?",
+                opts: [
+                    "a) Escribió «Prohibido usar el móvil» y señaló con el dedo a quien había hecho la captura.",
+                    "b) Escribió «Que nadie corte tus alas» y habló sin señalar a nadie para invitar a reflexionar.",
+                    "c) Escribió «Habrá examen sorpresa» y mandó copiar el texto diez veces.",
+                    "d) Escribió «No hagáis más fotos» y cerró el debate sin escuchar a nadie."
+                ],
+                ans: 1
+            },
+            {
+                cat: "Comprensión inferencial", cls: "inf",
+                q: "10. ¿Qué empezó a preguntarse Marcos por primera vez tras escuchar a la profesora?",
+                opts: [
+                    "a) Se preguntó si aquello que él llamaba una broma no sería una forma de hacer daño.",
+                    "b) Se preguntó cómo conseguir más seguidores para hacerse famoso en redes.",
+                    "c) Se preguntó por qué Claudia no había vuelto a pedir chocolatinas en clase.",
+                    "d) Se preguntó qué había de merienda ese día en el comedor escolar."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "11. ¿Por qué decir «era una broma» no justifica un comentario que molesta o humilla a otra persona?",
+                opts: [
+                    "a) Porque si alguien se siente mal o ridiculizado, la broma deja de ser divertida y provoca daño.",
+                    "b) Porque las bromas solo se pueden contar en voz alta y nunca por escrito.",
+                    "c) Porque quien se molesta nunca tiene razón en una conversación.",
+                    "d) Porque reírse en grupo siempre es obligatorio aunque alguien sufra."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "12. ¿Qué significa la expresión «que nadie corte tus alas» en esta historia?",
+                opts: [
+                    "a) Significa que nadie debe apagar tus ganas de expresarte, crecer o ser tú mismo por miedo a burlas.",
+                    "b) Significa que hay que construir alas de papel para volar por el patio del colegio.",
+                    "c) Significa que solo las personas que sacan mejores notas tienen derecho a opinar.",
+                    "d) Significa que debemos dejar de hacer actividades en grupo para evitar problemas."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "13. ¿Qué papel juegan los testigos (quienes ven lo que ocurre) cuando alguien recibe burlas o malos comentarios?",
+                opts: [
+                    "a) Apoyar a quien sufre, no reírse del daño y pedir ayuda a un adulto de confianza marca una gran diferencia.",
+                    "b) Fingir que no pasa nada y reenviar la captura a otros grupos para ver qué opinan.",
+                    "c) Esperar meses hasta que el problema se resuelva solo sin hablar con nadie.",
+                    "d) Contestar con más insultos para defender a la persona afectada."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Reflexionamos", cls: "ref",
+                q: "14. ¿Cuál es el mensaje final de la historia sobre «cuánto puedes brillar»?",
+                opts: [
+                    "a) Que no hace falta demostrar nada a nadie ni pedir permiso para ser como eres, sino vivir sin miedo a brillar.",
+                    "b) Que brillar consiste en tener más fotos y más likes que todo el resto de la clase.",
+                    "c) Que hay que esconder los gustos personales para que nadie los critique.",
+                    "d) Que solo importa lo que opinen los demás sobre nuestra ropa y nuestro peinado."
+                ],
+                ans: 0
+            },
+            {
+                cat: "Comprensión literal", cls: "",
+                q: "15. ¿Qué ocurrió cuando alguien le hacía una foto a Claudia en clase?",
+                opts: [
+                    "a) Pedía que la borrara.",
+                    "b) Pedía que la publicara en el grupo de clase de inmediato.",
+                    "c) Pedía que la imprimiera para pegarla en su carpeta.",
+                    "d) Pedía que la enviara a todos los compañeros del colegio."
+                ],
+                ans: 0
+            }
+        ];
+
+        let userAnswersTest = Array(15).fill(null);
+
+        function renderTest() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            preguntas.forEach((p, qIdx) => {
+                const card = document.createElement('div');
+                card.className = "q-card";
+                card.innerHTML = `
+                    <span class="cat-badge ${p.cls}">${p.cat}</span>
+                    <div class="q-title">${p.q}</div>
+                `;
+
+                const optsDiv = document.createElement('div');
+                optsDiv.className = "opts-grid";
+
+                p.opts.forEach((o, oIdx) => {
+                    const btn = document.createElement('button');
+                    btn.className = `opt-btn ${userAnswersTest[qIdx] === oIdx ? 'selected' : ''}`;
+                    btn.innerText = o;
+                    btn.onclick = () => {
+                        if (userAnswersTest[qIdx] === oIdx) {
+                            userAnswersTest[qIdx] = null;
+                            btn.classList.remove('selected');
+                        } else {
+                            userAnswersTest[qIdx] = oIdx;
+                            Array.from(optsDiv.children).forEach(c => c.classList.remove('selected'));
+                            btn.classList.add('selected');
+                        }
+                    };
+                    optsDiv.appendChild(btn);
+                });
+
+                card.appendChild(optsDiv);
+                container.appendChild(card);
+            });
+        }
+
+        /* =========================================================
+           2. SOPA DE LETRAS INTERACTIVA (SIN COLISIONES ENTRE PALABRAS)
+           ========================================================= */
+        const palabrasSopa = ["CLASE", "BROMA", "RISAS", "MIEDO", "PIZARRA", "BRILLAR"];
+        const filasSopa = 10, colsSopa = 10;
+        let tableroSopa = Array(filasSopa).fill().map(() => Array(colsSopa).fill(''));
+        let coordenadasPalabras = {};
+        let palabrasEncontradasSopa = new Set();
+
+        function generarSopa() {
+            const posiciones = [
+                { word: "CLASE",   r: 0, c: 0, vert: false },
+                { word: "BROMA",   r: 2, c: 1, vert: false },
+                { word: "RISAS",   r: 4, c: 0, vert: false },
+                { word: "MIEDO",   r: 6, c: 2, vert: false },
+                { word: "PIZARRA", r: 1, c: 8, vert: true  },
+                { word: "BRILLAR", r: 8, c: 1, vert: false }
+            ];
+
+            posiciones.forEach(p => {
+                coordenadasPalabras[p.word] = [];
+                for (let i = 0; i < p.word.length; i++) {
+                    const rr = p.r + (p.vert ? i : 0);
+                    const cc = p.c + (p.vert ? 0 : i);
+                    tableroSopa[rr][cc] = p.word[i];
+                    coordenadasPalabras[p.word].push(`${rr}-${cc}`);
+                }
+            });
+
+            const letras = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+            const sopaGrid = document.getElementById('sopa-grid');
+            sopaGrid.innerHTML = "";
+
+            for (let r = 0; r < filasSopa; r++) {
+                for (let c = 0; c < colsSopa; c++) {
+                    if (tableroSopa[r][c] === '') {
+                        tableroSopa[r][c] = letras[Math.floor(Math.random() * letras.length)];
+                    }
+                    const celda = document.createElement('div');
+                    celda.className = 'celda';
+                    celda.dataset.coord = `${r}-${c}`;
+                    celda.innerText = tableroSopa[r][c];
+                    celda.onclick = function () {
+                        if (this.classList.contains('encontrada')) return;
+                        this.classList.toggle('marcada');
+                        chequearSopa();
+                    };
+                    sopaGrid.appendChild(celda);
+                }
+            }
+        }
+
+        function chequearSopa() {
+            const marcadasSet = new Set();
+            document.querySelectorAll('.celda.marcada').forEach(m => {
+                marcadasSet.add(m.dataset.coord);
+            });
+
+            palabrasSopa.forEach(pal => {
+                if (palabrasEncontradasSopa.has(pal)) return;
+                const coords = coordenadasPalabras[pal];
+                const todasMarcadas = coords.every(coord => marcadasSet.has(coord));
+                if (todasMarcadas) {
+                    palabrasEncontradasSopa.add(pal);
+                    const tagEl = document.getElementById("p-" + pal);
+                    if (tagEl) tagEl.classList.add('found');
+
+                    coords.forEach(coord => {
+                        const cellEl = document.querySelector(`.celda[data-coord="${coord}"]`);
+                        if (cellEl) {
+                            cellEl.classList.remove('marcada');
+                            cellEl.classList.add('encontrada');
+                        }
+                    });
+                }
+            });
+        }
+
+        /* =========================================================
+           3. CRUCIGRAMA INTERACTIVO (12x12) - 100% CONECTADO Y VERIFICADO
+           ========================================================= */
+        const crosswordWords = [
+            { num: 1, dir: 'V', word: 'GRUPO',   r: 3, c: 2 },
+            { num: 2, dir: 'H', word: 'RISAS',   r: 4, c: 2 },
+            { num: 3, dir: 'V', word: 'CLASE',   r: 4, c: 8 },
+            { num: 4, dir: 'H', word: 'BRILLAR', r: 5, c: 5 },
+            { num: 5, dir: 'H', word: 'PIZARRA', r: 6, c: 2 },
+            { num: 6, dir: 'H', word: 'BROMA',   r: 7, c: 0 },
+            { num: 7, dir: 'V', word: 'MOVIL',   r: 7, c: 10 },
+            { num: 8, dir: 'H', word: 'MIEDO',   r: 8, c: 6 }
+        ];
+
+        const cwRows = 12;
+        const cwCols = 12;
+        let cwSolutionMap = {};
+        let cwCurrentDir = 'H';
+        let cwLastClickedKey = null;
+
+        function updateCwDirectionUI(r, c) {
+            const indicator = document.getElementById('cw-dir-indicator');
+            if (indicator) {
+                indicator.textContent = cwCurrentDir === 'H'
+                    ? 'Dirección activa: ➡️ Horizontal'
+                    : 'Dirección activa: ⬇️ Vertical';
+            }
+
+            document.querySelectorAll('.cw-input').forEach(el => el.classList.remove('cw-active-word'));
+            document.querySelectorAll('.cw-clue-list li').forEach(li => li.classList.remove('active-clue'));
+
+            const cellData = cwSolutionMap[`${r}-${c}`];
+            if (!cellData) return;
+
+            const activeWordObj = cellData.words.find(w => w.dir === cwCurrentDir) || cellData.words[0];
+            if (!activeWordObj) return;
+
+            const clueEl = document.getElementById(`clue-${activeWordObj.num}-${activeWordObj.dir}`);
+            if (clueEl) clueEl.classList.add('active-clue');
+
+            for (let i = 0; i < activeWordObj.word.length; i++) {
+                const rr = activeWordObj.r + (activeWordObj.dir === 'V' ? i : 0);
+                const cc = activeWordObj.c + (activeWordObj.dir === 'H' ? i : 0);
+                const inp = document.querySelector(`.cw-input[data-r="${rr}"][data-c="${cc}"]`);
+                if (inp) inp.classList.add('cw-active-word');
+            }
+        }
+
+        function buildCrossword() {
+            cwSolutionMap = {};
+
+            crosswordWords.forEach(item => {
+                for (let i = 0; i < item.word.length; i++) {
+                    const rr = item.r + (item.dir === 'V' ? i : 0);
+                    const cc = item.c + (item.dir === 'H' ? i : 0);
+                    const key = `${rr}-${cc}`;
+                    if (!cwSolutionMap[key]) {
+                        cwSolutionMap[key] = { letter: item.word[i], nums: [], words: [] };
+                    }
+                    cwSolutionMap[key].words.push(item);
+                    if (i === 0 && !cwSolutionMap[key].nums.includes(item.num)) {
+                        cwSolutionMap[key].nums.push(item.num);
+                    }
+                }
+            });
+
+            const gridEl = document.getElementById('cw-grid');
+            gridEl.innerHTML = '';
+
+            for (let r = 0; r < cwRows; r++) {
+                for (let c = 0; c < cwCols; c++) {
+                    const key = `${r}-${c}`;
+                    const cellData = cwSolutionMap[key];
+
+                    if (!cellData) {
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.className = 'cw-cell-empty';
+                        gridEl.appendChild(emptyDiv);
+                    } else {
+                        const box = document.createElement('div');
+                        box.className = 'cw-cell-box';
+
+                        if (cellData.nums.length > 0) {
+                            const numSpan = document.createElement('span');
+                            numSpan.className = 'cw-num';
+                            numSpan.textContent = cellData.nums.join('/');
+                            box.appendChild(numSpan);
+                        }
+
+                        const inp = document.createElement('input');
+                        inp.type = 'text';
+                        inp.maxLength = 1;
+                        inp.className = 'cw-input';
+                        inp.dataset.r = r;
+                        inp.dataset.c = c;
+                        inp.setAttribute('aria-label', `Fila ${r + 1}, Columna ${c + 1}`);
+
+                        inp.addEventListener('click', () => {
+                            const hasH = cellData.words.some(w => w.dir === 'H');
+                            const hasV = cellData.words.some(w => w.dir === 'V');
+                            if (cwLastClickedKey === key && hasH && hasV) {
+                                cwCurrentDir = cwCurrentDir === 'H' ? 'V' : 'H';
+                            } else if (hasH && !hasV) {
+                                cwCurrentDir = 'H';
+                            } else if (hasV && !hasH) {
+                                cwCurrentDir = 'V';
+                            }
+                            cwLastClickedKey = key;
+                            updateCwDirectionUI(r, c);
+                        });
+
+                        inp.addEventListener('focus', () => {
+                            const hasH = cellData.words.some(w => w.dir === 'H');
+                            const hasV = cellData.words.some(w => w.dir === 'V');
+                            if (hasH && !hasV) cwCurrentDir = 'H';
+                            else if (hasV && !hasH) cwCurrentDir = 'V';
+                            updateCwDirectionUI(r, c);
+                        });
+
+                        inp.addEventListener('input', (e) => {
+                            inp.classList.remove('cw-ok', 'cw-err');
+                            document.getElementById('cw-status').style.display = 'none';
+                            const val = e.target.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ]/g, '').toUpperCase();
+                            e.target.value = val.slice(-1);
+
+                            if (e.target.value) {
+                                moveFocusCw(r, c, 1);
+                            }
+                        });
+
+                        inp.addEventListener('keydown', (e) => {
+                            if (e.key === 'Backspace' && !inp.value) {
+                                e.preventDefault();
+                                moveFocusCw(r, c, -1);
+                            } else if (e.key === 'ArrowRight') {
+                                e.preventDefault();
+                                cwCurrentDir = 'H';
+                                focusCell(r, c + 1);
+                            } else if (e.key === 'ArrowLeft') {
+                                e.preventDefault();
+                                cwCurrentDir = 'H';
+                                focusCell(r, c - 1);
+                            } else if (e.key === 'ArrowDown') {
+                                e.preventDefault();
+                                cwCurrentDir = 'V';
+                                focusCell(r + 1, c);
+                            } else if (e.key === 'ArrowUp') {
+                                e.preventDefault();
+                                cwCurrentDir = 'V';
+                                focusCell(r - 1, c);
+                            }
+                        });
+
+                        box.appendChild(inp);
+                        gridEl.appendChild(box);
+                    }
+                }
+            }
+        }
+
+        function focusCell(r, c) {
+            const target = document.querySelector(`.cw-input[data-r="${r}"][data-c="${c}"]`);
+            if (target) target.focus();
+        }
+
+        function moveFocusCw(r, c, step) {
+            const nr = r + (cwCurrentDir === 'V' ? step : 0);
+            const nc = c + (cwCurrentDir === 'H' ? step : 0);
+            focusCell(nr, nc);
+        }
+
+        function focusWord(num, dir) {
+            const item = crosswordWords.find(w => w.num === num && (!dir || w.dir === dir));
+            if (!item) return;
+            cwCurrentDir = item.dir;
+            cwLastClickedKey = `${item.r}-${item.c}`;
+            focusCell(item.r, item.c);
+            updateCwDirectionUI(item.r, item.c);
+        }
+
+        function normalizeLetter(ch) {
+            return (ch || '')
+                .toUpperCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+        }
+
+        function contarPalabrasCrucigramaCorrectas() {
+            let correctas = 0;
+            crosswordWords.forEach(item => {
+                let palabraUsuario = '';
+                for (let i = 0; i < item.word.length; i++) {
+                    const rr = item.r + (item.dir === 'V' ? i : 0);
+                    const cc = item.c + (item.dir === 'H' ? i : 0);
+                    const inp = document.querySelector(`.cw-input[data-r="${rr}"][data-c="${cc}"]`);
+                    palabraUsuario += normalizeLetter(inp ? inp.value : '');
+                }
+                if (palabraUsuario === item.word) {
+                    correctas++;
+                }
+            });
+            return correctas;
+        }
+
+        function comprobarCrucigrama() {
+            Object.keys(cwSolutionMap).forEach(key => {
+                const [r, c] = key.split('-');
+                const inp = document.querySelector(`.cw-input[data-r="${r}"][data-c="${c}"]`);
+                if (!inp) return;
+                const val = normalizeLetter(inp.value);
+                inp.classList.remove('cw-ok', 'cw-err');
+                if (val === cwSolutionMap[key].letter) {
+                    inp.classList.add('cw-ok');
+                } else if (val !== '') {
+                    inp.classList.add('cw-err');
+                }
+            });
+
+            const aciertos = contarPalabrasCrucigramaCorrectas();
+            const statusEl = document.getElementById('cw-status');
+            statusEl.style.display = 'block';
+            if (aciertos === 8) {
+                statusEl.style.background = '#dcfce7';
+                statusEl.style.color = '#166534';
+                statusEl.textContent = '🎉 ¡Fantástico! Has completado las 8 palabras del crucigrama correctamente.';
+            } else {
+                statusEl.style.background = '#fef9c3';
+                statusEl.style.color = '#854d0e';
+                statusEl.textContent = `⭐ Llevas ${aciertos} de 8 palabras correctas. ¡Sigue completando!`;
+            }
+        }
+
+        function limpiarCrucigrama() {
+            document.querySelectorAll('.cw-input').forEach(inp => {
+                inp.value = '';
+                inp.classList.remove('cw-ok', 'cw-err');
+            });
+            document.getElementById('cw-status').style.display = 'none';
+        }
+
+        /* =========================================================
+           4. GRAMÁTICA (ORDEN VARIADO SIN SECUENCIA REPETITIVA)
+           ========================================================= */
+        const palabrasGram = [
+            { p: "Publicar",     t: "verbo" },
+            { p: "Pizarra",      t: "sustantivo" },
+            { p: "Callada",      t: "adjetivo" },
+            { p: "Valiente",     t: "adjetivo" },
+            { p: "Borrar",       t: "verbo" },
+            { p: "Captura",      t: "sustantivo" },
+            { p: "Amiga",        t: "sustantivo" },
+            { p: "Respetuoso",   t: "adjetivo" },
+            { p: "Escuchar",     t: "verbo" },
+            { p: "Mensaje",      t: "sustantivo" },
+            { p: "Brillar",      t: "verbo" },
+            { p: "Peinado",      t: "sustantivo" }
+        ];
+
+        let userGramAnswers = Array(12).fill(null);
+
+        function renderGrammar() {
+            const container = document.getElementById('gram-container');
+            container.innerHTML = "";
+
+            palabrasGram.forEach((item, idx) => {
+                const row = document.createElement('div');
+                row.className = "gram-item";
+
+                const wordLabel = document.createElement('div');
+                wordLabel.className = "gram-word-title";
+                wordLabel.innerText = item.p;
+
+                const btnGroup = document.createElement('div');
+                btnGroup.className = "gram-btn-group";
+
+                const cats = [
+                    { id: "sustantivo", label: "SUSTANTIVO" },
+                    { id: "verbo",      label: "VERBO" },
+                    { id: "adjetivo",   label: "ADJETIVO" }
+                ];
+
+                cats.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = "gram-choice-btn";
+                    if (userGramAnswers[idx] === cat.id) {
+                        btn.classList.add("selected-" + cat.id);
+                    }
+                    btn.innerText = cat.label;
+                    btn.onclick = () => {
+                        if (userGramAnswers[idx] === cat.id) {
+                            userGramAnswers[idx] = null;
+                        } else {
+                            userGramAnswers[idx] = cat.id;
+                        }
+                        renderGrammar();
+                    };
+                    btnGroup.appendChild(btn);
+                });
+
+                row.appendChild(wordLabel);
+                row.appendChild(btnGroup);
+                container.appendChild(row);
+            });
+        }
+
+        /* =========================================================
+           5. ORDENAR ORACIONES
+           ========================================================= */
+        const datosOraciones = [
+            {
+                s: "Que nadie corte tus alas.",
+                words: ["Que", "nadie", "corte", "tus", "alas."]
+            },
+            {
+                s: "Sara decidió hablar con la tutora.",
+                words: ["Sara", "decidió", "hablar", "con", "la", "tutora."]
+            },
+            {
+                s: "Claudia volvió a ser ella misma.",
+                words: ["Claudia", "volvió", "a", "ser", "ella", "misma."]
+            },
+            {
+                s: "Nadie decide cuánto puedes brillar.",
+                words: ["Nadie", "decide", "cuánto", "puedes", "brillar."]
+            },
+            {
+                s: "Después empezó a borrar las fotos antes de que alguien pudiera comentarlas.",
+                words: ["Después", "empezó", "a", "borrar", "las", "fotos", "antes", "de", "que", "alguien", "pudiera", "comentarlas."]
+            },
+            {
+                s: "Aquella tarde, Sara escribió a Claudia para preguntarle cómo estaba.",
+                words: ["Aquella", "tarde,", "Sara", "escribió", "a", "Claudia", "para", "preguntarle", "cómo", "estaba."]
+            }
+        ];
+
+        let ordIdx = 0;
+        let ordUserWords = Array(6).fill().map(() => []);
+        let ordShuffledWords = datosOraciones.map(item => [...item.words].sort(() => Math.random() - 0.5));
+
+        function loadOracion() {
+            document.getElementById('ord-current-idx').innerText = ordIdx + 1;
+            const dropZone = document.getElementById('drop-oracion');
+            const wordsZone = document.getElementById('words-oracion');
+
+            dropZone.innerHTML = "";
+            wordsZone.innerHTML = "";
+
+            ordUserWords[ordIdx].forEach((w, wIdx) => {
+                const chip = document.createElement('button');
+                chip.className = 'chip-palabra';
+                chip.innerText = w;
+                chip.onclick = () => deselectWord(wIdx);
+                dropZone.appendChild(chip);
+            });
+
+            ordShuffledWords[ordIdx].forEach((w) => {
+                const countInUser = ordUserWords[ordIdx].filter(item => item === w).length;
+                const countInOriginal = ordShuffledWords[ordIdx].filter(item => item === w).length;
+
+                const chip = document.createElement('button');
+                chip.className = 'chip-palabra';
+                chip.innerText = w;
+                if (countInUser >= countInOriginal) {
+                    chip.classList.add('usada');
+                } else {
+                    chip.onclick = () => selectWord(w);
+                }
+                wordsZone.appendChild(chip);
+            });
+        }
+
+        function selectWord(w) {
+            ordUserWords[ordIdx].push(w);
+            loadOracion();
+        }
+
+        function deselectWord(wIdx) {
+            ordUserWords[ordIdx].splice(wIdx, 1);
+            loadOracion();
+        }
+
+        function clearOracion() {
+            ordUserWords[ordIdx] = [];
+            loadOracion();
+        }
+
+        function nextOracion() {
+            ordIdx = (ordIdx + 1) % datosOraciones.length;
+            loadOracion();
+        }
+
+        /* =========================================================
+           6. EVALUACIÓN GLOBAL E INFORME DETALLADO
+           ========================================================= */
+        function evaluarYVerResultados() {
+            let totalAciertosTest = 0;
+            let feedbackHtml = "";
+
+            preguntas.forEach((p, idx) => {
+                if (userAnswersTest[idx] === p.ans) {
+                    totalAciertosTest++;
+                    feedbackHtml += `<div class="feedback-item correct"><span>✓ Test - Pregunta ${idx + 1}: Correcta</span></div>`;
+                } else {
+                    feedbackHtml += `<div class="feedback-item incorrect">
+                        <span>✗ Test - Pregunta ${idx + 1}: Incorrecta o sin responder</span>
+                        <button class="btn-retry-item" onclick="goToTab('sec-test', 1)">Corregir en Test 📝</button>
+                    </div>`;
+                }
+            });
+
+            const totalSopa = palabrasEncontradasSopa.size;
+            if (totalSopa === 6) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Sopa de Letras: ¡6 / 6 palabras encontradas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Sopa de Letras: ${totalSopa} / 6 palabras encontradas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-sopa', 2)">Buscar palabras 🔍</button>
+                </div>`;
+            }
+
+            const totalCrucigrama = contarPalabrasCrucigramaCorrectas();
+            if (totalCrucigrama === 8) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Crucigrama: ¡8 / 8 palabras completadas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Crucigrama: ${totalCrucigrama} / 8 palabras correctas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-crucigrama', 3)">Completar crucigrama ✏️</button>
+                </div>`;
+            }
+
+            let totalGram = 0;
+            palabrasGram.forEach((item, idx) => {
+                if (userGramAnswers[idx] === item.t) totalGram++;
+            });
+
+            if (totalGram === 12) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Tipos de Palabras: ¡12 / 12 correctas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Tipos de Palabras: ${totalGram} / 12 correctas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-gramatica', 4)">Revisar palabras 🅰️</button>
+                </div>`;
+            }
+
+            let totalOrd = 0;
+            datosOraciones.forEach((item, idx) => {
+                if (ordUserWords[idx].join(" ") === item.s) totalOrd++;
+            });
+
+            if (totalOrd === 6) {
+                feedbackHtml += `<div class="feedback-item correct"><span>✓ Ordenar Oraciones: ¡6 / 6 frases correctas!</span></div>`;
+            } else {
+                feedbackHtml += `<div class="feedback-item incorrect">
+                    <span>✗ Ordenar Oraciones: ${totalOrd} / 6 frases correctas</span>
+                    <button class="btn-retry-item" onclick="goToTab('sec-ordenar', 5)">Reordenar frases 🧩</button>
+                </div>`;
+            }
+
+            const notaNum = (
+                (totalAciertosTest / 15) * 4.0 +
+                (totalSopa / 6) * 1.5 +
+                (totalCrucigrama / 8) * 1.5 +
+                (totalGram / 12) * 1.5 +
+                (totalOrd / 6) * 1.5
+            );
+            const nota = notaNum.toFixed(1);
+
+            document.getElementById('rep-nota').innerText = nota;
+            document.getElementById('feedback-container').innerHTML = feedbackHtml;
+
+            const insigniaEl = document.getElementById('rep-insignia');
+            if (notaNum >= 8.5) {
+                insigniaEl.innerText = "🏆 ¡Insignia de Voz Valiente y Respetuosa!";
+            } else if (notaNum >= 6.0) {
+                insigniaEl.innerText = "🎖️ ¡Insignia de Compañero/a Solidario/a! ¡Muy bien!";
+            } else {
+                insigniaEl.innerText = "✨ ¡Insignia de Explorador/a del Buen Trato! Revisa los fallos para mejorar.";
+            }
+
+            const nombre = document.getElementById('alumno-nombre').value.trim();
+            const textoHistoria = document.getElementById('alumno-texto-historia').value.trim();
+            const textoOds = document.getElementById('alumno-texto-ods').value.trim();
+            document.getElementById('rep-nombre').innerText = nombre !== "" ? nombre : "(No especificado)";
+            document.getElementById('rep-redaccion-historia').innerText = textoHistoria !== "" ? textoHistoria : "(Sin respuesta)";
+            document.getElementById('rep-redaccion-ods').innerText = textoOds !== "" ? textoOds : "(Sin respuesta)";
+
+            goToTab('sec-eval', 7);
+        }
+
+        /* =========================================================
+           INICIALIZACIÓN
+           ========================================================= */
+        window.onload = () => {
+            renderTest();
+            generarSopa();
+            buildCrossword();
+            renderGrammar();
+            loadOracion();
+        };
+    </script>
+</body>
+</html>
